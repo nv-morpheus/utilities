@@ -18,7 +18,7 @@
 # This function is for when boost fully supports CMake. As of 1.76.0 the
 # functionality is not supported but is in the master branch. Check in version
 # 1.77
-function(find_and_configure_boost_true_cmake version)
+function(morpheus_utils_configure_boost_true_cmake version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
@@ -47,7 +47,7 @@ endfunction()
 
 # This function uses boost-cmake (https://github.com/Orphis/boost-cmake) to
 # configure boost. Not always up to date.
-function(find_and_configure_boost_boost_cmake version)
+function(morpheus_utils_configure_boost_boost_cmake version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
@@ -79,5 +79,3 @@ function(find_and_configure_boost_boost_cmake version)
     file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
   endif()
 endfunction()
-
-find_and_configure_boost_boost_cmake(${BOOST_VERSION})

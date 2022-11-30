@@ -15,7 +15,9 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_ucx version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_ucx version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "ucx")
 
@@ -178,5 +180,3 @@ function(find_and_configure_ucx version)
   endif()
 
 endfunction()
-
-find_and_configure_ucx(${UCX_VERSION})

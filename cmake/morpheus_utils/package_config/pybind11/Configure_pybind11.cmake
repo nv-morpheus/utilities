@@ -15,7 +15,9 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_pybind11 version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_pybind11 version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "pybind11")
 
@@ -36,5 +38,3 @@ function(find_and_configure_pybind11 version)
                       "PYBIND11_TEST OFF"
   )
 endfunction()
-
-find_and_configure_pybind11(${PYBIND11_VERSION})

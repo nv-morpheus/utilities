@@ -15,7 +15,9 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_glog version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_glog version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
 
@@ -36,5 +38,3 @@ function(find_and_configure_glog version)
   )
 
 endfunction()
-
-find_and_configure_glog(${GLOG_VERSION})

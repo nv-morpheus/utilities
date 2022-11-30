@@ -15,7 +15,9 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_libcudacxx version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_libcudacxx version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "libcudacxx")
 
@@ -34,5 +36,3 @@ function(find_and_configure_libcudacxx version)
   )
 
 endfunction()
-
-find_and_configure_libcudacxx(${LIBCUDACXX_VERSION})

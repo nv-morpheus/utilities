@@ -15,11 +15,13 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_rmm version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_rmm version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
 
-  message(STATUS "================> ${CMAKE_CURRENT_SOURCE_DIR}")
+  # TODO(Devin): do we actually need this? Assumes a lot about our internal structure
   #include(${CMAKE_BINARY_DIR}/_deps/cpm/rmm)
 
   # Does not work with cudf currently. Once updated to include rmm::Thrust to the GLOBAL_TARGETS. This should be used
@@ -51,5 +53,3 @@ function(find_and_configure_rmm version)
   )
 
 endfunction()
-
-find_and_configure_rmm(${RMM_VERSION})

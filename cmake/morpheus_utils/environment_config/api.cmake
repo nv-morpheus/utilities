@@ -17,25 +17,9 @@
 
 include_guard(DIRECTORY)
 
-function(morpheus_utils_configure_taskflow version)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "taskflow")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-  rapids_cpm_find(taskflow ${version}
-    GLOBAL_TARGETS
-      Taskflow Taskflow::Taskflow
-    BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    CPM_ARGS
-      GIT_REPOSITORY  https://github.com/taskflow/taskflow.git
-      GIT_TAG         "v${version}"
-      GIT_SHALLOW     TRUE
-      OPTIONS         "CMAKE_BUILD_TYPE Release"
-                      "TF_BUILD_TESTS OFF"
-                      "TF_BUILD_EXAMPLES OFF"
-  )
-
-  # Add the alias since Taskflow does not
-  add_library(Taskflow::Taskflow ALIAS Taskflow)
-endfunction()
+include(ccache/setup)
+include(iwyu/setup)
+include(package_manager/setup)
+include(rapids_cmake/setup)

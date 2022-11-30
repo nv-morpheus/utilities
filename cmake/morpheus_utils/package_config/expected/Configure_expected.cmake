@@ -15,7 +15,9 @@
 # limitations under the License.
 # =============================================================================
 
-function(find_and_configure_tl_expected version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_tl_expected version)
   list(APPEND CMAKE_MESSAGE_CONTEXT "tl-expected")
 
   rapids_cpm_find(tl-expected ${version}
@@ -32,5 +34,3 @@ function(find_and_configure_tl_expected version)
       OPTIONS "EXPECTED_BUILD_PACKAGE ON"
   )
 endfunction()
-
-find_and_configure_tl_expected(${EXPECTED_VERSION})

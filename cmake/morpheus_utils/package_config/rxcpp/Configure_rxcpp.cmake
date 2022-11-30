@@ -15,7 +15,9 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_rxcpp version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_rxcpp version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "rxcpp")
 
@@ -36,5 +38,3 @@ function(find_and_configure_rxcpp version)
   )
 
 endfunction()
-
-find_and_configure_rxcpp(${RXCPP_VERSION})

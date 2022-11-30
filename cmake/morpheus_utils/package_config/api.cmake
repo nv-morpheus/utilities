@@ -15,27 +15,16 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-function(morpheus_utils_configure_taskflow version)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "taskflow")
-
-  rapids_cpm_find(taskflow ${version}
-    GLOBAL_TARGETS
-      Taskflow Taskflow::Taskflow
-    BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    CPM_ARGS
-      GIT_REPOSITORY  https://github.com/taskflow/taskflow.git
-      GIT_TAG         "v${version}"
-      GIT_SHALLOW     TRUE
-      OPTIONS         "CMAKE_BUILD_TYPE Release"
-                      "TF_BUILD_TESTS OFF"
-                      "TF_BUILD_EXAMPLES OFF"
-  )
-
-  # Add the alias since Taskflow does not
-  add_library(Taskflow::Taskflow ALIAS Taskflow)
-endfunction()
+include(boost/Configure_boost)
+include(expected/Configure_expected)
+include(glog/Configure_glog)
+include(hwloc/Configure_hwloc)
+include(libcudacxx/Configure_libcudacxx)
+include(prometheus/Configure_prometheus)
+include(pybind11/Configure_pybind11)
+include(rmm/Configure_rmm)
+include(rxcpp/Configure_rxcpp)
+include(taskflow/Configure_taskflow)
+include(ucx/Configure_ucx)

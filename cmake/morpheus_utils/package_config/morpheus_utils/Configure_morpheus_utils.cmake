@@ -41,5 +41,3 @@ function(find_and_configure_morpheus_utils version)
   set(MORPHEUS_UTILS_HOME "${morpheus_utils_SOURCE_DIR}" CACHE INTERNAL "Morpheus utils home")
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
-
-find_and_configure_morpheus_utils(${MORPHEUS_UTILS_VERSION})

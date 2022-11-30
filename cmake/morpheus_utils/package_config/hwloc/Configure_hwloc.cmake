@@ -15,9 +15,11 @@
 # limitations under the License.
 #=============================================================================
 
+include_guard(DIRECTORY)
+
 find_package(CUDAToolkit)
 
-function(find_and_configure_hwloc version)
+function(morpheus_utils_configure_hwloc version)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "hwloc")
 
@@ -147,5 +149,3 @@ function(find_and_configure_hwloc version)
   endif()
 
 endfunction()
-
-find_and_configure_hwloc(${HWLOC_VERSION})

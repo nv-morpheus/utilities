@@ -15,7 +15,9 @@
 # limitations under the License.
 #=============================================================================
 
-function(find_and_configure_prometheus_cpp version)
+include_guard(DIRECTORY)
+
+function(morpheus_utils_configure_prometheus_cpp version)
   list(APPEND CMAKE_MESSAGE_CONTEXT "prometheus_cpp")
 
   rapids_cpm_find(prometheus-cpp ${version}
@@ -42,9 +44,3 @@ function(find_and_configure_prometheus_cpp version)
   )
 
 endfunction()
-
-find_and_configure_prometheus_cpp(${PROMETHEUS_CPP_VERSION})
-## Manually export prometheus-core. Use this if we don't want to apply the export fix patch.
-#add_library(prometheus-cpp-core STATIC IMPORTED)
-#set_property(TARGET prometheus-cpp-core PROPERTY
-#  IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/_deps/prometheus-cpp-build/lib/libprometheus-cpp-core.a")

@@ -18,9 +18,7 @@
 # ######################################################################################################################
 # * CMake properties ------------------------------------------------------------------------------
 
-list(APPEND CMAKE_MESSAGE_CONTEXT "cache")
-
-function(configure_ccache cache_dir_name)
+function(morpheus_utils_configure_ccache cache_dir_name)
   list(APPEND CMAKE_MESSAGE_CONTEXT "ccache")
 
   find_program(CCACHE_PROGRAM_PATH ccache DOC "Location of ccache executable")
@@ -38,7 +36,7 @@ function(configure_ccache cache_dir_name)
   message(STATUS "Using ccache directory: ${CCACHE_DIR}")
 
   # Write or update the ccache configuration file
-  configure_file("${LOCAL_MODULES_PATH}/ccache.conf.in" "${CCACHE_DIR}/ccache.conf")
+  configure_file("${CMAKE_CURRENT_LIST_DIR}/ccache.conf.in" "${CCACHE_DIR}/ccache.conf")
 
   # Set the ccache options we need
   set(CCACHE_CONFIGPATH "${CCACHE_DIR}/ccache.conf")
@@ -66,7 +64,7 @@ function(configure_ccache cache_dir_name)
     set(CCACHE_COMPILERTYPE "auto")
   endif()
 
-  configure_file("${LOCAL_MODULES_PATH}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_c.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_c.sh" @ONLY)
 
   # Configure ccache for CXX
   if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -77,11 +75,11 @@ function(configure_ccache cache_dir_name)
     set(CCACHE_COMPILERTYPE "auto")
   endif()
 
-  configure_file("${LOCAL_MODULES_PATH}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cxx.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cxx.sh" @ONLY)
 
   # Configure ccache for CUDA
   set(CCACHE_COMPILERTYPE "nvcc")
-  configure_file("${LOCAL_MODULES_PATH}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cuda.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cuda.sh" @ONLY)
 
   # Finally, set the compiler option
   set(CMAKE_C_COMPILER_LAUNCHER "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_c.sh" PARENT_SCOPE)
@@ -92,7 +90,7 @@ function(configure_ccache cache_dir_name)
   set(CCACHE_DIR "${CCACHE_DIR}" PARENT_SCOPE)
 endfunction()
 
-function(configure_cpm cache_dir_name)
+function(morpheus_utils_configure_cpm cache_dir_name)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cpm")
 
   # Set the CPM cache variable
@@ -104,7 +102,7 @@ function(configure_cpm cache_dir_name)
   # set(FETCHCONTENT_BASE_DIR "${${cache_dir_name}}/fetch" CACHE STRING "" FORCE)
 endfunction()
 
-function(check_cache_path cache_dir_name)
+function(morpheus_utils_check_cache_path cache_dir_name)
   # First, ensure that the current cache dir can be found by find_package/find_path/etc
   if((NOT "${CMAKE_FIND_ROOT_PATH}" STREQUAL "") AND("${CMAKE_FIND_ROOT_PATH_MODE_INCLUDE}" STREQUAL "ONLY"))
     set(is_contained FALSE)
@@ -131,14 +129,3 @@ function(check_cache_path cache_dir_name)
     endif()
   endif()
 endfunction()
-
-check_cache_path(MRC_CACHE_DIR)
-
-# Configure CCache if requested
-if(MRC_USE_CCACHE)
-  configure_ccache(MRC_CACHE_DIR)
-endif()
-
-configure_cpm(MRC_CACHE_DIR)
-
-list(POP_BACK CMAKE_MESSAGE_CONTEXT)
