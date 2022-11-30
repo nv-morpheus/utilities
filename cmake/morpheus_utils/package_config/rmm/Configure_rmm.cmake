@@ -20,7 +20,7 @@ function(find_and_configure_rmm version)
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
 
   message(STATUS "================> ${CMAKE_CURRENT_SOURCE_DIR}")
-  include(${CMAKE_BINARY_DIR}/cpm/rmm)
+  #include(${CMAKE_BINARY_DIR}/_deps/cpm/rmm)
 
   # Does not work with cudf currently. Once updated to include rmm::Thrust to the GLOBAL_TARGETS. This should be used
   # rapids_cpm_rmm(
