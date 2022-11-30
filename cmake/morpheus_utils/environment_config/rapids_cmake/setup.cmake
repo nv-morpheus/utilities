@@ -16,23 +16,25 @@
 # Ensure this is only run once
 include_guard(GLOBAL)
 
-set(RAPIDS_CMAKE_VERSION "${MRC_RAPIDS_VERSION}" CACHE STRING "Version of rapids-cmake to use")
+function(morpheus_utils_configure_rapids_cmake RAPIDS_VERSION_VAR_NAME)
+  set(RAPIDS_CMAKE_VERSION "${${RAPIDS_VERSION_VAR_NAME}}" CACHE STRING "Version of rapids-cmake to use")
 
-# Download and load the repo according to the rapids-cmake instructions if it does not exist
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake)
-  message(STATUS "Downloading RAPIDS CMake Version: ${RAPIDS_CMAKE_VERSION}")
-  file(
-    DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-${RAPIDS_CMAKE_VERSION}/RAPIDS.cmake
-    ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake
-  )
-endif()
+  # Download and load the repo according to the rapids-cmake instructions if it does not exist
+  if(NOT EXISTS ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake)
+    message(STATUS "Downloading RAPIDS CMake Version: ${RAPIDS_CMAKE_VERSION}")
+    file(
+      DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-${RAPIDS_CMAKE_VERSION}/RAPIDS.cmake
+      ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake
+    )
+  endif()
 
-# Now load the file
-include(${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake)
+  # Now load the file
+  include(${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake)
 
-# Load Rapids Cmake packages
-include(rapids-cmake)
-include(rapids-cpm)
-include(rapids-cuda)
-include(rapids-export)
-include(rapids-find)
+  # Load Rapids Cmake packages
+  include(rapids-cmake)
+  include(rapids-cpm)
+  include(rapids-cuda)
+  include(rapids-export)
+  include(rapids-find)
+endfunction()
