@@ -15,6 +15,9 @@
 # limitations under the License.
 # =============================================================================
 
+include_guard()
+include(FetchContent)
+
 # Fetch morpheus utilities -- don't use CPM, RAPIDS_CPM, or other external libraries here so
 #   we are only relying on CMake to get our core utilities.
 function(find_and_configure_morpheus_utils version)
