@@ -19,7 +19,8 @@ include_guard(DIRECTORY)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-include(ccache/setup)
-include(iwyu/setup)
-include(package_manager/setup)
-include(rapids_cmake/setup)
+include(ccache/init_ccache)
+include(code_coverage/init_coverage)
+include(iwyu/init_iwyu)
+include(package_manager/init_package_manager)
+include(rapids_cmake/init_rapids_cmake)

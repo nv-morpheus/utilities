@@ -15,7 +15,10 @@
 
 include_guard(GLOBAL)
 
-function(morpheus_utils_configure_package_manager
+# Capture the directory where the function is defined
+set(MORPHEUS_UTILS_ENVCFG_PM_DIR "${CMAKE_CURRENT_LIST_DIR}")
+
+function(morpheus_utils_initialize_package_manager
     USE_CONDA_VAR_NAME
     VCPKG_TOOLCHAIN_VAR_NAME
     VCPKG_DEFAULT_BINARY_CACHE_VAR_NAME
@@ -59,7 +62,7 @@ function(morpheus_utils_configure_package_manager
 
         # If using shared libs (the default) use a custom triplet file to use dynamic linking
         if(BUILD_SHARED_LIBS)
-          set(VCPKG_OVERLAY_TRIPLETS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vcpkg_triplets")
+          set(VCPKG_OVERLAY_TRIPLETS "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/vcpkg_triplets")
           set(VCPKG_TARGET_TRIPLET "x64-linux-dynamic")
         endif()
       else()

@@ -18,7 +18,12 @@
 # ######################################################################################################################
 # * CMake properties ------------------------------------------------------------------------------
 
-function(morpheus_utils_configure_ccache cache_dir_name)
+include_guard(DIRECTORY)
+
+# Capture the directory where the function is defined
+set(MORPHEUS_UTILS_ENVCFG_CCACHE_DIR "${CMAKE_CURRENT_LIST_DIR}")
+
+function(morpheus_utils_initialize_ccache cache_dir_name)
   list(APPEND CMAKE_MESSAGE_CONTEXT "ccache")
 
   find_program(CCACHE_PROGRAM_PATH ccache DOC "Location of ccache executable")
@@ -36,7 +41,7 @@ function(morpheus_utils_configure_ccache cache_dir_name)
   message(STATUS "Using ccache directory: ${CCACHE_DIR}")
 
   # Write or update the ccache configuration file
-  configure_file("${CMAKE_CURRENT_LIST_DIR}/ccache.conf.in" "${CCACHE_DIR}/ccache.conf")
+  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/ccache.conf.in" "${CCACHE_DIR}/ccache.conf")
 
   # Set the ccache options we need
   set(CCACHE_CONFIGPATH "${CCACHE_DIR}/ccache.conf")
@@ -64,7 +69,7 @@ function(morpheus_utils_configure_ccache cache_dir_name)
     set(CCACHE_COMPILERTYPE "auto")
   endif()
 
-  configure_file("${CMAKE_CURRENT_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_c.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_c.sh" @ONLY)
 
   # Configure ccache for CXX
   if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -75,11 +80,12 @@ function(morpheus_utils_configure_ccache cache_dir_name)
     set(CCACHE_COMPILERTYPE "auto")
   endif()
 
-  configure_file("${CMAKE_CURRENT_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cxx.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cxx.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/run_ccache_prefix.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_prefix.sh" @ONLY)
 
   # Configure ccache for CUDA
   set(CCACHE_COMPILERTYPE "nvcc")
-  configure_file("${CMAKE_CURRENT_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cuda.sh" @ONLY)
+  configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/run_ccache.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_cuda.sh" @ONLY)
 
   # Finally, set the compiler option
   set(CMAKE_C_COMPILER_LAUNCHER "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_c.sh" PARENT_SCOPE)
@@ -90,7 +96,7 @@ function(morpheus_utils_configure_ccache cache_dir_name)
   set(CCACHE_DIR "${CCACHE_DIR}" PARENT_SCOPE)
 endfunction()
 
-function(morpheus_utils_configure_cpm cache_dir_name)
+function(morpheus_utils_initialize_cpm cache_dir_name)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cpm")
 
   # Set the CPM cache variable

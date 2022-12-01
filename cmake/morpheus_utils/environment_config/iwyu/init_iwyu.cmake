@@ -17,7 +17,10 @@
 
 include_guard(DIRECTORY)
 
-function(morpheus_utils_configure_iwyu
+# Capture the directory where the function is defined
+set(MORPHEUS_UTILS_ENVCFG_IWYU_DIR "${CMAKE_CURRENT_LIST_DIR}")
+
+function(morpheus_utils_initialize_iwyu
     USE_IWYU_VAR_NAME
     IWYU_VERBOSITY_VAR_NAME
     IWYU_PROGRAM_VAR_NAME
@@ -27,7 +30,6 @@ function(morpheus_utils_configure_iwyu
   list(APPEND CMAKE_MESSAGE_CONTEXT "iwyu")
 
   set(${IWYU_VERBOSITY_VAR_NAME} "1" CACHE STRING "Set verbosity level for include-what-you-use, 1 is default, 1 only shows recomendations and 11+ prints everything")
-
   find_program(${IWYU_PROGRAM_VAR_NAME} "include-what-you-use")
 
   if(${IWYU_PROGRAM_VAR_NAME})
@@ -41,14 +43,17 @@ function(morpheus_utils_configure_iwyu
       -Xiwyu --no_comments)
 
     # Convert these to space separated arguments
-    string(REPLACE ";" " " ${IWYU_OPTIONS_VAR_NAME} "${${MRC_IWYU_OPTIONS_VAR_NAME}}")
+    string(REPLACE ";" " " ${IWYU_OPTIONS_VAR_NAME} "${${IWYU_OPTIONS_VAR_NAME}}")
 
-    message(STATUS "Enabling include-what-you-use for MRC targets")
+    message(STATUS "Enabling include-what-you-use for ${PROJECT_NAME} targets")
 
     set(IWYU_WRAPPER "${CMAKE_CURRENT_BINARY_DIR}/run_iwyu.sh")
 
     # Make a ccache runner file with the necessary settings. MRC_CCACHE_OPTIONS must be set!
-    configure_file("${LOCAL_MODULES_PATH}/templates/run_iwyu.sh.in" "${IWYU_WRAPPER}")
+    set(IWYU_PROGRAM "${${IWYU_PROGRAM_VAR_NAME}}")
+    set(IWYU_OPTIONS "${${IWYU_OPTIONS_VAR_NAME}}")
+
+    configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/run_iwyu.sh.in" "${IWYU_WRAPPER}")
 
     if(${USE_CCACHE_VAR_NAME})
       set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_prefix.sh;${IWYU_WRAPPER};${CMAKE_C_COMPILER}" PARENT_SCOPE)
@@ -62,5 +67,3 @@ function(morpheus_utils_configure_iwyu
     message(WARNING "IWYU option ${USE_IWYU_VAR_NAME} is enabled but the include-what-you-use was not found. Check iwyu installation and add the iwyu bin dir to your PATH variable.")
   endif()
 endfunction()
-
-# Configure IWYU if requested
