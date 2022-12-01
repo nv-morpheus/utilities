@@ -34,14 +34,18 @@ function(morpheus_utils_configure_matx version)
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
         GIT_TAG         "v${version}"
         GIT_SHALLOW     TRUE
-        PATCH_COMMAND   git checkout -- . && git apply --whitespace=fix ${PROJECT_SOURCE_DIR}/cmake/deps/patches/matx.patch
+        PATCH_COMMAND
+          git checkout -- .
+          && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/config_and_install_updates.patch
         OPTIONS         "BUILD_EXAMPLES OFF"
                         "BUILD_TESTS OFF"
                         "MATX_INSTALL ON"
     )
 
   else()
-    message(SEND_ERROR "Unable to add MatX dependency. CUDA Version must be greater than 11.4. Current CUDA Version: ${CUDAToolkit_VERSION}")
+    message(SEND_ERROR
+        "Unable to add MatX dependency. CUDA Version must be greater than 11.4.
+        Current CUDA Version: ${CUDAToolkit_VERSION}")
   endif()
 
 endfunction()
