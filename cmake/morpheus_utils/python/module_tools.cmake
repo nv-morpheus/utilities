@@ -15,71 +15,42 @@
 # Ensure we only include this once
 include_guard(DIRECTORY)
 
-find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-function(print_python_info)
-  message(VERBOSE "Python3_EXECUTABLE (before find_package): ${Python3_EXECUTABLE}")
-  message(VERBOSE "Python3_ROOT_DIR (before find_package): ${Python3_ROOT_DIR}")
-  message(VERBOSE "FIND_PYTHON_STRATEGY (before find_package): ${FIND_PYTHON_STRATEGY}")
-  message(VERBOSE "Python3_FOUND: " ${Python3_FOUND})
-  message(VERBOSE "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
-  message(VERBOSE "Python3_INTERPRETER_ID: " ${Python3_INTERPRETER_ID})
-  message(VERBOSE "Python3_STDLIB: " ${Python3_STDLIB})
-  message(VERBOSE "Python3_STDARCH: " ${Python3_STDARCH})
-  message(VERBOSE "Python3_SITELIB: " ${Python3_SITELIB})
-  message(VERBOSE "Python3_SITEARCH: " ${Python3_SITEARCH})
-  message(VERBOSE "Python3_SOABI: " ${Python3_SOABI})
-  message(VERBOSE "Python3_INCLUDE_DIRS: " ${Python3_INCLUDE_DIRS})
-  message(VERBOSE "Python3_LIBRARIES: " ${Python3_LIBRARIES})
-  message(VERBOSE "Python3_LIBRARY_DIRS: " ${Python3_LIBRARY_DIRS})
-  message(VERBOSE "Python3_VERSION: " ${Python3_VERSION})
-  message(VERBOSE "Python3_NumPy_FOUND: " ${Python3_NumPy_FOUND})
-  message(VERBOSE "Python3_NumPy_INCLUDE_DIRS: " ${Python3_NumPy_INCLUDE_DIRS})
-  message(VERBOSE "Python3_NumPy_VERSION: " ${Python3_NumPy_VERSION})
-endfunction()
-
-# After finding python, now find pybind11
+include(python3)
 
 # pybind11
 # =========
 set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
 morpheus_utils_configure_pybind11(${PYBIND11_VERSION})
 
-if (NOT EXISTS ${Python3_SITELIB}/skbuild)
-    # In case this is messed up by `/usr/local/python/site-packages` vs `/usr/python/site-packages`, check pip itself.
-    execute_process(
-        COMMAND bash "-c" "${Python3_EXECUTABLE} -m pip show scikit-build | sed -n -e 's/Location: //p'"
-        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-
-    if (NOT EXISTS ${PYTHON_SITE_PACKAGES}/skbuild)
-        message(SEND_ERROR "Scikit-build is not installed. CMake may not be able to find Cython. Install scikit-build with `pip install scikit-build`")
-    else()
-        list(APPEND CMAKE_MODULE_PATH "${PYTHON_SITE_PACKAGES}/skbuild/resources/cmake")
-    endif()
-else ()
-    list(APPEND CMAKE_MODULE_PATH "${Python3_SITELIB}/skbuild/resources/cmake")
-endif ()
-
-set(CYTHON_FLAGS "--directive binding=True,boundscheck=False,wraparound=False,embedsignature=True,always_allow_keywords=True" CACHE STRING "The directives for Cython compilation.")
+set(CYTHON_FLAGS
+    "--directive binding=True,boundscheck=False,wraparound=False,embedsignature=True,always_allow_keywords=True"
+    CACHE STRING "The directives for Cython compilation.")
 
 # Now we can find pybind11
 find_package(pybind11 REQUIRED)
 find_package(Cython REQUIRED)
 
-function(create_python_package PACKAGE_NAME)
+#[=======================================================================[
+@brief : Creates an artifact set used to build a python wheel
+ex. morpheus_utils_create_python_package(package_name)
+results --
+morpheus_utils_create_python_package <PACKAGE_NAME>
+#]=======================================================================]
+function(morpheus_utils_create_python_package PACKAGE_NAME)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "${PACKAGE_NAME}")
   set(CMAKE_MESSAGE_CONTEXT ${CMAKE_MESSAGE_CONTEXT} PARENT_SCOPE)
 
   if(PYTHON_ACTIVE_PACKAGE_NAME)
-    message(FATAL_ERROR "An active wheel has already been created. Must call create_python_package/build_python_package in pairs")
+    message(FATAL_ERROR
+        "An active wheel has already been created. Must call morpheus_utils_create_python_package/morpheus_utils_build_python_package in pairs")
   endif()
 
   message(STATUS "Creating python package '${PACKAGE_NAME}'")
 
-  # Set the active wheel in the parent scipe
+  # Set the active wheel in the parent scope
   set(PYTHON_ACTIVE_PACKAGE_NAME ${PACKAGE_NAME}-package)
 
   # Create a dummy source that holds all of the source files as resources
@@ -106,14 +77,23 @@ function(create_python_package PACKAGE_NAME)
     "MANIFEST.in"
   )
 
-  add_python_sources(${wheel_python_files})
+  morpheus_utils_add_python_sources(${wheel_python_files})
 
   # Set the active wheel in the parent scope so it will appear in any subdirectories
   set(PYTHON_ACTIVE_PACKAGE_NAME ${PYTHON_ACTIVE_PACKAGE_NAME} PARENT_SCOPE)
 
 endfunction()
 
-function(add_target_resources)
+#[=======================================================================[
+@brief : Adds all unparsed arguments from the call
+as target resources to <target_name>
+ex. morpheus_utils_add_target_resources(TARGET_NAME <target_name>)
+results --
+
+morpheus_utils_add_target_resources
+
+#]=======================================================================]
+function(morpheus_utils_add_target_resources)
 
   set(flags "")
   set(singleValues TARGET_NAME)
@@ -151,18 +131,36 @@ function(add_target_resources)
 
 endfunction()
 
-function(add_python_sources)
+#[=======================================================================[
+@brief : Add all <source> elements as resources to the current python
+wheel package.
+ex. morpheus_utils_add_python_sources([SOURCES...])
+results --
+
+morpheus_utils_add_python_sources
+
+#]=======================================================================]
+function(morpheus_utils_add_python_sources)
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
-    message(FATAL_ERROR "Must call create_python_wheel() before calling add_python_sources")
+    message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
   endif()
 
   # Append any arguments to the python_sources_target
-  add_target_resources(TARGET_NAME ${PYTHON_ACTIVE_PACKAGE_NAME}-sources ${ARGN})
+  morpheus_utils_add_target_resources(TARGET_NAME ${PYTHON_ACTIVE_PACKAGE_NAME}-sources ${ARGN})
 
 endfunction()
 
-function(copy_target_resources TARGET_NAME COPY_DIRECTORY)
+#[=======================================================================[
+@brief : Add custom command to copy all resources for a given
+<target_name> to <copy_directory>
+ex. morpheus_utils_copy_target_resources(<target name> <copy_dir>
+results --
+
+morpheus_utils_copy_target_resources(<TARGET_NAME>
+                      <COPY_DIRECTORY>)
+#]=======================================================================]
+function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
 
   # See if there are any resources associated with this target
   get_target_property(target_resources ${TARGET_NAME} RESOURCE)
@@ -222,7 +220,15 @@ function(copy_target_resources TARGET_NAME COPY_DIRECTORY)
 
 endfunction()
 
-function(inplace_build_copy TARGET_NAME INPLACE_DIR)
+#[=======================================================================[
+@brief : Copy built-in-place resources to an inplace directory
+ex. morpheus_utils_copy_target_resources
+results --
+
+morpheus_utils_copy_target_resources(<TARGET_NAME>
+                      <INPLACE_DIR>)
+#]=======================================================================]
+function(morpheus_utils_inplace_build_copy TARGET_NAME INPLACE_DIR)
   message(VERBOSE "Inplace build: (${TARGET_NAME}) ${INPLACE_DIR}")
 
   add_custom_command(
@@ -231,18 +237,28 @@ function(inplace_build_copy TARGET_NAME INPLACE_DIR)
     COMMENT "Moving target ${TARGET_NAME} to ${INPLACE_DIR} for inplace build"
   )
 
-  copy_target_resources(${TARGET_NAME} ${INPLACE_DIR})
+  morpheus_utils_copy_target_resources(${TARGET_NAME} ${INPLACE_DIR})
 
 endfunction()
 
-function(build_python_package PACKAGE_NAME)
+#[=======================================================================[
+@brief : Given an active, existing, package definition build a python
+wheel if BUILD_WHEEL is set, and install it if INSTALL_WHEEL is set.
+ex. morpheus_utils_build_python_package(<package_name> [BUILD_WHEEL] [INSTALL_WHEEL])
+results --
+
+morpheus_utils_build_python_package(<PACKAGE_NAME>
+                     [BUILD_WHEEL]
+                     [INSTALL_WHEEL])
+#]=======================================================================]
+function(morpheus_utils_build_python_package PACKAGE_NAME)
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
-    message(FATAL_ERROR "Must call create_python_package() before calling add_python_sources")
+    message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
   endif()
 
   if(NOT "${PACKAGE_NAME}-package" STREQUAL "${PYTHON_ACTIVE_PACKAGE_NAME}")
-    message(FATAL_ERROR "Mismatched package name supplied to create_python_package/build_python_package")
+    message(FATAL_ERROR "Mismatched package name supplied to morpheus_utils_create_python_package/morpheus_utils_build_python_package")
   endif()
 
   set(flags BUILD_WHEEL INSTALL_WHEEL IS_INPLACE)
@@ -263,7 +279,7 @@ function(build_python_package PACKAGE_NAME)
   get_target_property(sources_binary_dir ${PYTHON_ACTIVE_PACKAGE_NAME}-sources BINARY_DIR)
 
   # First copy the source files
-  copy_target_resources(${PYTHON_ACTIVE_PACKAGE_NAME}-sources ${sources_binary_dir})
+  morpheus_utils_copy_target_resources(${PYTHON_ACTIVE_PACKAGE_NAME}-sources ${sources_binary_dir})
 
   set(module_dependencies ${PYTHON_ACTIVE_PACKAGE_NAME}-sources-copy-resources)
 
@@ -355,20 +371,19 @@ fully qualified python module path. If MODULE_ROOT is not provided, it
 will default to ${CMAKE_CURRENT_SOURCE_DIR} -- the context of
 the caller.
 
-ex. resolve_python_module_name(my_module MODULE_ROOT morpheus/_lib)
+ex. morpheus_utils_resolve_python_module_name(my_module MODULE_ROOT morpheus/_lib)
 results --
   MODULE_TARGET_NAME:   morpheus._lib.my_module
   OUTPUT_MODULE_NAME:   my_module
   OUTPUT_RELATIVE_PATH: morpheus/_lib
 
-resolve_python_module_name <MODULE_NAME>
+morpheus_utils_resolve_python_module_name <MODULE_NAME>
                            [MODULE_ROOT]
                            [OUTPUT_TARGET_NAME]
                            [OUTPUT_MODULE_NAME]
                            [OUTPUT_RELATIVE_PATH]
 #]=======================================================================]
-
-function(resolve_python_module_name MODULE_NAME)
+function(morpheus_utils_resolve_python_module_name MODULE_NAME)
   set(prefix _ARGS) # Prefix parsed args
   set(flags "")
   set(singleValues
@@ -418,12 +433,12 @@ results --
 add_python_module
 
 #]=======================================================================]
-macro(_create_python_library MODULE_NAME)
+macro(__create_python_library MODULE_NAME)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "${MODULE_NAME}")
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
-    message(FATAL_ERROR "Must call create_python_wheel() before calling add_python_sources")
+    message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
   endif()
 
   set(prefix _ARGS)
@@ -445,7 +460,7 @@ macro(_create_python_library MODULE_NAME)
   # Normalize the module root
   cmake_path(SET _ARGS_MODULE_ROOT "${_ARGS_MODULE_ROOT}")
 
-  resolve_python_module_name(${MODULE_NAME}
+  morpheus_utils_resolve_python_module_name(${MODULE_NAME}
     MODULE_ROOT ${_ARGS_MODULE_ROOT}
     OUTPUT_TARGET_NAME TARGET_NAME
     OUTPUT_MODULE_NAME MODULE_NAME
@@ -536,7 +551,7 @@ macro(_create_python_library MODULE_NAME)
     add_dependencies(${PYTHON_ACTIVE_PACKAGE_NAME}-outputs ${TARGET_NAME}-stubs)
 
     # Save the output as a target property
-    add_target_resources(TARGET_NAME ${TARGET_NAME} "${module_binary_stub_file}")
+    morpheus_utils_add_target_resources(TARGET_NAME ${TARGET_NAME} "${module_binary_stub_file}")
   endif()
 
   if(_ARGS_INSTALL_DEST)
@@ -564,7 +579,7 @@ macro(_create_python_library MODULE_NAME)
 
   if(_ARGS_COPY_INPLACE)
     # Copy the target inplace
-    inplace_build_copy(${TARGET_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
+    morpheus_utils_inplace_build_copy(${TARGET_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
   endif()
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
@@ -572,44 +587,47 @@ macro(_create_python_library MODULE_NAME)
 endmacro()
 
 #[=======================================================================[
-@brief : TODO
-ex. add_cython_library
+@brief : Adds a CMake build target for a new Cython library
+ex. morpheus_utils_add_cython_library
 results --
 
-add_cython_library
+morpheus_utils_add_cython_library
 
 #]=======================================================================]
-function(add_cython_library MODULE_NAME)
+function(morpheus_utils_add_cython_library MODULE_NAME)
 
-  _create_python_library(${MODULE_NAME} IS_CYTHON ${ARGN})
+  __create_python_library(${MODULE_NAME} IS_CYTHON ${ARGN})
 
 endfunction()
 
 #[=======================================================================[
-@brief : TODO
-ex. add_pybind11_module
+@brief : Adds a CMake build target for a new pybind11 module
+ex. morpheus_utils_add_pybind1_module
 results --
 
-add_pybind11_module
+morpheus_utils_add_pybind1_module
 
 #]=======================================================================]
-function(add_pybind11_module MODULE_NAME)
+function(morpheus_utils_add_pybind11_module MODULE_NAME)
 
   # Add IS_MODULE to make a MODULE instead of a SHARED
-  _create_python_library(${MODULE_NAME} IS_PYBIND11 IS_MODULE ${ARGN})
+  __create_python_library(${MODULE_NAME} IS_PYBIND11 IS_MODULE ${ARGN})
 
 endfunction()
 
 #[=======================================================================[
-@brief : TODO
-ex. add_pybind11_library
+@brief : Adds a CMake build target for a new python enabled library -
+Note: this differs from a module in that there should be no intention
+to import the resulting artifacts directly into Python, and should not
+contain any PYBIND11_MODULE calls.
+ex. morpheus_utils_add_pybind11_library
 results --
 
-add_pybind11_library
+morpheus_utils_add_pybind11_library
 
 #]=======================================================================]
-function(add_pybind11_library MODULE_NAME)
+function(morpheus_utils_add_pybind11_library MODULE_NAME)
 
-  _create_python_library(${MODULE_NAME} IS_PYBIND11 ${ARGN})
+  __create_python_library(${MODULE_NAME} IS_PYBIND11 ${ARGN})
 
 endfunction()
