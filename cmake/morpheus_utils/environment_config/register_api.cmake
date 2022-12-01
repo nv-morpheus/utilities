@@ -22,7 +22,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 include(ccache/register_api)
 include(code_coverage/register_api)
 include(iwyu/register_api)
-include(package_manager/register_api)
+#include(package_manager/register_api)
 include(rapids_cmake/register_api)
 
 list(POP_BACK CMAKE_MODULE_PATH)
