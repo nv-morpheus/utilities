@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # Ensure this is only run once
-include_guard(GLOBAL)
+include_guard(DIRECTORY)
 
 # Capture the directory where the function is defined
 set(MORPHEUS_UTILS_ENVCFG_RAPIDS_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")

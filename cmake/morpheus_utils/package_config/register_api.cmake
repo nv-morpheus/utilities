@@ -24,6 +24,7 @@ else()
 endif()
 
 include(boost/Configure_boost)
+include(cudf/Configure_cudf)
 include(expected/Configure_expected)
 include(glog/Configure_glog)
 include(hwloc/Configure_hwloc)
