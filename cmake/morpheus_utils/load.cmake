@@ -15,24 +15,19 @@
 # limitations under the License.
 #=============================================================================
 
+include_guard(DIRECTORY)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-if (MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE)
-  rapids_cpm_init(OVERRIDE "${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}")
+include(environment_config/register_api)
+if (MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
+  morpheus_utils_initialize_rapids_cmake(MRC_RAPIDS_VERSION)
 else()
-  rapids_cpm_init()
+  morpheus_utils_initialize_rapids_cmake(22.08)
 endif()
 
-include(boost/Configure_boost)
-include(expected/Configure_expected)
-include(glog/Configure_glog)
-include(hwloc/Configure_hwloc)
-include(libcudacxx/Configure_libcudacxx)
-include(prometheus/Configure_prometheus)
-include(pybind11/Configure_pybind11)
-include(rmm/Configure_rmm)
-include(rxcpp/Configure_rxcpp)
-include(taskflow/Configure_taskflow)
-include(ucx/Configure_ucx)
+include(package_config/register_api)
+include(general/register_api)
+include(python/register_api)
 
 list(POP_BACK CMAKE_MODULE_PATH)
