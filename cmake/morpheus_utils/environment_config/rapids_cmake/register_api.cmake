@@ -16,9 +16,6 @@
 # Ensure this is only run once
 include_guard(DIRECTORY)
 
-# Capture the directory where the function is defined
-set(MORPHEUS_UTILS_ENVCFG_RAPIDS_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}")
-
 function(morpheus_utils_initialize_rapids_cmake RAPIDS_VERSION_VAR_NAME)
   set(RAPIDS_CMAKE_VERSION "${${RAPIDS_VERSION_VAR_NAME}}" CACHE STRING "Version of rapids-cmake to use")
 
@@ -42,24 +39,19 @@ function(morpheus_utils_initialize_rapids_cmake RAPIDS_VERSION_VAR_NAME)
   include(rapids-find)
 endfunction()
 
-function(morpheus_utils_initialize_cuda_arch ARCH_NAME)
+macro(morpheus_utils_initialize_cuda_arch project_name)
   message(STATUS "Configuring CUDA Architecture")
-  if (MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
-    morpheus_utils_initialize_rapids_cmake(MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
-  else()
-    morpheus_utils_initialize_rapids_cmake(22.08)
-  endif()
 
   # Default to using "" for CUDA_ARCHITECTURES to build based on GPU in system
   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-    set(CMAKE_CUDA_ARCHITECTURES "" PARENT_SCOPE)
+    set(CMAKE_CUDA_ARCHITECTURES "")
     message(STATUS "CMAKE_CUDA_ARCHITECTURES was not defined. Defaulting to '' to build only for local architecture. "
         "Specify -DCMAKE_CUDA_ARCHITECTURES='ALL' to build for all archs.")
   endif()
 
   # Initialize CUDA architectures
-  rapids_cuda_init_architectures(${ARCH_NAME})
-endfunction()
+  rapids_cuda_init_architectures(${project_name})
+endmacro()
 
 function(morpheus_utils_initialize_package_manager_2
     USE_CONDA_VAR_NAME

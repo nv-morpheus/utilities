@@ -30,7 +30,10 @@ set(CYTHON_FLAGS
 
 # Now we can find pybind11
 find_package(pybind11 REQUIRED)
+
+if (MORPHEUS_UTILS_REQUIRE_PYTHON_REQUIRE_SKBUILD)
 find_package(Cython REQUIRED)
+endif()
 
 #[=======================================================================[
 @brief : Creates an artifact set used to build a python wheel
