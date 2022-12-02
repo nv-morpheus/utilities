@@ -14,6 +14,10 @@
 # limitations under the License.
 #=============================================================================
 
+include_guard(DIRECTORY)
+include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
+morpheus_utils_package_config_ensure_rapids_cpm_init()
+
 function(morpheus_utils_configure_rdkafka version) # version currently unused, left for consistency
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "rdkafka")

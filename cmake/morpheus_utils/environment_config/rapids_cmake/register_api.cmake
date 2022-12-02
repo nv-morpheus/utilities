@@ -16,6 +16,17 @@
 # Ensure this is only run once
 include_guard(DIRECTORY)
 
+macro(morpheus_utils_ensure_rapids_cpm_init)
+  if (MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
+    morpheus_utils_initialize_rapids_cmake(MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
+    set(_MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED TRUE CACHE STRING "")
+    mark_as_advanced(_MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED)
+  else()
+    message(FATAL_ERROR "Must set MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION before loading
+    morpheus_utils::rapids_cmake")
+  endif()
+endmacro()
+
 function(morpheus_utils_initialize_rapids_cmake RAPIDS_VERSION_VAR_NAME)
   set(RAPIDS_CMAKE_VERSION "${${RAPIDS_VERSION_VAR_NAME}}" CACHE STRING "Version of rapids-cmake to use")
 

@@ -17,23 +17,10 @@ include_guard(DIRECTORY)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-include(python3)
-
-# pybind11
-# =========
-set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
-morpheus_utils_configure_pybind11(${PYBIND11_VERSION})
-
-set(CYTHON_FLAGS
-    "--directive binding=True,boundscheck=False,wraparound=False,embedsignature=True,always_allow_keywords=True"
-    CACHE STRING "The directives for Cython compilation.")
-
-# Now we can find pybind11
-find_package(pybind11 REQUIRED)
-
-if (MORPHEUS_UTILS_REQUIRE_PYTHON_REQUIRE_SKBUILD)
-find_package(Cython REQUIRED)
-endif()
+include(python_config_macros)
+morpheus_utils_ensure_sk_build()
+morpheus_utils_python_modules_ensure_pybind11()
+morpheus_utils_python_modules_ensure_cython()
 
 #[=======================================================================[
 @brief : Creates an artifact set used to build a python wheel
@@ -437,12 +424,7 @@ add_python_module
 
 #]=======================================================================]
 macro(__create_python_library MODULE_NAME)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "${MODULE_NAME}")
-
-  if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
-    message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
-  endif()
 
   set(prefix _ARGS)
   set(flags IS_PYBIND11 IS_CYTHON IS_MODULE COPY_INPLACE BUILD_STUBS)
@@ -455,6 +437,10 @@ macro(__create_python_library MODULE_NAME)
       "${singleValues}"
       "${multiValues}"
       ${ARGN})
+
+  if(NOT _ARGS_NO_PACKAGE AND NOT PYTHON_ACTIVE_PACKAGE_NAME)
+    message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
+  endif()
 
   if(NOT _ARGS_MODULE_ROOT)
     get_target_property(_ARGS_MODULE_ROOT ${PYTHON_ACTIVE_PACKAGE_NAME}-modules SOURCE_DIR)

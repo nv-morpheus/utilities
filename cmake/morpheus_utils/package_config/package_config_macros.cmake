@@ -15,28 +15,19 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
-
-include(package_config_macros)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-include(boost/Configure_boost)
-include(cudf/Configure_cudf)
-include(expected/Configure_expected)
-include(glog/Configure_glog)
-include(hwloc/Configure_hwloc)
-include(libcudacxx/Configure_libcudacxx)
-include(matx/Configure_matx)
-include(mrc/Configure_mrc)
-include(prometheus/Configure_prometheus)
-include(pybind11/Configure_pybind11)
-include(rdkafka/Configure_rdkafka)
-include(rmm/Configure_rmm)
-include(rxcpp/Configure_rxcpp)
-include(taskflow/Configure_taskflow)
-include(triton_client/Configure_triton_client)
-include(ucx/Configure_ucx)
-
-list(POP_BACK CMAKE_MODULE_PATH)
+macro(morpheus_utils_package_config_ensure_rapids_cpm_init)
+  if (MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED OR MORPHEUS_UTILS_NO_CPM_INIT)
+    # Do nothing if were already initialized or manually specified
+  else()
+    if (MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE)
+      message(STATUS "MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE:${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE},
+        is set and will be used: ${}")
+      rapids_cpm_init(OVERRIDE "${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}")
+      set(MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED ON)
+    else()
+      rapids_cpm_init()
+    endif()
+  endif()
+endmacro()

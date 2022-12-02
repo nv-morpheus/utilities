@@ -19,13 +19,9 @@ include_guard(DIRECTORY)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-include(environment_config/register_api)
-if (MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
-  morpheus_utils_initialize_rapids_cmake(MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
-else()
-  morpheus_utils_initialize_rapids_cmake(22.08)
-endif()
+set(MORPHEUS_UTILS_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
+include(environment_config/register_api)
 include(package_config/register_api)
 include(general/register_api)
 include(python/register_api)

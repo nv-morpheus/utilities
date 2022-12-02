@@ -19,10 +19,19 @@ include_guard(DIRECTORY)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
+# No deps
 include(ccache/register_api)
+
+# No deps
 include(code_coverage/register_api)
+
+# Depends on ccache
 include(iwyu/register_api)
-#include(package_manager/register_api)
+
+# No deps
 include(rapids_cmake/register_api)
+
+# Ensure that RAPIDS CPM is initialized
+morpheus_utils_ensure_rapids_cpm_init()
 
 list(POP_BACK CMAKE_MODULE_PATH)

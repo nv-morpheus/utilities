@@ -16,6 +16,8 @@
 #=============================================================================
 
 include_guard(DIRECTORY)
+include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
+morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 find_package(CUDAToolkit)
 

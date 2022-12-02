@@ -15,6 +15,10 @@
 # limitations under the License.
 #=============================================================================
 
+include_guard(DIRECTORY)
+include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
+morpheus_utils_package_config_ensure_rapids_cpm_init()
+
 # This function is for when boost fully supports CMake. As of 1.76.0 the
 # functionality is not supported but is in the master branch. Check in version
 # 1.77

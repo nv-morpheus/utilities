@@ -131,6 +131,8 @@
 #      make my_coverage_target
 #
 
+include_guard(DIRECTORY)
+
 include(CMakeParseArguments)
 
 option(CODE_COVERAGE_VERBOSE "Verbose information" FALSE)

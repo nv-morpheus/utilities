@@ -15,7 +15,8 @@
 # Ensure we only include this once
 include_guard(DIRECTORY)
 
-find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
+include(python_config_macros)
+morpheus_utils_python_modules_ensure_python3()
 
 function(morpheus_utils_print_python_info)
   message(VERBOSE "Python3_EXECUTABLE (before find_package): ${Python3_EXECUTABLE}")
@@ -37,22 +38,3 @@ function(morpheus_utils_print_python_info)
   message(VERBOSE "Python3_NumPy_INCLUDE_DIRS: " ${Python3_NumPy_INCLUDE_DIRS})
   message(VERBOSE "Python3_NumPy_VERSION: " ${Python3_NumPy_VERSION})
 endfunction()
-
-if (MORPHEUS_UTILS_REQUIRE_PYTHON_REQUIRE_SKBUILD)
-  if (NOT EXISTS ${Python3_SITELIB}/skbuild)
-    # In case this is messed up by `/usr/local/python/site-packages` vs `/usr/python/site-packages`, check pip itself.
-    execute_process(
-        COMMAND bash "-c" "${Python3_EXECUTABLE} -m pip show scikit-build | sed -n -e 's/Location: //p'"
-        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-
-    if (NOT EXISTS ${PYTHON_SITE_PACKAGES}/skbuild)
-      message(SEND_ERROR "Scikit-build is not installed. CMake may not be able to find Cython. Install scikit-build with `pip install scikit-build`")
-    else()
-      list(APPEND CMAKE_MODULE_PATH "${PYTHON_SITE_PACKAGES}/skbuild/resources/cmake")
-    endif()
-  else ()
-    list(APPEND CMAKE_MODULE_PATH "${Python3_SITELIB}/skbuild/resources/cmake")
-  endif ()
-endif()
