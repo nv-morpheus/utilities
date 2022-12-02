@@ -64,13 +64,14 @@ macro(morpheus_utils_initialize_cuda_arch project_name)
   rapids_cuda_init_architectures(${project_name})
 endmacro()
 
-function(morpheus_utils_initialize_package_manager_2
+function(morpheus_utils_initialize_package_manager
     USE_CONDA_VAR_NAME
     BUILD_SHARED_LIBS_VAR_NAME
     VCPKG_TOOLCHAIN_VAR_NAME
     VCPKG_DEFAULT_BINARY_CACHE_VAR_NAME
     )
 
+  morpheus_utils_ensure_rapids_cpm_init()
   set(USE_CONDA ${${USE_CONDA_VAR_NAME}})
   set(VCPKG_TOOLCHAIN ${${VCPKG_TOOLCHAIN_VAR_NAME}})
   set(VCPKG_DEFAULT_BINARY_CACHE ${${VCPKG_DEFAULT_BINARY_CACHE}})
@@ -130,7 +131,7 @@ function(morpheus_utils_initialize_package_manager_2
   endif()
 endfunction()
 
-function(morpheus_utils_initialize_package_manager
+function(morpheus_utils_initialize_package_manager_2
     USE_CONDA_VAR_NAME
     VCPKG_TOOLCHAIN_VAR_NAME
     VCPKG_DEFAULT_BINARY_CACHE_VAR_NAME
