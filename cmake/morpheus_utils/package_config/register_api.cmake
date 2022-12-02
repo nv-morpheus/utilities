@@ -19,9 +19,6 @@ include_guard(DIRECTORY)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-include(package_config_macros)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
 include(boost/Configure_boost)
 include(cudf/Configure_cudf)
 include(expected/Configure_expected)
