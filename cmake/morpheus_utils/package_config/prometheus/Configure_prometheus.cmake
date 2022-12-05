@@ -15,14 +15,16 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_prometheus_cpp version)
+set(PROMETHEUS_CPP_VERSION "1.0.0" CACHE STRING "Version of Prometheus-cpp to use")
+
+function(morpheus_utils_configure_prometheus_cpp)
   list(APPEND CMAKE_MESSAGE_CONTEXT "prometheus_cpp")
 
-  rapids_cpm_find(prometheus-cpp ${version}
+  rapids_cpm_find(prometheus-cpp ${PROMETHEUS_CPP_VERSION}
     GLOBAL_TARGETS
       prometheus-cpp prometheus-cpp::core
     BUILD_EXPORT_SET
@@ -31,7 +33,7 @@ function(morpheus_utils_configure_prometheus_cpp version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY https://github.com/jupp0r/prometheus-cpp.git
-      GIT_TAG "v${version}"
+      GIT_TAG "v${PROMETHEUS_CPP_VERSION}"
       GIT_SHALLOW TRUE
       PATCH_COMMAND   git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/exports_fix.patch
       OPTIONS "BUILD_SHARED_LIBS OFF"

@@ -15,15 +15,16 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
+
+set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
 # This function is for when boost fully supports CMake. As of 1.76.0 the
 # functionality is not supported but is in the master branch. Check in version
 # 1.77
-function(morpheus_utils_configure_boost_true_cmake version)
-
+function(morpheus_utils_configure_boost_true_cmake)
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
   cmake_policy(SET CMP0097 OLD)
@@ -32,7 +33,7 @@ function(morpheus_utils_configure_boost_true_cmake version)
   set(Boost_EXCLUDE_LIBRARIES "leaf property_tree" CACHE STRING "")
   set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
 
-  rapids_cpm_find(Boost ${version}
+  rapids_cpm_find(Boost ${BOOST_VERSION}
     GLOBAL_TARGETS
       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
     BUILD_EXPORT_SET
@@ -41,7 +42,7 @@ function(morpheus_utils_configure_boost_true_cmake version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/boostorg/boost.git
-      GIT_TAG                 v${version}
+      GIT_TAG                 v${BOOST_VERSION}
       GIT_SHALLOW             TRUE
       GIT_SUBMODULES          ""
       OPTIONS                 "BUILD_TESTING OFF"
@@ -51,13 +52,12 @@ endfunction()
 
 # This function uses boost-cmake (https://github.com/Orphis/boost-cmake) to
 # configure boost. Not always up to date.
-function(morpheus_utils_configure_boost_boost_cmake version)
-
+function(morpheus_utils_configure_boost_boost_cmake)
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
   set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
 
-  rapids_cpm_find(Boost ${version}
+  rapids_cpm_find(Boost ${BOOST_VERSION}
     GLOBAL_TARGETS
       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
     BUILD_EXPORT_SET

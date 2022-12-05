@@ -15,11 +15,13 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_rmm version)
+set(RMM_VERSION "22.08" CACHE STRING "Version of RMM to use. Defaults to \${MRC_RAPIDS_VERSION}")
+
+function(morpheus_utils_configure_rmm)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
 
@@ -33,11 +35,11 @@ function(morpheus_utils_configure_rmm version)
   # )
 
   # Allow setting version to a variable. If so, evaluate that here. Allows for dependent versions, i.e. RMM_VERSION=${SRF_RAPIDS_VERSION}
-  if ("${version}" MATCHES [=[^\${(.+)}$]=])
-    set(version "${${CMAKE_MATCH_1}}")
+  if ("${RMM_VERSION}" MATCHES [=[^\${(.+)}$]=])
+    set(RMM_VERSION "${${CMAKE_MATCH_1}}")
   endif()
 
-  rapids_cpm_find(rmm ${version}
+  rapids_cpm_find(rmm ${RMM_VERSION}
     GLOBAL_TARGETS
       rmm::rmm rmm::Thrust
     BUILD_EXPORT_SET
@@ -46,7 +48,7 @@ function(morpheus_utils_configure_rmm version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
-      GIT_TAG         branch-${version}
+      GIT_TAG         branch-${RMM_VERSION}
       GIT_SHALLOW     TRUE
       OPTIONS         "BUILD_TESTS OFF"
                       "BUILD_BENCHMARKS OFF"

@@ -15,16 +15,18 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_ucx version)
+set(UCX_VERSION "1.13" CACHE STRING "Version of ucx to use")
+
+function(morpheus_utils_configure_ucx)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "ucx")
 
   # Try to find UCX and download from source if not found
-  rapids_cpm_find(ucx ${version}
+  rapids_cpm_find(ucx ${UCX_VERSION}
     GLOBAL_TARGETS
       ucx ucx::ucp ucx::uct ucx_ucx ucx::ucp ucx::uct ucx::ucx
     BUILD_EXPORT_SET
@@ -33,7 +35,7 @@ function(morpheus_utils_configure_ucx version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/openucx/ucx.git
-      GIT_TAG                 "v${version}"
+      GIT_TAG                 "v${UCX_VERSION}"
       DOWNLOAD_ONLY           TRUE
   )
 
@@ -86,10 +88,12 @@ function(morpheus_utils_configure_ucx version)
       # The io_demo fails to build in out of source builds. So remove that from
       # the Makefile (wish we could just disable all test/examples/apps) as a
       # part of the download command
-      PATCH_COMMAND     git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_LIST_DIR}/patches/disable_tools_and_java_binds.patch
+      PATCH_COMMAND     git checkout -- . &&
+                        git apply --whitespace=fix ${CMAKE_CURRENT_LIST_DIR}/patches/disable_tools_and_java_binds.patch
       # Note, we set SED and GREP here since they can be hard coded in the conda libtoolize
       CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env SED=sed GREP=grep <SOURCE_DIR>/autogen.sh
-                COMMAND <SOURCE_DIR>/contrib/configure-release ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX} --enable-mt --without-rdmacm --disable-gtest --disable-examples
+                COMMAND <SOURCE_DIR>/contrib/configure-release ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX}
+                        --enable-mt --without-rdmacm --disable-gtest --disable-examples
       BUILD_COMMAND     make -j
       BUILD_IN_SOURCE   TRUE
       BUILD_BYPRODUCTS  <INSTALL_DIR>/lib/libuct.a

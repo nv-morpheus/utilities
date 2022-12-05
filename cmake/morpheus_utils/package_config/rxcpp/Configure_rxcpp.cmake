@@ -15,15 +15,17 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_rxcpp version)
+set(RXCPP_VERSION "4.1.1.2" CACHE STRING "Version of RxCpp to use")
+
+function(morpheus_utils_configure_rxcpp)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "rxcpp")
 
-  rapids_cpm_find(rxcpp ${version}
+  rapids_cpm_find(rxcpp ${RXCPP_VERSION}
     GLOBAL_TARGETS
       rxcpp rxcpp::rxcpp
     BUILD_EXPORT_SET
@@ -32,7 +34,7 @@ function(morpheus_utils_configure_rxcpp version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/mdemoret-nv/RxCpp.git # TODO(MDD): Move RxCpp fork to nv-morpheus
-      GIT_TAG         v${version}
+      GIT_TAG         v${RXCPP_VERSION}
       GIT_SHALLOW     TRUE
       OPTIONS         "RX_BUILD_TESTING OFF"
                       "RX_BUILD_EXAMPLES OFF"

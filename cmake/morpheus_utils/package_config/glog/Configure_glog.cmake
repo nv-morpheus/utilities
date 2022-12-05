@@ -15,15 +15,17 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_glog version)
+set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
+
+function(morpheus_utils_configure_glog)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
 
-  rapids_cpm_find(glog ${version}
+  rapids_cpm_find(glog ${GLOG_VERSION}
     GLOBAL_TARGETS
       glog glog::glog
     BUILD_EXPORT_SET
@@ -32,7 +34,7 @@ function(morpheus_utils_configure_glog version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/google/glog.git
-      GIT_TAG                 v${version}
+      GIT_TAG                 v${GLOG_VERSION}
       GIT_SHALLOW             TRUE
       OPTIONS                 "WITH_CUSTOM_PREFIX ON"
                               "WITH_PKGCONFIG OFF"

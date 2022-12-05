@@ -15,13 +15,15 @@
 # limitations under the License.
 #=============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
+set(HWLOC_VERSION "2.5" CACHE STRING "Version of hwloc to use")
+
 find_package(CUDAToolkit)
 
-function(morpheus_utils_configure_hwloc version)
+function(morpheus_utils_configure_hwloc)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "hwloc")
 
@@ -55,7 +57,7 @@ function(morpheus_utils_configure_hwloc version)
   else()
 
     # Try to find hwloc and download from source if not found
-    rapids_cpm_find(hwloc ${version}
+    rapids_cpm_find(hwloc ${HWLOC_VERSION}
       GLOBAL_TARGETS
         hwloc hwloc::hwloc
       BUILD_EXPORT_SET
@@ -64,7 +66,7 @@ function(morpheus_utils_configure_hwloc version)
         ${PROJECT_NAME}-core-exports
       CPM_ARGS
         GIT_REPOSITORY          https://github.com/open-mpi/hwloc.git
-        GIT_TAG                 "hwloc-${version}"
+        GIT_TAG                 "hwloc-${HWLOC_VERSION}"
         DOWNLOAD_ONLY           TRUE
         FIND_PACKAGE_ARGUMENTS  "EXACT"
     )

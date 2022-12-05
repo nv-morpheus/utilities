@@ -15,14 +15,16 @@
 # limitations under the License.
 # =============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_tl_expected version)
+set(EXPECTED_VERSION "1.0.0" CACHE STRING "Version of expected to use")
+
+function(morpheus_utils_configure_tl_expected)
   list(APPEND CMAKE_MESSAGE_CONTEXT "tl-expected")
 
-  rapids_cpm_find(tl-expected ${version}
+  rapids_cpm_find(tl-expected ${EXPECTED_VERSION}
     GLOBAL_TARGETS
       expected tl::expected
     BUILD_EXPORT_SET
