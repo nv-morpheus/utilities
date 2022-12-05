@@ -19,20 +19,20 @@ include_guard(DIRECTORY)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_srf version)
+function(morpheus_utils_configure_mrc version)
 
-  list(APPEND CMAKE_MESSAGE_CONTEXT "srf")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
 
-  rapids_cpm_find(srf ${version}
+  rapids_cpm_find(mrc ${version}
     GLOBAL_TARGETS
-      srf::srf srf::pysrf
+      mrc::mrc mrc::pymrc
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
     CPM_ARGS
-      GIT_REPOSITORY  https://github.com/nv-morpheus/SRF.git
-      GIT_TAG         branch-${version}
+      GIT_REPOSITORY  /home/drobison/Development/devin-mrc-public
+      GIT_TAG         v23.01.01-alpha
       GIT_SHALLOW     TRUE
       OPTIONS         "SRF_BUILD_EXAMPLES OFF"
                       "SRF_BUILD_TESTS OFF"

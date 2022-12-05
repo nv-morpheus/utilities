@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: Copyright (c) 2021-2022,NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+#!/bin/bash
+# SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,11 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(VCPKG_TARGET_ARCHITECTURE x64)
-set(VCPKG_CRT_LINKAGE dynamic)
-set(VCPKG_LIBRARY_LINKAGE dynamic)
 
-set(VCPKG_CMAKE_SYSTEM_NAME Linux)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# Set the RPATH to allow finding other libraries in the same folder
-set(VCPKG_LINKER_FLAGS "-Wl,-rpath,'$ORIGIN':'$ORIGIN/../lib'")
+export DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-"morpheus"}
+export DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG:-"dev-$(date +'%y%m%d')"}
+export DOCKER_TARGET=${DOCKER_TARGET:-"development"}
+
+# Call the general build script
+${SCRIPT_DIR}/build_container.sh
