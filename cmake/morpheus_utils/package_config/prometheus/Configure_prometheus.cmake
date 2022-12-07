@@ -47,4 +47,5 @@ function(morpheus_utils_configure_prometheus_cpp)
               "GENERATE_PKGCONFIG OFF"
   )
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

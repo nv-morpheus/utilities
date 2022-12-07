@@ -36,7 +36,6 @@ function(morpheus_utils_initialize_iwyu
       -Xiwyu; --mapping_file=${PROJECT_SOURCE_DIR}/ci/iwyu/mappings.imp;
       -Xiwyu; --max_line_length=120;
       -Xiwyu; --verbose=${MRC_IWYU_VERBOSITY};
-      -Xiwyu; --no_fwd_decls;
       -Xiwyu; --quoted_includes_first;
       -Xiwyu; --cxx17ns;
       -Xiwyu --no_comments)
@@ -68,4 +67,6 @@ function(morpheus_utils_initialize_iwyu
     message(WARNING "IWYU option ${USE_IWYU_VAR_NAME} is enabled but the include-what-you-use was not found.
       Check iwyu installation and add the iwyu bin dir to your PATH variable.")
   endif()
+
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

@@ -22,7 +22,6 @@ morpheus_utils_package_config_ensure_rapids_cpm_init()
 set(RXCPP_VERSION "4.1.1.2" CACHE STRING "Version of RxCpp to use")
 
 function(morpheus_utils_configure_rxcpp)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "rxcpp")
 
   rapids_cpm_find(rxcpp ${RXCPP_VERSION}
@@ -41,4 +40,5 @@ function(morpheus_utils_configure_rxcpp)
                       "RXCPP_USE_FIBERS ON"
   )
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

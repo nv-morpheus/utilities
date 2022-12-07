@@ -22,7 +22,6 @@ morpheus_utils_package_config_ensure_rapids_cpm_init()
 set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
 
 function(morpheus_utils_configure_glog)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
 
   rapids_cpm_find(glog ${GLOG_VERSION}
@@ -41,4 +40,5 @@ function(morpheus_utils_configure_glog)
                               "BUILD_TESTING OFF"
   )
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

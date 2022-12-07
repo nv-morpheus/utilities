@@ -20,7 +20,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 function(morpheus_utils_configure_mrc version)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
 
   rapids_cpm_find(mrc ${version}
@@ -34,20 +33,21 @@ function(morpheus_utils_configure_mrc version)
       GIT_REPOSITORY  /home/drobison/Development/devin-mrc-public
       GIT_TAG         v23.01.01-alpha
       GIT_SHALLOW     TRUE
-      OPTIONS         "SRF_BUILD_EXAMPLES OFF"
-                      "SRF_BUILD_TESTS OFF"
-                      "SRF_BUILD_BENCHMARKS OFF"
-                      "SRF_BUILD_PYTHON ON"
-                      "SRF_ENABLE_XTENSOR ON"
-                      "SRF_ENABLE_MATX ON"
-                      "SRF_USE_CONDA ${MORPHEUS_USE_CONDA}"
-                      "SRF_USE_CCACHE ${MORPHEUS_USE_CCACHE}"
-                      "SRF_USE_CLANG_TIDY ${MORPHEUS_USE_CLANG_TIDY}"
-                      "SRF_PYTHON_INPLACE_BUILD OFF"
-                      "SRF_PYTHON_PERFORM_INSTALL ON"
-                      "SRF_PYTHON_BUILD_STUBS ${MORPHEUS_BUILD_PYTHON_STUBS}"
+      OPTIONS         "MRC_BUILD_EXAMPLES OFF"
+                      "MRC_BUILD_TESTS OFF"
+                      "MRC_BUILD_BENCHMARKS OFF"
+                      "MRC_BUILD_PYTHON ON"
+                      "MRC_ENABLE_XTENSOR ON"
+                      "MRC_ENABLE_MATX ON"
+                      "MRC_USE_CONDA ${MORPHEUS_USE_CONDA}"
+                      "MRC_USE_CCACHE ${MORPHEUS_USE_CCACHE}"
+                      "MRC_USE_CLANG_TIDY ${MORPHEUS_USE_CLANG_TIDY}"
+                      "MRC_PYTHON_INPLACE_BUILD OFF"
+                      "MRC_PYTHON_PERFORM_INSTALL ON"
+                      "MRC_PYTHON_BUILD_STUBS ${MORPHEUS_BUILD_PYTHON_STUBS}"
                       "RMM_VERSION ${MORPHEUS_RAPIDS_VERSION}"
   )
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
 

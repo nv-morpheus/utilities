@@ -30,8 +30,7 @@ morpheus_utils_create_python_package <PACKAGE_NAME>
 #]=======================================================================]
 function(morpheus_utils_create_python_package PACKAGE_NAME)
 
-  list(APPEND CMAKE_MESSAGE_CONTEXT "${PACKAGE_NAME}")
-  set(CMAKE_MESSAGE_CONTEXT ${CMAKE_MESSAGE_CONTEXT} PARENT_SCOPE)
+  list(APPEND CMAKE_MESSAGE_CONTEXT "package-${PACKAGE_NAME}")
 
   if(PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR
@@ -72,6 +71,7 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
   # Set the active wheel in the parent scope so it will appear in any subdirectories
   set(PYTHON_ACTIVE_PACKAGE_NAME ${PYTHON_ACTIVE_PACKAGE_NAME} PARENT_SCOPE)
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
 
 #[=======================================================================[
@@ -348,10 +348,6 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
 
   # Finally, unset the active package
   unset(PYTHON_ACTIVE_PACKAGE_NAME PARENT_SCOPE)
-
-  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
-  set(CMAKE_MESSAGE_CONTEXT ${CMAKE_MESSAGE_CONTEXT} PARENT_SCOPE)
-
 endfunction()
 
 
@@ -424,7 +420,7 @@ add_python_module
 
 #]=======================================================================]
 macro(__create_python_library MODULE_NAME)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "${MODULE_NAME}")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "module-${MODULE_NAME}")
 
   set(prefix _ARGS)
   set(flags IS_PYBIND11 IS_CYTHON IS_MODULE COPY_INPLACE BUILD_STUBS)
@@ -572,7 +568,6 @@ macro(__create_python_library MODULE_NAME)
   endif()
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
-
 endmacro()
 
 #[=======================================================================[

@@ -50,4 +50,5 @@ function(morpheus_utils_configure_matx version)
         Current CUDA Version: ${CUDAToolkit_VERSION}")
   endif()
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

@@ -37,4 +37,6 @@ function(morpheus_utils_configure_tl_expected)
       GIT_SHALLOW TRUE
       OPTIONS "EXPECTED_BUILD_PACKAGE ON"
   )
+
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

@@ -19,7 +19,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 function(morpheus_utils_configure_tritonclient version)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "TritonClient")
 
   rapids_cpm_find(TritonClient ${version}
@@ -45,5 +44,6 @@ function(morpheus_utils_configure_tritonclient version)
                       "TRITON_BACKEND_REPO_TAG r${version}"
   )
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
 

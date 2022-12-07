@@ -152,4 +152,5 @@ function(morpheus_utils_configure_hwloc)
     endif()
   endif()
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

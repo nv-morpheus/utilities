@@ -39,4 +39,6 @@ function(morpheus_utils_configure_pybind11 version)
       OPTIONS         "PYBIND11_INSTALL ON"
                       "PYBIND11_TEST OFF"
   )
+
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

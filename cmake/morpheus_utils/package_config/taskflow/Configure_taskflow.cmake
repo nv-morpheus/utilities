@@ -40,4 +40,6 @@ function(morpheus_utils_configure_taskflow version)
 
   # Add the alias since Taskflow does not
   add_library(Taskflow::Taskflow ALIAS Taskflow)
+
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

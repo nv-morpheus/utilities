@@ -42,5 +42,6 @@ function(morpheus_utils_configure_rdkafka version) # version currently unused, l
     INSTALL_EXPORT_SET ${PROJECT_NAME}-exports
   )
 
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
 
