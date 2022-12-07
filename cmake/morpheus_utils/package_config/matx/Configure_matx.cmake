@@ -19,13 +19,15 @@ include_guard(DIRECTORY)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_matx version)
+set(MATX_VERSION "0.1.0" CACHE STRING "Version of MatX to use")
+
+function(morpheus_utils_configure_matx)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.4"))
 
-    rapids_cpm_find(matx ${version}
+    rapids_cpm_find(matx ${MATX_VERSION}
       GLOBAL_TARGETS
         matx matx::matx
       BUILD_EXPORT_SET
@@ -34,7 +36,7 @@ function(morpheus_utils_configure_matx version)
         ${PROJECT_NAME}-exports
       CPM_ARGS
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
-        GIT_TAG         "v${version}"
+        GIT_TAG         "v${MATX_VERSION}"
         GIT_SHALLOW     TRUE
         PATCH_COMMAND
           git checkout -- .

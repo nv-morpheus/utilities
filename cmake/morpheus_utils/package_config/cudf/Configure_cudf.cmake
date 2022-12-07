@@ -18,10 +18,12 @@ include_guard(DIRECTORY)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_cudf version)
+set(CUDF_VERSION "22.08" CACHE STRING "Which version of cuDF to use")
+
+function(morpheus_utils_configure_cudf CUDF_VERSION)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
 
-  rapids_cpm_find(cudf ${version}
+  rapids_cpm_find(cudf ${CUDF_VERSION}
       GLOBAL_TARGETS
         cudf cudf::cudf
       BUILD_EXPORT_SET

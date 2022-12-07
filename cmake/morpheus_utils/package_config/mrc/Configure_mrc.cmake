@@ -19,10 +19,13 @@ include_guard(DIRECTORY)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_mrc version)
+set(MRC_VERSION 23.01 CACHE STRING "Which version of MRC to use")
+
+# TODO(Devin): MORPHEUS_USE_CONDA
+function(morpheus_utils_configure_mrc MRC_VERSION)
   list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
 
-  rapids_cpm_find(mrc ${version}
+  rapids_cpm_find(mrc ${MRC_VERSION}
     GLOBAL_TARGETS
       mrc::mrc mrc::pymrc
     BUILD_EXPORT_SET

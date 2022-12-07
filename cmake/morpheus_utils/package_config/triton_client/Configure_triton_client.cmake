@@ -18,10 +18,12 @@ include_guard(DIRECTORY)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_tritonclient version)
+set(TRITONCLIENT_VERSION "22.08" CACHE STRING "Which version of TritonClient to use")
+
+function(morpheus_utils_configure_tritonclient TRITONCLIENT_VERSION)
   list(APPEND CMAKE_MESSAGE_CONTEXT "TritonClient")
 
-  rapids_cpm_find(TritonClient ${version}
+  rapids_cpm_find(TritonClient ${TRITONCLIENT_VERSION}
     GLOBAL_TARGETS
       TritonClient::httpclient TritonClient::httpclient_static TritonClient::grpcclient TritonClient::grpcclient_static
     BUILD_EXPORT_SET
@@ -35,13 +37,13 @@ function(morpheus_utils_configure_tritonclient version)
       SOURCE_SUBDIR   src/c++
       PATCH_COMMAND   git checkout -- .
         && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/triton_client.patch
-      OPTIONS         "TRITON_VERSION r${version}"
+      OPTIONS         "TRITON_VERSION r${TRITONCLIENT_VERSION}"
                       "TRITON_ENABLE_CC_HTTP ON"
                       "TRITON_ENABLE_CC_GRPC OFF"
                       "TRITON_ENABLE_GPU ON"
-                      "TRITON_COMMON_REPO_TAG r${version}"
-                      "TRITON_CORE_REPO_TAG r${version}"
-                      "TRITON_BACKEND_REPO_TAG r${version}"
+                      "TRITON_COMMON_REPO_TAG r${TRITONCLIENT_VERSION}"
+                      "TRITON_CORE_REPO_TAG r${TRITONCLIENT_VERSION}"
+                      "TRITON_BACKEND_REPO_TAG r${TRITONCLIENT_VERSION}"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
