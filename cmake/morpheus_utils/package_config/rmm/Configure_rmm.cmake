@@ -34,11 +34,9 @@ function(morpheus_utils_configure_rmm)
   #     INSTALL_EXPORT_SET  ${PROJECT_NAME}-core-exports
   # )
 
-  message(STATUS "=============> ${RMM_VERSION}")
   if ("${RMM_VERSION}" MATCHES [=[^\${(.+)}$]=])
     set(RMM_VERSION "${${CMAKE_MATCH_1}}")
   endif()
-  message(STATUS "=============> ${RMM_VERSION}")
 
   rapids_cpm_find(rmm ${RMM_VERSION}
     GLOBAL_TARGETS
