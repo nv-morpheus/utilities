@@ -19,12 +19,14 @@ include_guard(DIRECTORY)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-function(morpheus_utils_configure_pybind11 version)
+set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
+
+function(morpheus_utils_configure_pybind11 PYBIND11_VERSION)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "pybind11")
 
   # Needs a patch to change the internal tracker to use fiber specific storage instead of TSS
-  rapids_cpm_find(pybind11 ${version}
+  rapids_cpm_find(pybind11 ${PYBIND11_VERSION}
     GLOBAL_TARGETS
       pybind11 pybind11::pybind11
     BUILD_EXPORT_SET
@@ -33,7 +35,7 @@ function(morpheus_utils_configure_pybind11 version)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/pybind/pybind11.git
-      GIT_TAG         "v${version}"
+      GIT_TAG         "v${PYBIND11_VERSION}"
       GIT_SHALLOW     TRUE
       PATCH_COMMAND   git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/enable_fiber_support.patch
       OPTIONS         "PYBIND11_INSTALL ON"
