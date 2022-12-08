@@ -53,15 +53,8 @@ function(morpheus_utils_initialize_iwyu
 
     configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/run_iwyu.sh.in" "${IWYU_WRAPPER}")
 
-    if(${USE_CCACHE_VAR_NAME})
-      set(CMAKE_C_INCLUDE_WHAT_YOU_USE
-          "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_prefix.sh;${IWYU_WRAPPER};${CMAKE_C_COMPILER}" PARENT_SCOPE)
-      set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
-          "${CMAKE_CURRENT_BINARY_DIR}/run_ccache_prefix.sh;${IWYU_WRAPPER};${CMAKE_CXX_COMPILER}" PARENT_SCOPE)
-    else()
-      set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${IWYU_WRAPPER}" PARENT_SCOPE)
-      set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_WRAPPER}" PARENT_SCOPE)
-    endif()
+    set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${IWYU_WRAPPER}" PARENT_SCOPE)
+    set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_WRAPPER}" PARENT_SCOPE)
 
   else()
     message(WARNING "IWYU option ${USE_IWYU_VAR_NAME} is enabled but the include-what-you-use was not found.
