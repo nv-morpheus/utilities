@@ -20,7 +20,7 @@ morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 set(CUDF_VERSION "22.08" CACHE STRING "Which version of cuDF to use")
 
-function(morpheus_utils_configure_cudf CUDF_VERSION)
+function(morpheus_utils_configure_cudf)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
 
   rapids_cpm_find(cudf ${CUDF_VERSION}

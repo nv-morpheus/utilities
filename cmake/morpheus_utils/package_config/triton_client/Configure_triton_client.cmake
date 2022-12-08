@@ -20,7 +20,7 @@ morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 set(TRITONCLIENT_VERSION "22.08" CACHE STRING "Which version of TritonClient to use")
 
-function(morpheus_utils_configure_tritonclient TRITONCLIENT_VERSION)
+function(morpheus_utils_configure_tritonclient)
   list(APPEND CMAKE_MESSAGE_CONTEXT "TritonClient")
 
   rapids_cpm_find(TritonClient ${TRITONCLIENT_VERSION}

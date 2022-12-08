@@ -15,14 +15,14 @@
 # limitations under the License.
 #=============================================================================
 
+
 include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-set(RMM_VERSION "22.08" CACHE STRING "Version of RMM to use. Defaults to \${MRC_RAPIDS_VERSION}")
+set(RMM_VERSION 22.08 CACHE STRING "Version of RMM to use.")
 
 function(morpheus_utils_configure_rmm)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
 
   # TODO(Devin): do we actually need this? Assumes a lot about our internal structure
@@ -34,10 +34,11 @@ function(morpheus_utils_configure_rmm)
   #     INSTALL_EXPORT_SET  ${PROJECT_NAME}-core-exports
   # )
 
-  # Allow setting version to a variable. If so, evaluate that here. Allows for dependent versions, i.e. RMM_VERSION=${SRF_RAPIDS_VERSION}
+  message(STATUS "=============> ${RMM_VERSION}")
   if ("${RMM_VERSION}" MATCHES [=[^\${(.+)}$]=])
     set(RMM_VERSION "${${CMAKE_MATCH_1}}")
   endif()
+  message(STATUS "=============> ${RMM_VERSION}")
 
   rapids_cpm_find(rmm ${RMM_VERSION}
     GLOBAL_TARGETS

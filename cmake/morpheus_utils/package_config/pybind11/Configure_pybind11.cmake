@@ -21,7 +21,7 @@ morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
 
-function(morpheus_utils_configure_pybind11 PYBIND11_VERSION)
+function(morpheus_utils_configure_pybind11)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "pybind11")
 
