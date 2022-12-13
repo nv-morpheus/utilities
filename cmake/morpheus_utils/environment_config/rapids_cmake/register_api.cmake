@@ -16,6 +16,12 @@
 # Ensure this is only run once
 include_guard(DIRECTORY)
 
+
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+  set(CMAKE_CUDA_ARCHITECTURES "native")
+  message(STATUS "CMAKE_CUDA_ARCHITECTURES was not defined. Defaulting to '${CMAKE_CUDA_ARCHITECTURES}' to build only for local architecture. Specify -DCMAKE_CUDA_ARCHITECTURES='ALL' to build for all archs.")
+endif()
+
 macro(morpheus_utils_ensure_rapids_cpm_init)
   if (MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
     morpheus_utils_initialize_rapids_cmake(MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
@@ -53,11 +59,9 @@ endfunction()
 macro(morpheus_utils_initialize_cuda_arch project_name)
   message(STATUS "Configuring CUDA Architecture")
 
-  # Default to using "" for CUDA_ARCHITECTURES to build based on GPU in system
   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-    set(CMAKE_CUDA_ARCHITECTURES "")
-    message(STATUS "CMAKE_CUDA_ARCHITECTURES was not defined. Defaulting to '' to build only for local architecture. "
-        "Specify -DCMAKE_CUDA_ARCHITECTURES='ALL' to build for all archs.")
+    set(CMAKE_CUDA_ARCHITECTURES "native")
+    message(STATUS "CMAKE_CUDA_ARCHITECTURES was not defined. Defaulting to '${CMAKE_CUDA_ARCHITECTURES}' to build only for local architecture. Specify -DCMAKE_CUDA_ARCHITECTURES='ALL' to build for all archs.")
   endif()
 
   # Initialize CUDA architectures
