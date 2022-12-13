@@ -20,7 +20,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 if ((NOT MORPHEUS_RAPIDS_VERSION) OR ("${MORPHEUS_RAPIDS_VERSION}" STREQUAL ""))
-  set(MRC_RMM_VERSION "22.08")
+  set(MRC_RMM_VERSION "22.10")
 else()
   set(MRC_RMM_VERSION "${MORPHEUS_RAPIDS_VERSION}")
 endif()

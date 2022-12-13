@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
 morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-set(RMM_VERSION "22.08" CACHE STRING "Version of RMM to use.")
+set(RMM_VERSION "22.10" CACHE STRING "Version of RMM to use.")
 
 function(morpheus_utils_configure_rmm)
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
