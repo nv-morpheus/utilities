@@ -72,6 +72,21 @@ function(morpheus_utils_print_all_targets)
     message("All targets: ${all_targets}")
 endfunction()
 
+#[=======================================================================[
+@brief : Print global CMAKE configuration variables
+
+ex. morpheus_utils_print_target_properties(
+      <TARGETS>
+        [<targets>...]
+      <PROPERITES>
+        [<property>...] # defaults to all known cmake target properties for
+                        # all specified targets
+      [PRINT_NOTFOUND] # print a property even if its value is not set
+      [QUIET] # skip printing to cmake configuration output
+      [WRITE_TO_FILE]
+      [WRITE_TO_FILE_NAME] # Override output file name, defaults to build dir
+  )
+#]=======================================================================]
 function(morpheus_utils_print_target_properties)
     set(prefix F_ARGV)
     set(options WRITE_TO_FILE PRINT_NOTFOUND QUIET)
@@ -167,6 +182,18 @@ function(morpheus_utils_print_target_properties)
     endforeach()
 endfunction()
 
+#[=======================================================================[
+@brief : Print global CMAKE configuration variables
+
+ex. morpheus_utils_print_target_properties(
+      <PROPERITES>
+        [<property>...] # defaults to all known cmake global properties
+      [PRINT_NOTFOUND] # print a property even if its value is not set
+      [QUIET] # skip printing to cmake configuration output
+      [WRITE_TO_FILE]
+      [WRITE_TO_FILE_NAME] # Override output file name, defaults to build dir
+  )
+#]=======================================================================]
 function(morpheus_utils_print_global_properties)
     set(prefix F_ARGV)
     set(options WRITE_TO_FILE PRINT_NOTFOUND QUIET)
