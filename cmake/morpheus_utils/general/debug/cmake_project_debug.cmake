@@ -73,7 +73,7 @@ function(morpheus_utils_print_all_targets)
 endfunction()
 
 #[=======================================================================[
-@brief : Print global CMAKE configuration variables
+@brief : Print target CMAKE configuration variables for each target
 
 ex. morpheus_utils_print_target_properties(
       <TARGETS>
