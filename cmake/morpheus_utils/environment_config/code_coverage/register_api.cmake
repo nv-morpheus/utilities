@@ -131,7 +131,7 @@
 #      make my_coverage_target
 #
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 macro(morpheus_utils_initialize_code_coverage)
   include(CMakeParseArguments)

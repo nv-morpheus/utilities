@@ -13,7 +13,7 @@
 # =============================================================================
 
 # Ensure we only include this once
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 include(python_config_macros)
 morpheus_utils_python_modules_ensure_python3()

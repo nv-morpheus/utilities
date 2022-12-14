@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # Ensure this is only run once
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 
 if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)

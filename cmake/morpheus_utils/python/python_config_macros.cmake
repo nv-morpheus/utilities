@@ -13,7 +13,7 @@
 # =============================================================================
 
 # Ensure we only include this once
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 macro(morpheus_utils_python_modules_ensure_python3)
   set(Python3_FIND_VIRTUALENV "FIRST")

@@ -15,7 +15,7 @@
 # limitations under the License.
 # =============================================================================
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 function(morpheus_utils_initialize_iwyu
     USE_IWYU_VAR_NAME
