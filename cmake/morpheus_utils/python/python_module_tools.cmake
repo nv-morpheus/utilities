@@ -80,8 +80,6 @@ morpheus_utils_add_target_resources
 
 #]=======================================================================]
 function(morpheus_utils_add_target_resources)
-  morpheus_utils_python_modules_ensure_loaded()
-
   set(flags "")
   set(singleValues TARGET_NAME)
   set(multiValues "")
@@ -93,6 +91,8 @@ function(morpheus_utils_add_target_resources)
     "${multiValues}"
     ${ARGN}
   )
+
+  morpheus_utils_python_modules_ensure_loaded()
 
   # Get the current target resources
   get_target_property(target_resources ${_ARGS_TARGET_NAME} RESOURCE)
@@ -128,6 +128,7 @@ morpheus_utils_add_python_sources
 
 #]=======================================================================]
 function(morpheus_utils_add_python_sources)
+  morpheus_utils_python_modules_ensure_loaded()
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
@@ -148,6 +149,7 @@ morpheus_utils_copy_target_resources(<TARGET_NAME>
                       <COPY_DIRECTORY>)
 #]=======================================================================]
 function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
+  morpheus_utils_python_modules_ensure_loaded()
 
   # See if there are any resources associated with this target
   get_target_property(target_resources ${TARGET_NAME} RESOURCE)
@@ -239,7 +241,8 @@ morpheus_utils_build_python_package(<PACKAGE_NAME>
                      [INSTALL_WHEEL])
 #]=======================================================================]
 function(morpheus_utils_build_python_package PACKAGE_NAME)
-  include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_python_init.cmake")
+  morpheus_utils_python_modules_ensure_loaded()
+  #include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_python_init.cmake")
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
