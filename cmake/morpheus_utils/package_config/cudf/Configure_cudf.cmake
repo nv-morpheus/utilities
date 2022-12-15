@@ -15,13 +15,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(CUDF_VERSION "22.08" CACHE STRING "Which version of cuDF to use")
 
 function(morpheus_utils_configure_cudf)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(CUDF_VERSION "22.08" CACHE STRING "Which version of cuDF to use")
 
   rapids_cpm_find(cudf ${CUDF_VERSION}
       GLOBAL_TARGETS
@@ -35,8 +34,6 @@ function(morpheus_utils_configure_cudf)
         GIT_TAG           branch-${CUDF_VERSION}
         DOWNLOAD_ONLY     TRUE # disable internal builds for now.
         SOURCE_SUBDIR     cpp
-        PATCH_COMMAND     git checkout -- .
-              COMMAND     git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/expose_cudf_column_info.patch
         OPTIONS           USE_NVTX ON
                           BUILD_TESTS OFF
                           BUILD_BENCHMARKS OFF

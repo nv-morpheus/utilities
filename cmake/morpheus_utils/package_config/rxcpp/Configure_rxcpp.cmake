@@ -16,13 +16,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(RXCPP_VERSION "4.1.1.2" CACHE STRING "Version of RxCpp to use")
 
 function(morpheus_utils_configure_rxcpp)
   list(APPEND CMAKE_MESSAGE_CONTEXT "rxcpp")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(RXCPP_VERSION "4.1.1.2" CACHE STRING "Version of RxCpp to use")
 
   rapids_cpm_find(rxcpp ${RXCPP_VERSION}
     GLOBAL_TARGETS

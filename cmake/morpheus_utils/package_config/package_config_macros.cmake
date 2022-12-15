@@ -18,16 +18,11 @@
 include_guard(GLOBAL)
 
 macro(morpheus_utils_package_config_ensure_rapids_cpm_init)
-  if (MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED OR MORPHEUS_UTILS_NO_CPM_INIT)
-    # Do nothing if were already initialized or manually specified
+  if (MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE)
+    message(STATUS "MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE:${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}"
+        ", is set and will be used.")
+    rapids_cpm_init(OVERRIDE "${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}")
   else()
-    if (MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE)
-      message(STATUS "MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE:${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE},
-        is set and will be used: ${}")
-      rapids_cpm_init(OVERRIDE "${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}")
-      set(MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED ON)
-    else()
-      rapids_cpm_init()
-    endif()
+    rapids_cpm_init()
   endif()
 endmacro()

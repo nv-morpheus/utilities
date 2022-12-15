@@ -16,14 +16,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(LIBCUDACXX_VERSION "1.8.0" CACHE STRING "Version of libcudacxx to use")
 
 function(morpheus_utils_configure_libcudacxx)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "libcudacxx")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(LIBCUDACXX_VERSION "1.8.0" CACHE STRING "Version of libcudacxx to use")
 
   include("${rapids-cmake-dir}/cpm/libcudacxx.cmake")
 

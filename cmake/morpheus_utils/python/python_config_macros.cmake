@@ -18,21 +18,12 @@ include_guard(GLOBAL)
 macro(morpheus_utils_python_modules_ensure_python3)
   set(Python3_FIND_VIRTUALENV "FIRST")
   set(Python3_FIND_STRATEGY "LOCATION")
-  find_package(Python3 REQUIRED COMPONENTS Development Interpreter NumPy)
+  find_package(Python3 REQUIRED COMPONENTS Development Development.Module Development.Embed Interpreter NumPy)
 endmacro()
 
 macro(morpheus_utils_python_modules_ensure_pybind11)
-  set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
-  morpheus_utils_configure_pybind11(${PYBIND11_VERSION})
+  morpheus_utils_configure_pybind11()
   find_package(pybind11 REQUIRED)
-endmacro()
-
-macro(morpheus_utils_python_modules_ensure_cython)
-  set(CYTHON_FLAGS
-      "--directive binding=True,boundscheck=False,wraparound=False,embedsignature=True,always_allow_keywords=True"
-      CACHE STRING "The directives for Cython compilation.")
-
-  find_package(Cython REQUIRED)
 endmacro()
 
 macro(morpheus_utils_ensure_sk_build)
@@ -53,4 +44,19 @@ macro(morpheus_utils_ensure_sk_build)
   else ()
     list(APPEND CMAKE_MODULE_PATH "${Python3_SITELIB}/skbuild/resources/cmake")
   endif ()
+endmacro()
+
+macro(morpheus_utils_python_modules_ensure_cython)
+  morpheus_utils_ensure_sk_build()
+  set(CYTHON_FLAGS
+      "--directive binding=True,boundscheck=False,wraparound=False,embedsignature=True,always_allow_keywords=True"
+      CACHE STRING "The directives for Cython compilation.")
+
+  find_package(Cython REQUIRED)
+endmacro()
+
+macro(morpheus_utils_python_modules_ensure_loaded)
+  morpheus_utils_python_modules_ensure_python3()
+  morpheus_utils_python_modules_ensure_pybind11()
+  morpheus_utils_python_modules_ensure_cython()
 endmacro()

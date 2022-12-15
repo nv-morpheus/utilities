@@ -15,24 +15,13 @@
 # limitations under the License.
 #=============================================================================
 
-
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(RMM_VERSION "22.10" CACHE STRING "Version of RMM to use.")
 
 function(morpheus_utils_configure_rmm)
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
 
-  # TODO(Devin): do we actually need this? Assumes a lot about our internal structure
-  #include(${CMAKE_BINARY_DIR}/_deps/cpm/rmm)
-
-  # Does not work with cudf currently. Once updated to include rmm::Thrust to the GLOBAL_TARGETS. This should be used
-  # rapids_cpm_rmm(
-  #     BUILD_EXPORT_SET    ${PROJECT_NAME}-core-exports
-  #     INSTALL_EXPORT_SET  ${PROJECT_NAME}-core-exports
-  # )
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(RMM_VERSION "22.10" CACHE STRING "Version of RMM to use.")
 
   if ("${RMM_VERSION}" MATCHES [=[^\${(.+)}$]=])
     set(RMM_VERSION "${${CMAKE_MATCH_1}}")

@@ -16,14 +16,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(UCX_VERSION "1.13" CACHE STRING "Version of ucx to use")
 
 function(morpheus_utils_configure_ucx)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "ucx")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(UCX_VERSION "1.13" CACHE STRING "Version of ucx to use")
 
   # Try to find UCX and download from source if not found
   rapids_cpm_find(ucx ${UCX_VERSION}
@@ -89,7 +87,7 @@ function(morpheus_utils_configure_ucx)
       # the Makefile (wish we could just disable all test/examples/apps) as a
       # part of the download command
       PATCH_COMMAND     git checkout -- . &&
-                        git apply --whitespace=fix ${CMAKE_CURRENT_LIST_DIR}/patches/disable_tools_and_java_binds.patch
+                        git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/disable_tools_and_java_binds.patch
       # Note, we set SED and GREP here since they can be hard coded in the conda libtoolize
       CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env SED=sed GREP=grep <SOURCE_DIR>/autogen.sh
                 COMMAND <SOURCE_DIR>/contrib/configure-release ${COMPILER_SETTINGS} --prefix=${CMAKE_INSTALL_PREFIX}

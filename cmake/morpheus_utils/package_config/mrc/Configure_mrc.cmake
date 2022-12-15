@@ -16,19 +16,18 @@
 
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
 
-if ((NOT MORPHEUS_RAPIDS_VERSION) OR ("${MORPHEUS_RAPIDS_VERSION}" STREQUAL ""))
-  set(MRC_RMM_VERSION "22.10")
-else()
-  set(MRC_RMM_VERSION "${MORPHEUS_RAPIDS_VERSION}")
-endif()
-set(MRC_VERSION 23.01 CACHE STRING "Which version of MRC to use")
-
-# TODO(Devin): MORPHEUS_USE_CONDA
 function(morpheus_utils_configure_mrc)
   list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  if ((NOT MORPHEUS_UTILS_RAPIDS_VERSION) OR ("${MORPHEUS_UTILS_RAPIDS_VERSION}" STREQUAL ""))
+    set(MRC_RMM_VERSION "22.10")
+  else()
+    set(MRC_RMM_VERSION "${MORPHEUS_UTILS_RAPIDS_VERSION}")
+  endif()
+
+  set(MRC_VERSION 23.01 CACHE STRING "Which version of MRC to use")
 
   rapids_cpm_find(mrc ${MRC_VERSION}
     GLOBAL_TARGETS

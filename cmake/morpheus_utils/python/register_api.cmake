@@ -17,6 +17,9 @@ include_guard(GLOBAL)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
+include(python_config_macros)
+include("${CMAKE_CURRENT_LIST_DIR}/../package_config/ensure_cpm_init.cmake")
+
 include(python3)
 include(python_module_tools)
 

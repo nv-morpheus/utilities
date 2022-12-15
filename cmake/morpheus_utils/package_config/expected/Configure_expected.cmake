@@ -16,13 +16,12 @@
 # =============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(EXPECTED_VERSION "1.0.0" CACHE STRING "Version of expected to use")
 
 function(morpheus_utils_configure_tl_expected)
   list(APPEND CMAKE_MESSAGE_CONTEXT "tl-expected")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(EXPECTED_VERSION "1.0.0" CACHE STRING "Version of expected to use")
 
   rapids_cpm_find(tl-expected ${EXPECTED_VERSION}
     GLOBAL_TARGETS

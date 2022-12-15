@@ -16,13 +16,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(PROMETHEUS_CPP_VERSION "1.0.0" CACHE STRING "Version of Prometheus-cpp to use")
 
 function(morpheus_utils_configure_prometheus_cpp)
   list(APPEND CMAKE_MESSAGE_CONTEXT "prometheus_cpp")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(PROMETHEUS_CPP_VERSION "1.0.0" CACHE STRING "Version of Prometheus-cpp to use")
 
   rapids_cpm_find(prometheus-cpp ${PROMETHEUS_CPP_VERSION}
     GLOBAL_TARGETS

@@ -15,10 +15,8 @@
 # Ensure we only include this once
 include_guard(GLOBAL)
 
-include(python_config_macros)
-morpheus_utils_python_modules_ensure_python3()
-
 function(morpheus_utils_print_python_info)
+  morpheus_utils_python_modules_ensure_python3()
   message(VERBOSE "Python3_EXECUTABLE (before find_package): ${Python3_EXECUTABLE}")
   message(VERBOSE "Python3_ROOT_DIR (before find_package): ${Python3_ROOT_DIR}")
   message(VERBOSE "FIND_PYTHON_STRATEGY (before find_package): ${FIND_PYTHON_STRATEGY}")

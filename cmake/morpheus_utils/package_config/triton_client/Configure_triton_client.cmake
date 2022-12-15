@@ -15,13 +15,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(TRITONCLIENT_VERSION "22.10" CACHE STRING "Which version of TritonClient to use")
 
 function(morpheus_utils_configure_tritonclient)
   list(APPEND CMAKE_MESSAGE_CONTEXT "TritonClient")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(TRITONCLIENT_VERSION "22.10" CACHE STRING "Which version of TritonClient to use")
 
   rapids_cpm_find(TritonClient ${TRITONCLIENT_VERSION}
     GLOBAL_TARGETS

@@ -17,11 +17,6 @@ include_guard(GLOBAL)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-include(python_config_macros)
-morpheus_utils_ensure_sk_build()
-morpheus_utils_python_modules_ensure_pybind11()
-morpheus_utils_python_modules_ensure_cython()
-
 #[=======================================================================[
 @brief : Creates an artifact set used to build a python wheel
 ex. morpheus_utils_create_python_package(package_name)
@@ -29,8 +24,9 @@ results --
 morpheus_utils_create_python_package <PACKAGE_NAME>
 #]=======================================================================]
 function(morpheus_utils_create_python_package PACKAGE_NAME)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "package-${PACKAGE_NAME}")
+
+  morpheus_utils_python_modules_ensure_loaded()
 
   if(PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR
@@ -84,6 +80,7 @@ morpheus_utils_add_target_resources
 
 #]=======================================================================]
 function(morpheus_utils_add_target_resources)
+  morpheus_utils_python_modules_ensure_loaded()
 
   set(flags "")
   set(singleValues TARGET_NAME)
@@ -242,6 +239,7 @@ morpheus_utils_build_python_package(<PACKAGE_NAME>
                      [INSTALL_WHEEL])
 #]=======================================================================]
 function(morpheus_utils_build_python_package PACKAGE_NAME)
+  include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_python_init.cmake")
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
@@ -350,7 +348,6 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
   unset(PYTHON_ACTIVE_PACKAGE_NAME PARENT_SCOPE)
 endfunction()
 
-
 #[=======================================================================[
 @brief : given a module name, and potentially a root path, resolves the
 fully qualified python module path. If MODULE_ROOT is not provided, it
@@ -386,6 +383,8 @@ function(morpheus_utils_resolve_python_module_name MODULE_NAME)
       "${multiValues}"
       ${ARGN})
 
+  morpheus_utils_python_modules_ensure_loaded()
+
   set(py_module_name ${MODULE_NAME})
   set(py_module_namespace "")
   set(py_module_path "")
@@ -412,7 +411,7 @@ function(morpheus_utils_resolve_python_module_name MODULE_NAME)
 endfunction()
 
 #[=======================================================================[
-@brief : TODO
+@brief : Create a new python module from a set of source files
 ex. add_python_module
 results --
 
@@ -433,6 +432,8 @@ macro(__create_python_library MODULE_NAME)
       "${singleValues}"
       "${multiValues}"
       ${ARGN})
+
+  morpheus_utils_python_modules_ensure_loaded()
 
   if(NOT _ARGS_NO_PACKAGE AND NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")

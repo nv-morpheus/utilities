@@ -22,7 +22,6 @@ function(morpheus_utils_initialize_iwyu
     IWYU_VERBOSITY_VAR_NAME
     IWYU_PROGRAM_VAR_NAME
     IWYU_OPTIONS_VAR_NAME
-    USE_CCACHE_VAR_NAME
     )
   list(APPEND CMAKE_MESSAGE_CONTEXT "iwyu")
 
@@ -38,7 +37,7 @@ function(morpheus_utils_initialize_iwyu
       -Xiwyu; --verbose=${MRC_IWYU_VERBOSITY};
       -Xiwyu; --quoted_includes_first;
       -Xiwyu; --cxx17ns;
-      -Xiwyu --no_comments)
+      -Xiwyu --no_comments;)
 
     # Convert these to space separated arguments
     string(REPLACE ";" " " ${IWYU_OPTIONS_VAR_NAME} "${${IWYU_OPTIONS_VAR_NAME}}")

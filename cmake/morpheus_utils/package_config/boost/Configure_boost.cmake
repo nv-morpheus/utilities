@@ -16,16 +16,15 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
 # This function is for when boost fully supports CMake. As of 1.76.0 the
 # functionality is not supported but is in the master branch. Check in version
 # 1.77
 function(morpheus_utils_configure_boost_true_cmake)
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
   cmake_policy(SET CMP0097 OLD)
   set(Boost_ENABLE_CMAKE ON)
@@ -54,6 +53,9 @@ endfunction()
 # configure boost. Not always up to date.
 function(morpheus_utils_configure_boost_boost_cmake)
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
   set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
 

@@ -15,14 +15,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(RDKAFKA_VERSION 1.6.2 CACHE STRING "Version of RDKafka to use (currently Ignored)")
 
 function(morpheus_utils_configure_rdkafka) # version currently unused, left for consistency
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "rdkafka")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(RDKAFKA_VERSION 1.6.2 CACHE STRING "Version of RDKafka to use (currently Ignored)")
 
   rapids_find_generate_module(RDKAFKA
     HEADER_NAMES rdkafkacpp.h

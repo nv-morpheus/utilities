@@ -16,20 +16,31 @@
 # Ensure this is only run once
 include_guard(GLOBAL)
 
-
-if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-  set(CMAKE_CUDA_ARCHITECTURES "native")
-  message(STATUS "CMAKE_CUDA_ARCHITECTURES was not defined. Defaulting to '${CMAKE_CUDA_ARCHITECTURES}' to build only for local architecture. Specify -DCMAKE_CUDA_ARCHITECTURES='ALL' to build for all archs.")
-endif()
-
 macro(morpheus_utils_ensure_rapids_cpm_init)
-  if (MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
-    morpheus_utils_initialize_rapids_cmake(MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION)
-    set(_MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED TRUE CACHE STRING "")
-    mark_as_advanced(_MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED)
+  set(prefix F_ARGV)
+  set(options "")
+  set(singleValueArgs RAPIDS_CMAKE_VERSION)
+  set(multiValueArgs "")
+
+  include(CMakeParseArguments)
+  cmake_parse_arguments(${prefix}
+      "${options}"
+      "${singleValueArgs}"
+      "${multiValueArgs}"
+      ${ARGN})
+
+  if (F_ARGV_RAPIDS_CMAKE_VERSION)
+    set(rapids_cmake_version "${F_ARGV_RAPIDS_CMAKE_VERSION}")
+  elseif(MORPHEUS_UTILS_OVERRIDE_RAPIDS_CMAKE_VERSION)
+    set(rapids_cmake_version "${MORPHEUS_UTILS_OVERRIDE_RAPIDS_CMAKE_VERSION}")
   else()
-    message(FATAL_ERROR "Must set MORPHEUS_UTILS_RAPIDS_CMAKE_VERSION before loading
-    morpheus_utils::rapids_cmake")
+    set(rapids_cmake_version "22.10")
+  endif()
+
+  if (NOT MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED)
+    morpheus_utils_initialize_rapids_cmake(${rapids_cmake_version})
+    set(MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED TRUE CACHE STRING "")
+    mark_as_advanced(MORPHEUS_UTILS_RAPIDS_CPM_INITIALIZED)
   endif()
 endmacro()
 
@@ -57,7 +68,7 @@ function(morpheus_utils_initialize_rapids_cmake RAPIDS_VERSION_VAR_NAME)
 endfunction()
 
 macro(morpheus_utils_initialize_cuda_arch project_name)
-  message(STATUS "Configuring CUDA Architecture")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "cuda")
 
   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
     set(CMAKE_CUDA_ARCHITECTURES "native")
@@ -76,10 +87,7 @@ function(morpheus_utils_initialize_package_manager
   morpheus_utils_ensure_rapids_cpm_init()
   set(USE_CONDA ${${USE_CONDA_VAR_NAME}})
 
-  if(DEFINED CMAKE_TOOLCHAIN_FILE)
-    message(STATUS "[CMAKE_TOOLCHAIN_FILE] is defined (${CMAKE_TOOLCHAIN_FILE}), using custom toolchain")
-    message(STATUS "Conda environment variables will be ignored.")
-  elseif (USE_CONDA AND DEFINED ENV{CONDA_PREFIX})
+  if(USE_CONDA AND DEFINED ENV{CONDA_PREFIX})
     message(STATUS "${USE_CONDA_VAR_NAME} is defined and CONDA environment ($ENV{CONDA_PREFIX}) exists.")
     rapids_cmake_support_conda_env(conda_env MODIFY_PREFIX_PATH)
 

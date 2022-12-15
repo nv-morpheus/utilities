@@ -16,11 +16,11 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
 
 function(morpheus_utils_configure_taskflow version)
   list(APPEND CMAKE_MESSAGE_CONTEXT "taskflow")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
 
   rapids_cpm_find(taskflow ${version}
     GLOBAL_TARGETS

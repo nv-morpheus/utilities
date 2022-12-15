@@ -16,16 +16,12 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-include(${CMAKE_CURRENT_LIST_DIR}/../package_config_macros.cmake)
-morpheus_utils_package_config_ensure_rapids_cpm_init()
-
-set(HWLOC_VERSION "2.5" CACHE STRING "Version of hwloc to use")
-
-find_package(CUDAToolkit)
 
 function(morpheus_utils_configure_hwloc)
-
   list(APPEND CMAKE_MESSAGE_CONTEXT "hwloc")
+
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  set(HWLOC_VERSION "2.5" CACHE STRING "Version of hwloc to use")
 
   set(oneValueArgs VERSION PINNED_TAG)
   cmake_parse_arguments(PKG "${options}" "${oneValueArgs}"
@@ -55,6 +51,7 @@ function(morpheus_utils_configure_hwloc)
       "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_hwloc.cmake" @ONLY)
 
   else()
+    find_package(CUDAToolkit)
 
     # Try to find hwloc and download from source if not found
     rapids_cpm_find(hwloc ${HWLOC_VERSION}
