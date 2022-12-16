@@ -27,6 +27,7 @@ function(morpheus_utils_configure_hwloc)
   cmake_parse_arguments(PKG "${options}" "${oneValueArgs}"
                         "${multiValueArgs}" ${ARGN} )
 
+  find_package(CUDAToolkit)
   find_package(PkgConfig)
 
   pkg_check_modules(hwloc IMPORTED_TARGET GLOBAL hwloc)
@@ -51,8 +52,6 @@ function(morpheus_utils_configure_hwloc)
       "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_hwloc.cmake" @ONLY)
 
   else()
-    find_package(CUDAToolkit)
-
     # Try to find hwloc and download from source if not found
     rapids_cpm_find(hwloc ${HWLOC_VERSION}
       GLOBAL_TARGETS
