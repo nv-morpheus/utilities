@@ -286,3 +286,33 @@ function(morpheus_utils_print_global_properties)
 
     list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
+
+#[=======================================================================[
+@brief : Print CMAKE configuration
+#]=======================================================================]
+function(morpheus_utils_print_config)
+    # Print CMake settings when verbose output is enabled
+    message(STATUS "PROJECT_NAME: " ${PROJECT_NAME})
+    message(STATUS "CMAKE_HOST_SYSTEM: ${CMAKE_HOST_SYSTEM}")
+    message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
+    message(STATUS "CMAKE_CXX_COMPILER: " ${CMAKE_CXX_COMPILER})
+    message(STATUS "CMAKE_CXX_COMPILER_ID: " ${CMAKE_CXX_COMPILER_ID})
+    message(STATUS "CMAKE_CXX_COMPILER_VERSION: " ${CMAKE_CXX_COMPILER_VERSION})
+    message(STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+    message(STATUS "CMAKE_CUDA_COMPILER: " ${CMAKE_CUDA_COMPILER})
+    message(STATUS "CMAKE_CUDA_COMPILER_ID: " ${CMAKE_CUDA_COMPILER_ID})
+    message(STATUS "CMAKE_CUDA_COMPILER_VERSION: " ${CMAKE_CUDA_COMPILER_VERSION})
+    message(STATUS "CMAKE_CUDA_FLAGS: " ${CMAKE_CUDA_FLAGS})
+    message(STATUS "CMAKE_CURRENT_SOURCE_DIR: " ${CMAKE_CURRENT_SOURCE_DIR})
+    message(STATUS "CMAKE_CURRENT_BINARY_DIR: " ${CMAKE_CURRENT_BINARY_DIR})
+    message(STATUS "CMAKE_CURRENT_LIST_DIR: " ${CMAKE_CURRENT_LIST_DIR})
+    message(STATUS "CMAKE_EXE_LINKER_FLAGS: " ${CMAKE_EXE_LINKER_FLAGS})
+    message(STATUS "CMAKE_INSTALL_PREFIX: " ${CMAKE_INSTALL_PREFIX})
+    message(STATUS "CMAKE_INSTALL_FULL_INCLUDEDIR: " ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+    message(STATUS "CMAKE_INSTALL_FULL_LIBDIR: " ${CMAKE_INSTALL_FULL_LIBDIR})
+    message(STATUS "CMAKE_MODULE_PATH: " ${CMAKE_MODULE_PATH})
+    message(STATUS "CMAKE_PREFIX_PATH: " ${CMAKE_PREFIX_PATH})
+    message(STATUS "CMAKE_FIND_ROOT_PATH: " ${CMAKE_FIND_ROOT_PATH})
+    message(STATUS "CMAKE_LIBRARY_ARCHITECTURE: " ${CMAKE_LIBRARY_ARCHITECTURE})
+    message(STATUS "FIND_LIBRARY_USE_LIB64_PATHS: " ${FIND_LIBRARY_USE_LIB64_PATHS})
+endfunction()

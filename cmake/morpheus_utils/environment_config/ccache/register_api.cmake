@@ -106,11 +106,11 @@ function(morpheus_utils_initialize_cpm cache_dir_name)
 
   # Set the CPM cache variable
   set(ENV{CPM_SOURCE_CACHE} "${${cache_dir_name}}/cpm")
+  set(CPM_SOURCE_CACHE "${${cache_dir_name}}/cpm" PARENT_SCOPE)
 
   message(STATUS "Using CPM source cache: $ENV{CPM_SOURCE_CACHE}")
 
   # # Set the FetchContent default download folder to be the same as CPM
-  # set(FETCHCONTENT_BASE_DIR "${${cache_dir_name}}/fetch" CACHE STRING "" FORCE)
   set(MORPHEUS_UTILS_CPM_INITIALIZED ON PARENT_SCOPE)
 endfunction()
 
