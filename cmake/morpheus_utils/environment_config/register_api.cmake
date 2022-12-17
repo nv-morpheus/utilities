@@ -23,6 +23,12 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 include(ccache/register_api)
 
 # No deps
+include(cpm/register_api)
+
+# No deps
+include(compiler/register_api)
+
+# No deps
 include(code_coverage/register_api)
 
 # Depends on ccache
