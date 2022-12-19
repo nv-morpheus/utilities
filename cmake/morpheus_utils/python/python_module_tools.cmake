@@ -242,7 +242,6 @@ morpheus_utils_build_python_package(<PACKAGE_NAME>
 #]=======================================================================]
 function(morpheus_utils_build_python_package PACKAGE_NAME)
   morpheus_utils_python_modules_ensure_loaded()
-  #include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_python_init.cmake")
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
