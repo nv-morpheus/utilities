@@ -201,11 +201,6 @@ function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
 
       cmake_path(IS_PREFIX target_source_dir "${resource}" NORMALIZE is_source_relative)
       cmake_path(IS_PREFIX target_binary_dir "${resource}" NORMALIZE is_binary_relative)
-      message(STATUS "**********${resource}")
-      message(STATUS "**********${target_source_dir}")
-      message(STATUS "**********${target_binary_dir}")
-      message(STATUS "**********${is_source_relative}")
-      message(STATUS "**********${is_binary_relative}")
 
       # Get the relative path to the source or binary directories
       if(is_binary_relative)
@@ -227,7 +222,6 @@ function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
       cmake_path(RELATIVE_PATH resource BASE_DIRECTORY "${top_level_source_dir}" OUTPUT_VARIABLE resource_source_relative)
       cmake_path(RELATIVE_PATH resource_output BASE_DIRECTORY "${top_level_source_dir}" OUTPUT_VARIABLE resource_output_source_relative)
 
-      message(STATUS "========>${resource}\n:: ${resource_output}")
       add_custom_command(
         OUTPUT  ${resource_output}
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${resource} ${resource_output}
