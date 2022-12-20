@@ -28,6 +28,30 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
 
   morpheus_utils_python_modules_ensure_loaded()
 
+  set(prefix F_ARGV)
+  set(flags "")
+  set(singleValues SOURCE_DIRECTORY PROJECT_DIRECTORY)
+  set(multiValues "")
+
+  include(CMakeParseArguments)
+  cmake_parse_arguments(
+      "${prefix}"
+      "${flags}"
+      "${singleValues}"
+      "${multiValues}"
+      ${ARGN}
+  )
+
+  set(src_dir ".")
+  if(F_ARGV_SOURCE_DIRECTORY)
+    set(src_dir "${F_ARGV_SOURCE_DIRECTORY}")
+  endif()
+
+  set(project_dir ".")
+  if(F_ARGV_PROJECT_DIRECTORY)
+    set(project_dir "${F_ARGV_PROJECT_DIRECTORY}")
+  endif()
+
   if(PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR
         "An active wheel has already been created. Must call morpheus_utils_create_python_package/morpheus_utils_build_python_package in pairs")
@@ -55,12 +79,19 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
   file(GLOB_RECURSE wheel_python_files
     LIST_DIRECTORIES FALSE
     CONFIGURE_DEPENDS
-    "*.py"
-    "py.typed"
-    "pyproject.toml"
-    "setup.cfg"
-    "MANIFEST.in"
+    "${src_dir}/.*.py"
   )
+
+  file(GLOB wheel_python_project_files
+      LIST_DIRECTORIES FALSE
+      CONFIGURE_DEPENDS
+      "${project_dir}/py.typed"
+      "${project_dir}/pyproject.toml"
+      "${project_dir}/setup.cfg"
+      "${project_dir}/MANIFEST.in"
+  )
+
+  list(APPEND wheel_python_files ${wheel_python_project_files})
 
   morpheus_utils_add_python_sources(${wheel_python_files})
 
@@ -170,6 +201,11 @@ function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
 
       cmake_path(IS_PREFIX target_source_dir "${resource}" NORMALIZE is_source_relative)
       cmake_path(IS_PREFIX target_binary_dir "${resource}" NORMALIZE is_binary_relative)
+      message(STATUS "**********${resource}")
+      message(STATUS "**********${target_source_dir}")
+      message(STATUS "**********${target_binary_dir}")
+      message(STATUS "**********${is_source_relative}")
+      message(STATUS "**********${is_binary_relative}")
 
       # Get the relative path to the source or binary directories
       if(is_binary_relative)
@@ -191,6 +227,7 @@ function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
       cmake_path(RELATIVE_PATH resource BASE_DIRECTORY "${top_level_source_dir}" OUTPUT_VARIABLE resource_source_relative)
       cmake_path(RELATIVE_PATH resource_output BASE_DIRECTORY "${top_level_source_dir}" OUTPUT_VARIABLE resource_output_source_relative)
 
+      message(STATUS "========>${resource}\n:: ${resource_output}")
       add_custom_command(
         OUTPUT  ${resource_output}
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${resource} ${resource_output}
