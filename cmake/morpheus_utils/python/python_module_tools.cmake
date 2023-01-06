@@ -42,7 +42,7 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
       ${ARGN}
   )
 
-  set(src_dir ".")
+  set(src_dir "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}")
   if(F_ARGV_SOURCE_DIRECTORY)
     set(src_dir "${F_ARGV_SOURCE_DIRECTORY}")
   endif()
@@ -80,15 +80,17 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
     LIST_DIRECTORIES FALSE
     CONFIGURE_DEPENDS
     "${src_dir}/.*.py"
+    "${src_dir}/py.typed"
   )
 
   file(GLOB wheel_python_project_files
       LIST_DIRECTORIES FALSE
       CONFIGURE_DEPENDS
-      "${project_dir}/py.typed"
+      "${project_dir}/MANIFEST.in"
       "${project_dir}/pyproject.toml"
       "${project_dir}/setup.cfg"
-      "${project_dir}/MANIFEST.in"
+      "${project_dir}/setup.py"
+      "${project_dir}/versioneer.py"
   )
 
   list(APPEND wheel_python_files ${wheel_python_project_files})
