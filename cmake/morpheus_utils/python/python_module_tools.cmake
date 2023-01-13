@@ -79,7 +79,7 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
   file(GLOB_RECURSE wheel_python_files
     LIST_DIRECTORIES FALSE
     CONFIGURE_DEPENDS
-    "${src_dir}/.*.py"
+    "${src_dir}/*.py"
     "${src_dir}/py.typed"
   )
 
