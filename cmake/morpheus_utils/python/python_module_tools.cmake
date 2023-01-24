@@ -361,13 +361,15 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
     message(STATUS "Automatically installing Python package '${PACKAGE_NAME}' into current python environment. This may overwrite any existing library with the same name")
 
     # Now actually install the package
-    set(install_stamp ${sources_binary_dir}/${PYTHON_ACTIVE_PACKAGE_NAME}-install.stamp)
+    set(install_stamp_depfile ${install_stamp}.d)
 
     add_custom_command(
       OUTPUT ${install_stamp}
       COMMAND ${_pip_command}
       COMMAND ${CMAKE_COMMAND} -E touch ${install_stamp}
+      COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/pip_gen_depfile.py --pkg_name ${PACKAGE_NAME} --input_file ${install_stamp} --output_file ${install_stamp_depfile}
       DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-outputs
+      DEPFILE ${install_stamp_depfile}
       COMMENT "Installing ${PACKAGE_NAME} python package"
     )
 
@@ -558,7 +560,7 @@ macro(__create_python_library MODULE_NAME)
     add_custom_command(
       OUTPUT  ${module_binary_stub_file}
       COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen ${TARGET_NAME} --no-setup-py --log-level WARN -o ./ --root-module-suffix \"\"
-      DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules
+      DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules $<TARGET_OBJECTS:${TARGET_NAME}>
       COMMENT "Building stub for python module ${TARGET_NAME}..."
       WORKING_DIRECTORY ${module_root_binary_dir}
     )
