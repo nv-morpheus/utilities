@@ -330,7 +330,7 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
 
     # Create a dummy target to ensure the above custom command is always run
     add_custom_target(${PYTHON_ACTIVE_PACKAGE_NAME}-wheel ALL
-      DEPENDS ${install_stamp}
+      DEPENDS ${wheel_stamp}
     )
 
     message(STATUS "Creating python wheel for library '${PACKAGE_NAME}'")
