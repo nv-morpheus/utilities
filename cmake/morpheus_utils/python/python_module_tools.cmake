@@ -361,6 +361,7 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
     message(STATUS "Automatically installing Python package '${PACKAGE_NAME}' into current python environment. This may overwrite any existing library with the same name")
 
     # Now actually install the package
+    set(install_stamp ${sources_binary_dir}/${PYTHON_ACTIVE_PACKAGE_NAME}-install.stamp)
     set(install_stamp_depfile ${install_stamp}.d)
 
     add_custom_command(

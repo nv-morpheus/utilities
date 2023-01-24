@@ -20,7 +20,11 @@ function(morpheus_utils_configure_cudf)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
-  set(CUDF_VERSION "22.08" CACHE STRING "Which version of cuDF to use")
+
+  set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
+
+  # Convert to a useable version
+  eval_rapids_version(${CUDF_VERSION} CUDF_VERSION)
 
   rapids_cpm_find(cudf ${CUDF_VERSION}
       GLOBAL_TARGETS
