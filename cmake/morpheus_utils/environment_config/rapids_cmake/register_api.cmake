@@ -54,6 +54,8 @@ macro(morpheus_utils_initialize_cuda_arch project_name)
 
   # Initialize CUDA architectures
   rapids_cuda_init_architectures(${project_name})
+
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endmacro()
 
 function(morpheus_utils_initialize_package_manager
