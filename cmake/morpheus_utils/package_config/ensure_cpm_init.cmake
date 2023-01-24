@@ -17,6 +17,13 @@
 
 include_guard(GLOBAL)
 
-include(${CMAKE_CURRENT_LIST_DIR}/package_config_macros.cmake)
+# Make sure RAPIDS CMake has been loaded
+# include(${CMAKE_CURRENT_LIST_DIR}/../environment_config/rapids_cmake/ensure_rapids_cmake_init.cmake)
 
-morpheus_utils_package_config_ensure_rapids_cpm_init()
+if (MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE)
+  message(STATUS "MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE:${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}"
+      ", is set and will be used.")
+  rapids_cpm_init(OVERRIDE "${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}")
+else()
+  rapids_cpm_init()
+endif()

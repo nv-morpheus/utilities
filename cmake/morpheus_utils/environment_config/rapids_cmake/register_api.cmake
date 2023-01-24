@@ -16,31 +16,7 @@
 # Ensure this is only run once
 include_guard(GLOBAL)
 
-macro(morpheus_utils_ensure_rapids_cpm_init)
-  set(prefix F_ARGV)
-  set(options "")
-  set(singleValueArgs RAPIDS_CMAKE_VERSION)
-  set(multiValueArgs "")
-
-  include(CMakeParseArguments)
-  cmake_parse_arguments(${prefix}
-      "${options}"
-      "${singleValueArgs}"
-      "${multiValueArgs}"
-      ${ARGN})
-
-  if (F_ARGV_RAPIDS_CMAKE_VERSION)
-    set(rapids_cmake_version "${F_ARGV_RAPIDS_CMAKE_VERSION}")
-  elseif(MORPHEUS_UTILS_OVERRIDE_RAPIDS_CMAKE_VERSION)
-    set(rapids_cmake_version "${MORPHEUS_UTILS_OVERRIDE_RAPIDS_CMAKE_VERSION}")
-  else()
-    set(rapids_cmake_version "22.10")
-  endif()
-
-  morpheus_utils_initialize_rapids_cmake(rapids_cmake_version)
-endmacro()
-
-function(morpheus_utils_initialize_rapids_cmake RAPIDS_VERSION_VAR_NAME)
+function(morpheus_utils_ensure_rapids_cpm_init)
   include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_rapids_cmake_init.cmake")
 endfunction()
 

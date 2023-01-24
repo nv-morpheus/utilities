@@ -21,11 +21,6 @@ function(morpheus_utils_configure_mrc)
   list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
-  if ((NOT MORPHEUS_UTILS_RAPIDS_VERSION) OR ("${MORPHEUS_UTILS_RAPIDS_VERSION}" STREQUAL ""))
-    set(MRC_RMM_VERSION "22.10")
-  else()
-    set(MRC_RMM_VERSION "${MORPHEUS_UTILS_RAPIDS_VERSION}")
-  endif()
 
   set(MRC_VERSION 23.01 CACHE STRING "Which version of MRC to use")
 
@@ -57,4 +52,3 @@ function(morpheus_utils_configure_mrc)
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
-

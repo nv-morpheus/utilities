@@ -17,19 +17,24 @@
 
 include_guard(GLOBAL)
 
-set(RAPIDS_CMAKE_VERSION "22.10" CACHE STRING "Version of rapids-cmake to use")
+# Ensure we have MORPHEUS_UTILS_RAPIDS_VERSION set
+include("${CMAKE_CURRENT_LIST_DIR}/rapids_version.cmake")
+
+set(RAPIDS_CMAKE_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of rapids-cmake to use")
+
+eval_rapids_version(${RAPIDS_CMAKE_VERSION} _rapids_cmake_version)
 
 # Download and load the repo according to the rapids-cmake instructions if it does not exist
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake)
-  message(STATUS "Downloading RAPIDS CMake Version: ${RAPIDS_CMAKE_VERSION}")
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE_${_rapids_cmake_version}.cmake)
+  message(STATUS "Downloading RAPIDS CMake Version: ${_rapids_cmake_version}")
   file(
-      DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-${RAPIDS_CMAKE_VERSION}/RAPIDS.cmake
-      ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake
+      DOWNLOAD https://raw.githubusercontent.com/rapidsai/rapids-cmake/branch-${_rapids_cmake_version}/RAPIDS.cmake
+      ${CMAKE_BINARY_DIR}/RAPIDS_CMAKE_${_rapids_cmake_version}.cmake
   )
 endif()
 
 # Now load the file
-include(${CMAKE_BINARY_DIR}/RAPIDS_CMAKE.cmake)
+include(${CMAKE_BINARY_DIR}/RAPIDS_CMAKE_${_rapids_cmake_version}.cmake)
 
 # Load Rapids Cmake packages
 include(rapids-cmake)
