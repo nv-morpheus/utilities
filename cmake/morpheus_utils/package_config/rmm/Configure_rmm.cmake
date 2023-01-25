@@ -21,11 +21,10 @@ function(morpheus_utils_configure_rmm)
   list(APPEND CMAKE_MESSAGE_CONTEXT "rmm")
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
-  set(RMM_VERSION "22.10" CACHE STRING "Version of RMM to use.")
 
-  if ("${RMM_VERSION}" MATCHES [=[^\${(.+)}$]=])
-    set(RMM_VERSION "${${CMAKE_MATCH_1}}")
-  endif()
+  set(RMM_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use.")
+
+  eval_rapids_version(${RMM_VERSION} RMM_VERSION)
 
   rapids_cpm_find(rmm ${RMM_VERSION}
     GLOBAL_TARGETS

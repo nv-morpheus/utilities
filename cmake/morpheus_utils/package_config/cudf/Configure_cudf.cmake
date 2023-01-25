@@ -19,9 +19,19 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_cudf)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
 
-  set(CUDF_VERSION "22.08" CACHE STRING "Which version of cuDF to use")
+  set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
 
-  find_package(cudf ${CUDF_VERSION} REQUIRED)
+  # Convert to a useable version
+  eval_rapids_version(${CUDF_VERSION} CUDF_VERSION)
+
+  rapids_find_package(cudf ${CUDF_VERSION} REQUIRED
+    GLOBAL_TARGETS
+      cudf cudf::cudf
+    BUILD_EXPORT_SET
+      ${PROJECT_NAME}-exports
+    INSTALL_EXPORT_SET
+      ${PROJECT_NAME}-exports
+  )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

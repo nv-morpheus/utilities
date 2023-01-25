@@ -17,12 +17,24 @@
 
 include_guard(GLOBAL)
 
-macro(morpheus_utils_package_config_ensure_rapids_cpm_init)
-  if (MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE)
-    message(STATUS "MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE:${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}"
-        ", is set and will be used.")
-    rapids_cpm_init(OVERRIDE "${MORPHEUS_UTILS_RAPIDS_CPM_INIT_OVERRIDE}")
-  else()
-    rapids_cpm_init()
-  endif()
-endmacro()
+if (DEFINED MORPHEUS_UTILS_RAPIDS_VERSION)
+   message(STATUS "Setting MORPHEUS_UTILS_RAPIDS_VERSION. Prev value: '${MORPHEUS_UTILS_RAPIDS_VERSION}'")
+else()
+   message(STATUS "Setting MORPHEUS_UTILS_RAPIDS_VERSION.")
+endif()
+
+# This variable must be set early since many functions use it
+set(MORPHEUS_UTILS_RAPIDS_VERSION 22.10 CACHE STRING "The default version to use for RAPIDS libraries unless otherwise specified.")
+
+function(eval_rapids_version input_value output_var_name)
+
+   set(version "${input_value}")
+
+   # Allow setting version to a variable. If so, evaluate that here. Allows for dependent versions, i.e. RMM_VERSION=${MORPHEUS_UTILS_RAPIDS_VERSION}
+   if("${version}" MATCHES [=[^\${(.+)}$]=])
+      set(version "${${CMAKE_MATCH_1}}")
+   endif()
+
+   set(${output_var_name} "${version}" PARENT_SCOPE)
+
+endfunction()
