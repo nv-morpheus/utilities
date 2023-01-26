@@ -1,5 +1,5 @@
 #=============================================================================
-# SPDX-FileCopyrightText: Copyright (c) 2020-2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,6 @@
 #=============================================================================
 
 include_guard(GLOBAL)
-
-if (DEFINED MORPHEUS_UTILS_RAPIDS_VERSION)
-   message(STATUS "Setting MORPHEUS_UTILS_RAPIDS_VERSION. Prev value: '${MORPHEUS_UTILS_RAPIDS_VERSION}'")
-else()
-   message(STATUS "Setting MORPHEUS_UTILS_RAPIDS_VERSION.")
-endif()
 
 # This variable must be set early since many functions use it
 set(MORPHEUS_UTILS_RAPIDS_VERSION 22.10 CACHE STRING "The default version to use for RAPIDS libraries unless otherwise specified.")
