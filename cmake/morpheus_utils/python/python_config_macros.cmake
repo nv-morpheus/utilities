@@ -18,7 +18,7 @@ include_guard(GLOBAL)
 macro(morpheus_utils_python_modules_ensure_python3)
   set(Python3_FIND_VIRTUALENV "FIRST")
   set(Python3_FIND_STRATEGY "LOCATION")
-  find_package(Python3 REQUIRED COMPONENTS Development Development.Module Development.Embed Interpreter NumPy)
+  find_package(Python3 REQUIRED COMPONENTS Development Development.Module Development.Embed Interpreter)
 endmacro()
 
 macro(morpheus_utils_python_modules_ensure_pybind11)
