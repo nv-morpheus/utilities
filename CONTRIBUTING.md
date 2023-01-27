@@ -19,7 +19,7 @@ Contributions to Morpheus Utilities fall into the following three categories.
 
 As contributors and maintainers to this project,
 you are expected to abide by Morpheus Utilities's code of conduct.
-More information can be found at: [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+More information can be found at: [Contributor Code of Conduct](https://github.com/nv-morpheus/.github/blob/main/CODE_OF_CONDUCT.md).
 
 ## Code contributions
 
