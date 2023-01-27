@@ -16,35 +16,55 @@
 
 include_guard(GLOBAL)
 
+# function(morpheus_utils_configure_cudf)
+#   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
+
+#   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+
+#   set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
+
+#   # Convert to a useable version
+#   eval_rapids_version(${CUDF_VERSION} CUDF_VERSION)
+
+#   rapids_cpm_find(cudf ${CUDF_VERSION}
+#       GLOBAL_TARGETS
+#         cudf cudf::cudf
+#       BUILD_EXPORT_SET
+#         ${PROJECT_NAME}-exports
+#       INSTALL_EXPORT_SET
+#         ${PROJECT_NAME}-exports
+#       CPM_ARGS
+#         GIT_REPOSITORY    https://github.com/rapidsai/cudf
+#         GIT_TAG           branch-${CUDF_VERSION}
+#         DOWNLOAD_ONLY     TRUE # disable internal builds for now.
+#         SOURCE_SUBDIR     cpp
+#         OPTIONS           USE_NVTX ON
+#                           BUILD_TESTS OFF
+#                           BUILD_BENCHMARKS OFF
+#                           DISABLE_DEPRECATION_WARNING OFF
+#                           PER_THREAD_DEFAULT_STREAM ON
+#                           CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}
+#                           CUDF_CMAKE_CUDA_ARCHITECTURES NATIVE
+#   )
+
+#   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
+# endfunction()
+
 function(morpheus_utils_configure_cudf)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
-
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
 
   set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
 
   # Convert to a useable version
   eval_rapids_version(${CUDF_VERSION} CUDF_VERSION)
 
-  rapids_cpm_find(cudf ${CUDF_VERSION}
-      GLOBAL_TARGETS
-        cudf cudf::cudf
-      BUILD_EXPORT_SET
-        ${PROJECT_NAME}-exports
-      INSTALL_EXPORT_SET
-        ${PROJECT_NAME}-exports
-      CPM_ARGS
-        GIT_REPOSITORY    https://github.com/rapidsai/cudf
-        GIT_TAG           branch-${CUDF_VERSION}
-        DOWNLOAD_ONLY     TRUE # disable internal builds for now.
-        SOURCE_SUBDIR     cpp
-        OPTIONS           USE_NVTX ON
-                          BUILD_TESTS OFF
-                          BUILD_BENCHMARKS OFF
-                          DISABLE_DEPRECATION_WARNING OFF
-                          PER_THREAD_DEFAULT_STREAM ON
-                          CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}
-                          CUDF_CMAKE_CUDA_ARCHITECTURES NATIVE
+  rapids_find_package(cudf ${CUDF_VERSION} REQUIRED
+    GLOBAL_TARGETS
+      cudf cudf::cudf
+    BUILD_EXPORT_SET
+      ${PROJECT_NAME}-exports
+    INSTALL_EXPORT_SET
+      ${PROJECT_NAME}-exports
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

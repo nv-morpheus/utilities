@@ -17,71 +17,88 @@
 
 include_guard(GLOBAL)
 
-# This function is for when boost fully supports CMake. As of 1.76.0 the
-# functionality is not supported but is in the master branch. Check in version
-# 1.77
-function(morpheus_utils_configure_boost_true_cmake)
+# # This function is for when boost fully supports CMake. As of 1.76.0 the
+# # functionality is not supported but is in the master branch. Check in version
+# # 1.77
+# function(morpheus_utils_configure_boost_true_cmake)
+#   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
+
+#   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+#   set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
+
+#   cmake_policy(SET CMP0097 OLD)
+#   set(Boost_ENABLE_CMAKE ON)
+#   set(Boost_INCLUDE_LIBRARIES "fiber thread" CACHE STRING "")
+#   set(Boost_EXCLUDE_LIBRARIES "leaf property_tree" CACHE STRING "")
+#   set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
+
+#   rapids_cpm_find(Boost ${BOOST_VERSION}
+#     GLOBAL_TARGETS
+#       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
+#     BUILD_EXPORT_SET
+#       ${PROJECT_NAME}-core-exports
+#     INSTALL_EXPORT_SET
+#       ${PROJECT_NAME}-core-exports
+#     CPM_ARGS
+#       GIT_REPOSITORY          https://github.com/boostorg/boost.git
+#       GIT_TAG                 v${BOOST_VERSION}
+#       GIT_SHALLOW             TRUE
+#       GIT_SUBMODULES          ""
+#       OPTIONS                 "BUILD_TESTING OFF"
+#       FIND_PACKAGE_ARGUMENTS  "COMPONENTS context fiber filesystem system"
+#   )
+# endfunction()
+
+# # This function uses boost-cmake (https://github.com/Orphis/boost-cmake) to
+# # configure boost. Not always up to date.
+# function(morpheus_utils_configure_boost_boost_cmake)
+#   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
+
+#   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+#   set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
+
+#   set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
+
+#   rapids_cpm_find(Boost ${BOOST_VERSION}
+#     GLOBAL_TARGETS
+#       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
+#     BUILD_EXPORT_SET
+#       ${PROJECT_NAME}-core-exports
+#     INSTALL_EXPORT_SET
+#       ${PROJECT_NAME}-core-exports
+#     CPM_ARGS
+#       GIT_REPOSITORY          https://github.com/Orphis/boost-cmake.git
+#       GIT_TAG                 "7f97a08b64bd5d2e53e932ddf80c40544cf45edf"
+#       GIT_SHALLOW             TRUE
+#       OPTIONS                 "BUILD_TESTING OFF"
+#       FIND_PACKAGE_ARGUMENTS  "COMPONENTS context fiber filesystem system"
+#   )
+
+#   if (NOT Boost_ADDED)
+#     # Now add it to the list of packages to install
+#     rapids_export_package(INSTALL Boost
+#       ${PROJECT_NAME}-core-exports
+#       GLOBAL_TARGETS Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
+#     )
+
+#     # Overwrite the default package contents
+#     file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
+#   endif()
+# endfunction()
+
+function(morpheus_utils_configure_boost)
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
   set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
-  cmake_policy(SET CMP0097 OLD)
-  set(Boost_ENABLE_CMAKE ON)
-  set(Boost_INCLUDE_LIBRARIES "fiber thread" CACHE STRING "")
-  set(Boost_EXCLUDE_LIBRARIES "leaf property_tree" CACHE STRING "")
-  set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
-
-  rapids_cpm_find(Boost ${BOOST_VERSION}
+  rapids_find_package(Boost ${BOOST_VERSION} REQUIRED
     GLOBAL_TARGETS
       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-core-exports
-    CPM_ARGS
-      GIT_REPOSITORY          https://github.com/boostorg/boost.git
-      GIT_TAG                 v${BOOST_VERSION}
-      GIT_SHALLOW             TRUE
-      GIT_SUBMODULES          ""
-      OPTIONS                 "BUILD_TESTING OFF"
-      FIND_PACKAGE_ARGUMENTS  "COMPONENTS context fiber filesystem system"
-  )
-endfunction()
-
-# This function uses boost-cmake (https://github.com/Orphis/boost-cmake) to
-# configure boost. Not always up to date.
-function(morpheus_utils_configure_boost_boost_cmake)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
-
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
-  set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
-
-  set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs
-
-  rapids_cpm_find(Boost ${BOOST_VERSION}
-    GLOBAL_TARGETS
-      Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
-    BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    CPM_ARGS
-      GIT_REPOSITORY          https://github.com/Orphis/boost-cmake.git
-      GIT_TAG                 "7f97a08b64bd5d2e53e932ddf80c40544cf45edf"
-      GIT_SHALLOW             TRUE
-      OPTIONS                 "BUILD_TESTING OFF"
-      FIND_PACKAGE_ARGUMENTS  "COMPONENTS context fiber filesystem system"
   )
 
-  if (NOT Boost_ADDED)
-    # Now add it to the list of packages to install
-    rapids_export_package(INSTALL Boost
-      ${PROJECT_NAME}-core-exports
-      GLOBAL_TARGETS Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
-    )
-
-    # Overwrite the default package contents
-    file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
-  endif()
+  list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
