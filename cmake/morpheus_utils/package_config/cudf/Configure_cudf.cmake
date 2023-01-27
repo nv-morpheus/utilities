@@ -56,9 +56,9 @@ function(morpheus_utils_configure_cudf)
   set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
 
   # Convert to a useable version
-  eval_rapids_version(${CUDF_VERSION} CUDF_VERSION)
+  eval_rapids_version(${CUDF_VERSION} _cudf_version)
 
-  rapids_find_package(cudf ${CUDF_VERSION} REQUIRED
+  rapids_find_package(cudf ${_cudf_version} REQUIRED
     GLOBAL_TARGETS
       cudf cudf::cudf
     BUILD_EXPORT_SET

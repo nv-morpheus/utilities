@@ -47,7 +47,6 @@ function(morpheus_utils_configure_mrc)
                       "MRC_PYTHON_INPLACE_BUILD OFF"
                       "MRC_PYTHON_PERFORM_INSTALL ON"
                       "MRC_PYTHON_BUILD_STUBS ${MORPHEUS_BUILD_PYTHON_STUBS}"
-                      "RMM_VERSION ${MRC_RMM_VERSION}"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
