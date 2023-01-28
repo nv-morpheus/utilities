@@ -32,9 +32,9 @@ function(morpheus_utils_configure_mrc)
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
     CPM_ARGS
-      GIT_REPOSITORY  https://github.com/nv-morpheus/utilities.git
-      GIT_TAG         v${MRC_VERSION}
-      GIT_SHALLOW     TRUE
+      GIT_REPOSITORY  https://github.com/nv-morpheus/MRC.git
+      GIT_TAG         branch-${MRC_VERSION}
+      GIT_SHALLOW     FALSE
       OPTIONS         "MRC_BUILD_EXAMPLES OFF"
                       "MRC_BUILD_TESTS OFF"
                       "MRC_BUILD_BENCHMARKS OFF"
@@ -47,7 +47,6 @@ function(morpheus_utils_configure_mrc)
                       "MRC_PYTHON_INPLACE_BUILD OFF"
                       "MRC_PYTHON_PERFORM_INSTALL ON"
                       "MRC_PYTHON_BUILD_STUBS ${MORPHEUS_BUILD_PYTHON_STUBS}"
-                      "RMM_VERSION ${MRC_RMM_VERSION}"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

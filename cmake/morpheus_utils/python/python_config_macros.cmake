@@ -15,10 +15,18 @@
 # Ensure we only include this once
 include_guard(GLOBAL)
 
+# Ensures that Python3 is loaded from the correct location. Loads all components
+# with NumPy being optional
 macro(morpheus_utils_python_modules_ensure_python3)
   set(Python3_FIND_VIRTUALENV "FIRST")
   set(Python3_FIND_STRATEGY "LOCATION")
-  find_package(Python3 REQUIRED COMPONENTS Development Development.Module Development.Embed Interpreter)
+
+  # Call find_package
+  find_package(Python3 REQUIRED
+    COMPONENTS Development Development.Module Development.Embed Interpreter
+    # Load NumPy as optional. Morpheus uses NumPy, MRC does not.
+    OPTIONAL_COMPONENTS NumPy
+  )
 endmacro()
 
 macro(morpheus_utils_python_modules_ensure_pybind11)

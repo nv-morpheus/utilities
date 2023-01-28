@@ -24,9 +24,9 @@ function(morpheus_utils_configure_rmm)
 
   set(RMM_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use.")
 
-  eval_rapids_version(${RMM_VERSION} RMM_VERSION)
+  eval_rapids_version(${RMM_VERSION} _rmm_version)
 
-  rapids_cpm_find(rmm ${RMM_VERSION}
+  rapids_cpm_find(rmm ${_rmm_version}
     GLOBAL_TARGETS
       rmm::rmm rmm::Thrust
     BUILD_EXPORT_SET
@@ -35,7 +35,7 @@ function(morpheus_utils_configure_rmm)
       ${PROJECT_NAME}-core-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
-      GIT_TAG         branch-${RMM_VERSION}
+      GIT_TAG         branch-${_rmm_version}
       GIT_SHALLOW     TRUE
       OPTIONS         "BUILD_TESTS OFF"
                       "BUILD_BENCHMARKS OFF"
