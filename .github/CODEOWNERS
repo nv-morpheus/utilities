@@ -1,0 +1,3 @@
+# Default Approval rule if one of the later sections does not apply
+* @nv-morpheus/utilities-codeowners
+
