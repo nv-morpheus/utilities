@@ -22,9 +22,9 @@ function(morpheus_utils_configure_matx)
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
-  set(MATX_VERSION "0.1.0" CACHE STRING "Version of MatX to use")
+  set(MATX_VERSION "0.3.0" CACHE STRING "Version of MatX to use")
 
-  if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.4"))
+  if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
     rapids_cpm_find(matx ${MATX_VERSION}
       GLOBAL_TARGETS
@@ -37,17 +37,16 @@ function(morpheus_utils_configure_matx)
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
         GIT_TAG         "v${MATX_VERSION}"
         GIT_SHALLOW     TRUE
-        PATCH_COMMAND
-          git checkout -- .
-          && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/config_and_install_updates.patch
-        OPTIONS         "BUILD_EXAMPLES OFF"
-                        "BUILD_TESTS OFF"
+        OPTIONS         "MATX_BUILD_BENCHMARKS OFF"
+                        "MATX_BUILD_DOCS OFF"
+                        "MATX_BUILD_EXAMPLES OFF"
+                        "MATX_BUILD_TESTS OFF"
                         "MATX_INSTALL ON"
     )
 
   else()
     message(SEND_ERROR
-        "Unable to add MatX dependency. CUDA Version must be greater than 11.4.
+        "Unable to add MatX dependency. CUDA Version must be greater than 11.5.
         Current CUDA Version: ${CUDAToolkit_VERSION}")
   endif()
 
