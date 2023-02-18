@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2021-2022,NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,43 @@
 
 include_guard(GLOBAL)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+set(_MORPHEUS_UTILS_PYTHON_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}")
 
-include(python_config_macros)
-include("${CMAKE_CURRENT_LIST_DIR}/../package_config/ensure_cpm_init.cmake")
+macro(morpheus_utils_python_ensure_python3)
+   list(APPEND CMAKE_MODULE_PATH "${_MORPHEUS_UTILS_PYTHON_DIRECTORY}")
+   include(ensure_python3)
+   list(POP_BACK CMAKE_MODULE_PATH)
+endmacro()
 
-include(python3)
-include(python_module_tools)
+macro(morpheus_utils_python_configure)
+   list(APPEND CMAKE_MODULE_PATH "${_MORPHEUS_UTILS_PYTHON_DIRECTORY}")
+   include(configure)
+   list(POP_BACK CMAKE_MODULE_PATH)
+endmacro()
 
-list(POP_BACK CMAKE_MODULE_PATH)
+macro(morpheus_utils_python_ensure_pybind11)
+   list(APPEND CMAKE_MODULE_PATH "${_MORPHEUS_UTILS_PYTHON_DIRECTORY}")
+   include(ensure_pybind11)
+   list(POP_BACK CMAKE_MODULE_PATH)
+endmacro()
+
+macro(morpheus_utils_python_ensure_sk_build)
+   list(APPEND CMAKE_MODULE_PATH "${_MORPHEUS_UTILS_PYTHON_DIRECTORY}")
+   include(ensure_sk_build)
+   list(POP_BACK CMAKE_MODULE_PATH)
+endmacro()
+
+macro(morpheus_utils_python_ensure_cython)
+   list(APPEND CMAKE_MODULE_PATH "${_MORPHEUS_UTILS_PYTHON_DIRECTORY}")
+   include(ensure_cython)
+   list(POP_BACK CMAKE_MODULE_PATH)
+endmacro()
+
+macro(morpheus_utils_python_ensure_loaded)
+   # Call all functions
+   morpheus_utils_python_ensure_python3()
+   morpheus_utils_python_configure()
+   morpheus_utils_python_ensure_pybind11()
+   morpheus_utils_python_ensure_sk_build()
+   morpheus_utils_python_ensure_cython()
+endmacro()

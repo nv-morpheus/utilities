@@ -1,21 +1,24 @@
-# =============================================================================
-# Copyright (c) 2020-2022, NVIDIA CORPORATION.
+# SPDX-FileCopyrightText: Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
 #
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-# in compliance with the License. You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software distributed under the License
-# is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-# or implied. See the License for the specific language governing permissions and limitations under
-# the License.
-# =============================================================================
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Ensure we only include this once
 include_guard(GLOBAL)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+# Needs cython and pybind11 first
+include("${CMAKE_CURRENT_LIST_DIR}/ensure_pybind11.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/ensure_cython.cmake")
 
 #[=======================================================================[
 @brief : Creates an artifact set used to build a python wheel
@@ -26,7 +29,7 @@ morpheus_utils_create_python_package <PACKAGE_NAME>
 function(morpheus_utils_create_python_package PACKAGE_NAME)
   list(APPEND CMAKE_MESSAGE_CONTEXT "package-${PACKAGE_NAME}")
 
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   set(prefix F_ARGV)
   set(flags "")
@@ -125,7 +128,7 @@ function(morpheus_utils_add_target_resources)
     ${ARGN}
   )
 
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   # Get the current target resources
   get_target_property(target_resources ${_ARGS_TARGET_NAME} RESOURCE)
@@ -161,14 +164,35 @@ morpheus_utils_add_python_sources
 
 #]=======================================================================]
 function(morpheus_utils_add_python_sources)
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
-    message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
+    message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
   endif()
 
   # Append any arguments to the python_sources_target
   morpheus_utils_add_target_resources(TARGET_NAME ${PYTHON_ACTIVE_PACKAGE_NAME}-sources ${ARGN})
+
+endfunction()
+
+#[=======================================================================[
+@brief : Add all <source> elements as resources to the current python
+wheel package.
+ex. morpheus_utils_add_python_sources([SOURCES...])
+results --
+
+morpheus_utils_add_python_sources
+
+#]=======================================================================]
+function(morpheus_utils_python_package_set_default_link_targets)
+  # morpheus_utils_python_ensure_loaded()
+
+  if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
+    message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_set_default_link_targets")
+  endif()
+
+  # Save the link targets in the modules target properties
+  set_target_properties(${PYTHON_ACTIVE_PACKAGE_NAME}-modules PROPERTIES LINK_TARGETS "${ARGN}")
 
 endfunction()
 
@@ -182,7 +206,7 @@ morpheus_utils_copy_target_resources(<TARGET_NAME>
                       <COPY_DIRECTORY>)
 #]=======================================================================]
 function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   # See if there are any resources associated with this target
   get_target_property(target_resources ${TARGET_NAME} RESOURCE)
@@ -217,7 +241,7 @@ function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
       # Get the final copied location
       cmake_path(APPEND COPY_DIRECTORY "${resource_relative}" OUTPUT_VARIABLE resource_output)
 
-      message(VERBOSE "Copying ${resource} to ${resource_output}")
+      # message(VERBOSE "Copying ${resource} to ${resource_output}")
 
       # Pretty up the output message
       set(top_level_source_dir ${${CMAKE_PROJECT_NAME}_SOURCE_DIR})
@@ -274,7 +298,7 @@ morpheus_utils_build_python_package(<PACKAGE_NAME>
                      [INSTALL_WHEEL])
 #]=======================================================================]
 function(morpheus_utils_build_python_package PACKAGE_NAME)
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
@@ -421,7 +445,7 @@ function(morpheus_utils_resolve_python_module_name MODULE_NAME)
       "${multiValues}"
       ${ARGN})
 
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   set(py_module_name ${MODULE_NAME})
   set(py_module_namespace "")
@@ -471,7 +495,7 @@ macro(__create_python_library MODULE_NAME)
       "${multiValues}"
       ${ARGN})
 
-  morpheus_utils_python_modules_ensure_loaded()
+  # morpheus_utils_python_ensure_loaded()
 
   if(NOT _ARGS_NO_PACKAGE AND NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
@@ -479,6 +503,11 @@ macro(__create_python_library MODULE_NAME)
 
   if(NOT _ARGS_MODULE_ROOT)
     get_target_property(_ARGS_MODULE_ROOT ${PYTHON_ACTIVE_PACKAGE_NAME}-modules SOURCE_DIR)
+  endif()
+
+  if(NOT _ARGS_LINK_TARGETS)
+    get_target_property(_ARGS_LINK_TARGETS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules LINK_TARGETS)
+    message(STATUS "Using LINK_TARGETS: ${_ARGS_LINK_TARGETS}")
   endif()
 
   # Normalize the module root
