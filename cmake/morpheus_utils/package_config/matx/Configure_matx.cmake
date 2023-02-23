@@ -26,6 +26,7 @@ function(morpheus_utils_configure_matx)
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
+    # Build MatX with 32 bit indexes, this allows matx size types to match those of cuDF
     rapids_cpm_find(matx ${MATX_VERSION}
       GLOBAL_TARGETS
         matx matx::matx
@@ -37,7 +38,8 @@ function(morpheus_utils_configure_matx)
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
         GIT_TAG         "v${MATX_VERSION}"
         GIT_SHALLOW     TRUE
-        OPTIONS         "MATX_BUILD_BENCHMARKS OFF"
+        OPTIONS         "MATX_BUILD_32_BIT ON"
+                        "MATX_BUILD_BENCHMARKS OFF"
                         "MATX_BUILD_DOCS OFF"
                         "MATX_BUILD_EXAMPLES OFF"
                         "MATX_BUILD_TESTS OFF"
