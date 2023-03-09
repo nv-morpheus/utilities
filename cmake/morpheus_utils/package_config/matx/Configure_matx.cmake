@@ -22,7 +22,7 @@ function(morpheus_utils_configure_matx)
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
-  set(MATX_VERSION "0.3.0" CACHE STRING "Version of MatX to use")
+  set(MATX_VERSION "9b5e56a" CACHE STRING "Version of MatX to use")
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
@@ -36,7 +36,7 @@ function(morpheus_utils_configure_matx)
         ${PROJECT_NAME}-exports
       CPM_ARGS
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
-        GIT_TAG         "v${MATX_VERSION}"
+        GIT_TAG         "${MATX_VERSION}"
         GIT_SHALLOW     TRUE
         OPTIONS         "MATX_BUILD_32_BIT ON"
                         "MATX_BUILD_BENCHMARKS OFF"
