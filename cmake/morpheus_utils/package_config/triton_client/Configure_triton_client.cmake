@@ -19,7 +19,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_tritonclient)
   list(APPEND CMAKE_MESSAGE_CONTEXT "TritonClient")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(TRITONCLIENT_VERSION "22.10" CACHE STRING "Which version of TritonClient to use")
 
   rapids_cpm_find(TritonClient ${TRITONCLIENT_VERSION}
@@ -47,4 +47,3 @@ function(morpheus_utils_configure_tritonclient)
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
-

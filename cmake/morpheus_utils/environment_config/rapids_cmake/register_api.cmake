@@ -16,10 +16,6 @@
 # Ensure this is only run once
 include_guard(GLOBAL)
 
-function(morpheus_utils_ensure_rapids_cpm_init)
-  include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_rapids_cmake_init.cmake")
-endfunction()
-
 macro(morpheus_utils_initialize_cuda_arch project_name)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cuda")
 
@@ -39,7 +35,9 @@ function(morpheus_utils_initialize_package_manager
     BUILD_SHARED_LIBS_VAR_NAME
     )
 
-  morpheus_utils_ensure_rapids_cpm_init()
+  # Ensure rapids CMake is setup
+  include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_rapids_cmake_init.cmake")
+
   set(USE_CONDA ${${USE_CONDA_VAR_NAME}})
 
   if(USE_CONDA AND DEFINED ENV{CONDA_PREFIX})

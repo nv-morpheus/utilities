@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_ucx)
   list(APPEND CMAKE_MESSAGE_CONTEXT "ucx")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(UCX_VERSION "1.13" CACHE STRING "Version of ucx to use")
 
   # Try to find UCX and download from source if not found

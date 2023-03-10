@@ -16,8 +16,6 @@
 # Ensure we only include this once
 include_guard(GLOBAL)
 
-# This needs CPM to be init first
-include("${CMAKE_CURRENT_LIST_DIR}/../package_config/ensure_cpm_init.cmake")
-
 morpheus_utils_configure_pybind11()
+
 find_package(pybind11 REQUIRED)

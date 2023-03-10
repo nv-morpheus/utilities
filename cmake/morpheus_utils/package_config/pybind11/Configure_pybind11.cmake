@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_pybind11)
   list(APPEND CMAKE_MESSAGE_CONTEXT "pybind11")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
 
   # Needs a patch to change the internal tracker to use fiber specific storage instead of TSS
@@ -39,5 +39,6 @@ function(morpheus_utils_configure_pybind11)
       OPTIONS         "PYBIND11_INSTALL ON"
                       "PYBIND11_TEST OFF"
   )
+
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

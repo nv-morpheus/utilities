@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_taskflow version)
   list(APPEND CMAKE_MESSAGE_CONTEXT "taskflow")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
 
   rapids_cpm_find(taskflow ${version}
     GLOBAL_TARGETS

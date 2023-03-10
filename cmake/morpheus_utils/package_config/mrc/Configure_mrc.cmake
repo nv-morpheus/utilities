@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_mrc)
   list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
 
   string(TOUPPER "${PROJECT_NAME}" PROJECT_NAME_UPPER)
 

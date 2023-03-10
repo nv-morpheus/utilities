@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_prometheus_cpp)
   list(APPEND CMAKE_MESSAGE_CONTEXT "prometheus_cpp")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(PROMETHEUS_CPP_VERSION "1.0.0" CACHE STRING "Version of Prometheus-cpp to use")
 
   rapids_cpm_find(prometheus-cpp ${PROMETHEUS_CPP_VERSION}
