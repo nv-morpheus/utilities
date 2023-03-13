@@ -38,7 +38,6 @@ function(morpheus_utils_configure_matx)
       CPM_ARGS
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
         GIT_TAG         "${MATX_TAG}"
-        GIT_SHALLOW     TRUE
         OPTIONS         "MATX_BUILD_32_BIT ON"
                         "MATX_BUILD_BENCHMARKS OFF"
                         "MATX_BUILD_DOCS OFF"
