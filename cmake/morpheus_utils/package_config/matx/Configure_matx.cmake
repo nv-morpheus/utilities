@@ -23,7 +23,7 @@ function(morpheus_utils_configure_matx)
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
   set(MATX_VERSION "0.3.0" CACHE STRING "Version of MatX to use")
-  set(MATX_TAG "9b5e56a" CACHE STRING "Tag of MatX to use")
+  set(MATX_TAG "015908f" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
