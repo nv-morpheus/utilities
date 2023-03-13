@@ -23,9 +23,11 @@ function(morpheus_utils_configure_matx)
 
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
   set(MATX_VERSION "0.3.0" CACHE STRING "Version of MatX to use")
+  set(MATX_TAG "9b5e56a" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
+    # Build MatX with 32 bit indexes, this allows matx size types to match those of cuDF
     rapids_cpm_find(matx ${MATX_VERSION}
       GLOBAL_TARGETS
         matx matx::matx
@@ -35,9 +37,10 @@ function(morpheus_utils_configure_matx)
         ${PROJECT_NAME}-exports
       CPM_ARGS
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
-        GIT_TAG         "v${MATX_VERSION}"
+        GIT_TAG         "${MATX_TAG}"
         GIT_SHALLOW     TRUE
-        OPTIONS         "MATX_BUILD_BENCHMARKS OFF"
+        OPTIONS         "MATX_BUILD_32_BIT ON"
+                        "MATX_BUILD_BENCHMARKS OFF"
                         "MATX_BUILD_DOCS OFF"
                         "MATX_BUILD_EXAMPLES OFF"
                         "MATX_BUILD_TESTS OFF"
