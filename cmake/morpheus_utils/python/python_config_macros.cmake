@@ -22,7 +22,7 @@ macro(morpheus_utils_python_modules_ensure_python3)
   set(Python3_FIND_STRATEGY "LOCATION")
 
   # Call find_package
-  find_package(Python 3.8 REQUIRED
+  find_package(Python3 REQUIRED
     COMPONENTS Development Development.Module Development.Embed Interpreter
     # Load NumPy as optional. Morpheus uses NumPy, MRC does not.
     OPTIONAL_COMPONENTS NumPy
