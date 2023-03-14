@@ -13,8 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Ensure we only include this once
-include_guard(GLOBAL)
+# Include this once per directory since we set variables
+include_guard(DIRECTORY)
+
+# Needs Python3 first
+include("${CMAKE_CURRENT_LIST_DIR}/ensure_python3.cmake")
 
 morpheus_utils_configure_pybind11()
 

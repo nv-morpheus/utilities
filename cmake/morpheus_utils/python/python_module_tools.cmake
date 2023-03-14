@@ -507,7 +507,6 @@ macro(__create_python_library MODULE_NAME)
 
   if(NOT _ARGS_LINK_TARGETS)
     get_target_property(_ARGS_LINK_TARGETS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules LINK_TARGETS)
-    message(STATUS "Using LINK_TARGETS: ${_ARGS_LINK_TARGETS}")
   endif()
 
   # Normalize the module root

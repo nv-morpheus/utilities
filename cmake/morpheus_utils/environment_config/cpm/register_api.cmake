@@ -29,9 +29,7 @@ function(morpheus_utils_initialize_cpm cache_dir_name)
   if (is_cpm_initialized)
 
     # Now check for the local property
-    if (MORPHEUS_UTILS_CPM_INITIALIZED)
-      message(WARNING "CPM has already been initialized. Skipping initialization. morpheus_utils_initialize_cpm() should only be called once")
-    else()
+    if (NOT MORPHEUS_UTILS_CPM_INITIALIZED)
       message(WARNING "CPM was initialized from another directory and may not be configured correctly for this project. Ensure morpheus_utils_initialize_cpm() is called from the project root scope")
     endif()
 

@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Ensure we only include this once
-include_guard(GLOBAL)
+# Include this once per directory since we set variables
+include_guard(DIRECTORY)
 
 # Set both Python and Python3
 set(Python3_FIND_VIRTUALENV "FIRST")
@@ -24,6 +24,13 @@ set(Python_FIND_STRATEGY "LOCATION")
 
 # Call find_package
 find_package(Python3 REQUIRED
+  COMPONENTS Development Development.Module Development.Embed Interpreter
+  # Load NumPy as optional. Morpheus uses NumPy, MRC does not.
+  OPTIONAL_COMPONENTS NumPy
+)
+
+# Call find_package(Python) as well since some use Python3 and others use Python. Just to be safe
+find_package(Python REQUIRED
   COMPONENTS Development Development.Module Development.Embed Interpreter
   # Load NumPy as optional. Morpheus uses NumPy, MRC does not.
   OPTIONAL_COMPONENTS NumPy
