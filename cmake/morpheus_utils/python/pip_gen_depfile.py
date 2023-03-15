@@ -16,6 +16,7 @@
 import argparse
 import os
 
+import pkg_resources as pkg
 from pip._internal.commands.show import search_packages_info
 
 
@@ -25,18 +26,31 @@ def gen_dep_file(pkg_name: str, input_file: str, output_file: str):
 
     for pkg_info in package_generator:
 
-        if (pkg_info.name == pkg_name):
+        # Get the import name of the package
+        try:
+            egg_info = pkg.get_distribution(pkg_info.name).egg_info
 
-            joined_files = " ".join([os.path.join(pkg_info.location, f) for f in pkg_info.files])
+            # Try to open it
+            with open(os.path.join(egg_info, "top_level.txt")) as f:
+                egg_pkg_name = f.readline().rstrip()
 
-            # Create the output lines
-            lines = [f"{input_file}: {joined_files}"]
+            if (egg_pkg_name == pkg_name):
 
-            # Write the depfile
-            with open(output_file, "w") as f:
-                f.writelines(lines)
+                joined_files = " ".join([os.path.join(pkg_info.location, f) for f in pkg_info.files])
 
-            break
+                # Create the output lines
+                lines = [f"{input_file}: {joined_files}"]
+
+                # Write the depfile
+                with open(output_file, "w") as f:
+                    f.writelines(lines)
+
+                return
+
+        except:
+            continue
+
+    print(f"Could not find package info for '{pkg_name}'")
 
 
 if (__name__ == "__main__"):

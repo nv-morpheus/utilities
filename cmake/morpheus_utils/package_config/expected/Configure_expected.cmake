@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_tl_expected)
   list(APPEND CMAKE_MESSAGE_CONTEXT "tl-expected")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(EXPECTED_VERSION "1.0.0" CACHE STRING "Version of expected to use")
 
   rapids_cpm_find(tl-expected ${EXPECTED_VERSION}

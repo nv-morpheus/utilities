@@ -19,6 +19,15 @@ include_guard(GLOBAL)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
+function(morpheus_utils_assert_cpm_initialized)
+   get_property(is_cpm_initialized GLOBAL PROPERTY CPM_INITIALIZED)
+
+   if (NOT is_cpm_initialized)
+      message(SEND_ERROR "CPM was not initialized before it was used. Ensure morpheus_utils_initialize_cpm() is called from the most root scope")
+   endif()
+
+endfunction()
+
 include(boost/Configure_boost)
 include(cudf/Configure_cudf)
 include(expected/Configure_expected)

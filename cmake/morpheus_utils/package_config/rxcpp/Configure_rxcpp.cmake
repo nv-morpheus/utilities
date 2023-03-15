@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_rxcpp)
   list(APPEND CMAKE_MESSAGE_CONTEXT "rxcpp")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(RXCPP_VERSION "4.1.1.2" CACHE STRING "Version of RxCpp to use")
 
   rapids_cpm_find(rxcpp ${RXCPP_VERSION}

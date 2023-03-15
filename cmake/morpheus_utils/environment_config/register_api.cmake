@@ -37,7 +37,5 @@ include(iwyu/register_api)
 # No deps
 include(rapids_cmake/register_api)
 
-# Ensure that RAPIDS CPM is initialized
-morpheus_utils_ensure_rapids_cpm_init()
 
 list(POP_BACK CMAKE_MODULE_PATH)

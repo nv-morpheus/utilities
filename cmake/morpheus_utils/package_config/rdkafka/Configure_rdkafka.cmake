@@ -19,7 +19,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_rdkafka) # version currently unused, left for consistency
   list(APPEND CMAKE_MESSAGE_CONTEXT "rdkafka")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(RDKAFKA_VERSION 1.6.2 CACHE STRING "Version of RDKafka to use (currently Ignored)")
 
   rapids_find_generate_module(RDKAFKA

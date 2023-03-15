@@ -23,7 +23,7 @@ include_guard(GLOBAL)
 # function(morpheus_utils_configure_boost_true_cmake)
 #   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
-#   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+#   morpheus_utils_assert_cpm_initialized()
 #   set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
 #   cmake_policy(SET CMP0097 OLD)
@@ -54,7 +54,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_boost)
   list(APPEND CMAKE_MESSAGE_CONTEXT "boost")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(BOOST_VERSION "1.74.0" CACHE STRING "Version of boost to use")
 
   set(Boost_USE_DEBUG_LIBS OFF)  # ignore debug libs

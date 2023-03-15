@@ -21,7 +21,7 @@ function(morpheus_utils_configure_matx)
 
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(MATX_VERSION "0.3.0" CACHE STRING "Version of MatX to use")
   set(MATX_TAG "015908f" CACHE STRING "Tag of MatX to use")
 
