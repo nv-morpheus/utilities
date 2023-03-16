@@ -388,15 +388,21 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
     set(install_stamp ${sources_binary_dir}/${PYTHON_ACTIVE_PACKAGE_NAME}-install.stamp)
     set(install_stamp_depfile ${install_stamp}.d)
 
+    # Need to set CMP0116 to guarantee absolute/reltive paths in the depfile are handled properly
+    cmake_policy(PUSH)
+    cmake_policy(SET CMP0116 NEW)
+
     add_custom_command(
       OUTPUT ${install_stamp}
       COMMAND ${_pip_command}
       COMMAND ${CMAKE_COMMAND} -E touch ${install_stamp}
-      COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/pip_gen_depfile.py --pkg_name ${PACKAGE_NAME} --input_file ${install_stamp} --output_file ${install_stamp_depfile}
+      COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/pip_gen_depfile.py --pkg_name ${PACKAGE_NAME} --input_file ${install_stamp} --output_file ${install_stamp_depfile} --relative_to ${CMAKE_CURRENT_BINARY_DIR}
       DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-outputs
       DEPFILE ${install_stamp_depfile}
       COMMENT "Installing ${PACKAGE_NAME} python package"
     )
+
+    cmake_policy(POP)
 
     add_custom_target(${PYTHON_ACTIVE_PACKAGE_NAME}-install ALL
       DEPENDS ${install_stamp}
