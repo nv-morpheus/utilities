@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_glog)
   list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
   set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
 
   rapids_cpm_find(glog ${GLOG_VERSION}

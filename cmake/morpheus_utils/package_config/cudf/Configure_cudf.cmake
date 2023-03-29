@@ -19,7 +19,7 @@ include_guard(GLOBAL)
 # function(morpheus_utils_configure_cudf)
 #   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
 
-#   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+#   morpheus_utils_assert_cpm_initialized()
 
 #   set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
 

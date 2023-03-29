@@ -20,9 +20,11 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_mrc)
   list(APPEND CMAKE_MESSAGE_CONTEXT "mrc")
 
-  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../ensure_cpm_init.cmake)
+  morpheus_utils_assert_cpm_initialized()
 
-  set(MRC_VERSION 23.01 CACHE STRING "Which version of MRC to use")
+  string(TOUPPER "${PROJECT_NAME}" PROJECT_NAME_UPPER)
+
+  set(MRC_VERSION 23.03 CACHE STRING "Which version of MRC to use")
 
   rapids_cpm_find(mrc ${MRC_VERSION}
     GLOBAL_TARGETS
@@ -46,7 +48,7 @@ function(morpheus_utils_configure_mrc)
                       "MRC_USE_CLANG_TIDY ${MORPHEUS_USE_CLANG_TIDY}"
                       "MRC_PYTHON_INPLACE_BUILD OFF"
                       "MRC_PYTHON_PERFORM_INSTALL ON"
-                      "MRC_PYTHON_BUILD_STUBS ${MORPHEUS_BUILD_PYTHON_STUBS}"
+                      "MRC_PYTHON_BUILD_STUBS ${${PROJECT_NAME_UPPER}_BUILD_PYTHON_STUBS}"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
