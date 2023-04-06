@@ -18,7 +18,7 @@
 include_guard(GLOBAL)
 
 # This variable must be set early since many functions use it
-set(MORPHEUS_UTILS_RAPIDS_VERSION 22.10 CACHE STRING "The default version to use for RAPIDS libraries unless otherwise specified.")
+set(MORPHEUS_UTILS_RAPIDS_VERSION 23.02 CACHE STRING "The default version to use for RAPIDS libraries unless otherwise specified.")
 
 function(eval_rapids_version input_value output_var_name)
 
