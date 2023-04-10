@@ -139,7 +139,7 @@ macro(morpheus_utils_initialize_code_coverage)
   option(CODE_COVERAGE_VERBOSE "Verbose information" FALSE)
 
   # Check prereqs
-  find_program( GCOV_PATH gcov )
+  find_program( GCOV_PATH NAMES gcov x86_64-conda-linux-gnu-gcov)
   find_program( LCOV_PATH  NAMES lcov lcov.bat lcov.exe lcov.perl)
   find_program( FASTCOV_PATH NAMES fastcov fastcov.py )
   find_program( GENHTML_PATH NAMES genhtml genhtml.perl genhtml.bat )
