@@ -28,7 +28,7 @@ cd $(git rev-parse --show-superproject-working-tree)
 ```
 
 # Building CI images
-The `Dockerfile` defines two targets: `base` and `driver`. The `driver` target includes the Nvidia driver needed to build MRC on a machine without access to a GPU.
+The `Dockerfile` defines two targets: `build` and `test`. The `build` target is used during the build phase and most likely will not have a GPU. The `test` target is used during the test phase and will have a GPU.
 
 To build the images from the root of the repo run:
 ```bash
@@ -49,8 +49,8 @@ If the images are already built, the build step can be skipped by setting `SKIP_
 # Updating CI to use the new images
 Update `.github/workflows/pull_request.yml` changing these two lines with the new image names:
 ```yaml
-      container: nvcr.io/ea-nvidia-morpheus/morpheus:${repo_name}-ci-driver-221128
-      test_container: nvcr.io/ea-nvidia-morpheus/morpheus:${repo_name}-ci-base-221128
+      container: nvcr.io/ea-nvidia-morpheus/morpheus:${repo_name}-ci-build-221128
+      test_container: nvcr.io/ea-nvidia-morpheus/morpheus:${repo_name}-ci-test-221128
 ```
 
 Where the final 6 digits of the tag represent the current year, month, and day in the form `YYMMDD`.
