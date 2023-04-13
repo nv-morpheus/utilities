@@ -20,7 +20,7 @@ REPO_NAME=$(basename -s .git `git config --get remote.origin.url`)
 # Convert it to lower
 REPO_NAME=$(echo "${REPO_NAME}" | tr '[:upper:]' '[:lower:]')
 
-DOCKER_TARGET=${DOCKER_TARGET:-"driver" "test"}
+DOCKER_TARGET=${DOCKER_TARGET:-"build" "test"}
 DOCKER_BUILDKIT=${DOCKER_BUILDKIT:-1}
 DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER:-"nvcr.io"}
 DOCKER_REGISTRY_PATH=${DOCKER_REGISTRY_PATH:-"/ea-nvidia-morpheus/morpheus"}
