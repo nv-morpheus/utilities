@@ -540,6 +540,9 @@ macro(__create_python_library MODULE_NAME)
     add_cython_target(${MODULE_NAME} "${_ARGS_PYX_FILE}" CXX PY3)
     add_library(${TARGET_NAME} ${lib_type} ${${MODULE_NAME}} ${_ARGS_SOURCE_FILES})
 
+    # Make the filename match pybind
+    pybind11_extension(${TARGET_NAME})
+
     # Need to set -fvisibility=hidden for cython according to https://pybind11.readthedocs.io/en/stable/faq.html
     # set_target_properties(${TARGET_NAME} PROPERTIES CXX_VISIBILITY_PRESET hidden)
   else()
