@@ -22,22 +22,31 @@ macro(morpheus_utils_python_configure)
    include(${MORPHEUS_UTILS_ROOT_PATH}/python/configure.cmake)
 endmacro()
 
+# ==== Load Functions ====
+# The following functions run the load scripts for all dependencies. They assume
+# everything is optional and do not fail if something is missing (i.e. cython)
 macro(morpheus_utils_python_load_python3)
-   include(${MORPHEUS_UTILS_ROOT_PATH}/python/ensure_python3.cmake)
+   include(${MORPHEUS_UTILS_ROOT_PATH}/python/load_python3.cmake)
 endmacro()
 
 macro(morpheus_utils_python_load_pybind11)
-   include(${MORPHEUS_UTILS_ROOT_PATH}/python/ensure_pybind11.cmake)
+   include(${MORPHEUS_UTILS_ROOT_PATH}/python/load_pybind11.cmake)
 endmacro()
 
 macro(morpheus_utils_python_load_sk_build)
-   include(${MORPHEUS_UTILS_ROOT_PATH}/python/ensure_sk_build.cmake)
+   include(${MORPHEUS_UTILS_ROOT_PATH}/python/load_sk_build.cmake)
 endmacro()
 
 macro(morpheus_utils_python_load_cython)
-   include(${MORPHEUS_UTILS_ROOT_PATH}/python/ensure_cython.cmake)
+   include(${MORPHEUS_UTILS_ROOT_PATH}/python/load_cython.cmake)
 endmacro()
 
+# ==== Ensure Functions ====
+# The following functions are similar to the Load functions above, except they
+# assert that the library was actually found. If the library wasnt found, then
+# an error is raised. These functions should only be used when it is 100%
+# necessary that a dependency has been loaded. Otherwise, use
+# morpheus_utils_python_load_all
 macro(morpheus_utils_python_ensure_python3)
    # Make sure we loaded the dependency
    morpheus_utils_python_load_python3()
@@ -70,7 +79,8 @@ macro(morpheus_utils_python_ensure_cython)
    morpheus_utils_python_assert_loaded(CYTHON)
 endmacro()
 
-
+# Tries to load all necessary python dependencies. Does not return an error if
+# any of them were not found.
 macro(morpheus_utils_python_load_all)
 
    # Call all functions
@@ -80,6 +90,9 @@ macro(morpheus_utils_python_load_all)
    morpheus_utils_python_load_cython()
 endmacro()
 
+# Asserts that a specific dependency was loaded and found. To specify which
+# dependency, pass any of the following as arguments: PYTHON3, SKBUILD,
+# PYBIND11, CYTHON or ALL. If no argument was passed, ALL is assumed
 function(morpheus_utils_python_assert_loaded)
 
    set(prefix ARGS)
@@ -102,19 +115,19 @@ function(morpheus_utils_python_assert_loaded)
    endif()
 
    if ((ARGS_PYTHON OR ARGS_ALL) AND NOT _MORPHEUS_UTILS_PYTHON_FOUND_PYTHON3)
-      message(FATAL_ERROR "Missing Python3")
+      message(FATAL_ERROR "CMake could not find Python3. Ensure it is installed and visible to CMake")
    endif()
 
    if ((ARGS_SKBUILD OR ARGS_ALL) AND NOT _MORPHEUS_UTILS_PYTHON_FOUND_SKBUILD)
-      message(FATAL_ERROR "Scikit-build is not installed. CMake may not be able to find Cython. Install scikit-build with `pip install scikit-build`")
+      message(FATAL_ERROR "CMake could not find Scikit Build. Ensure it is installed and visible to CMake. Install Cython with `pip install scikit-build`")
    endif()
 
    if ((ARGS_PYBIND11 OR ARGS_ALL) AND NOT _MORPHEUS_UTILS_PYTHON_FOUND_PYBIND11)
-      message(FATAL_ERROR "Missing PYBIND11")
+      message(FATAL_ERROR "CMake could not find pybind11. Ensure it is installed and visible to CMake")
    endif()
 
    if ((ARGS_CYTHON OR ARGS_ALL) AND NOT _MORPHEUS_UTILS_PYTHON_FOUND_CYTHON)
-      message(FATAL_ERROR "Missing CYTHON")
+      message(FATAL_ERROR "CMake could not find Cython. Ensure it is installed and visible to CMake. Install Cython with `pip install cython`")
    endif()
 
 endfunction()
