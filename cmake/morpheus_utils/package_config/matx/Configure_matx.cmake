@@ -23,7 +23,7 @@ function(morpheus_utils_configure_matx)
 
   morpheus_utils_assert_cpm_initialized()
   set(MATX_VERSION "0.4.0" CACHE STRING "Version of MatX to use")
-  set(MATX_TAG "v${MATX_VERSION}" CACHE STRING "Tag of MatX to use")
+  set(MATX_TAG "e974c12" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
@@ -38,7 +38,7 @@ function(morpheus_utils_configure_matx)
       CPM_ARGS
         GIT_REPOSITORY  https://github.com/NVIDIA/MatX.git
         GIT_TAG         "${MATX_TAG}"
-        GIT_SHALLOW     TRUE
+        GIT_SHALLOW     FALSE
         OPTIONS         "MATX_BUILD_32_BIT ON"
                         "MATX_BUILD_BENCHMARKS OFF"
                         "MATX_BUILD_DOCS OFF"
