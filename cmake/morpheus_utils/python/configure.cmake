@@ -16,6 +16,9 @@
 # Include this once per directory since we set variables
 include_guard(DIRECTORY)
 
+# We just need to assert that python is available
+morpheus_utils_python_assert_loaded(PYTHON3)
+
 # Get the project name in uppercase if OPTION_PREFIX is not defined
 if(NOT DEFINED OPTION_PREFIX)
    string(TOUPPER "${PROJECT_NAME}" OPTION_PREFIX)

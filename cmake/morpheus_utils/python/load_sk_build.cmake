@@ -16,9 +16,11 @@
 # Include this once per directory since we set variables
 include_guard(DIRECTORY)
 
-# Needs Python3 first
-include("${CMAKE_CURRENT_LIST_DIR}/ensure_python3.cmake")
+# Must have python
+morpheus_utils_python_ensure_python3()
 
+# By the end of this if statement, set a variable indicating whether or this was
+# found. We will use this later in morpheus_utils_python_assert_loaded()
 if (NOT EXISTS ${Python3_SITELIB}/skbuild)
   # In case this is messed up by `/usr/local/python/site-packages` vs `/usr/python/site-packages`, check pip itself.
   execute_process(
@@ -28,10 +30,13 @@ if (NOT EXISTS ${Python3_SITELIB}/skbuild)
   )
 
   if (NOT EXISTS ${PYTHON_SITE_PACKAGES}/skbuild)
-    message(SEND_ERROR "Scikit-build is not installed. CMake may not be able to find Cython. Install scikit-build with `pip install scikit-build`")
+    # message(SEND_ERROR "Scikit-build is not installed. CMake may not be able to find Cython. Install scikit-build with `pip install scikit-build`")
+    set(_MORPHEUS_UTILS_PYTHON_FOUND_SKBUILD FALSE)
   else()
     list(APPEND CMAKE_MODULE_PATH "${PYTHON_SITE_PACKAGES}/skbuild/resources/cmake")
+    set(_MORPHEUS_UTILS_PYTHON_FOUND_SKBUILD TRUE)
   endif()
 else ()
   list(APPEND CMAKE_MODULE_PATH "${Python3_SITELIB}/skbuild/resources/cmake")
+  set(_MORPHEUS_UTILS_PYTHON_FOUND_SKBUILD TRUE)
 endif ()

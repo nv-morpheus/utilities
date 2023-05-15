@@ -23,14 +23,14 @@ set(Python_FIND_VIRTUALENV "FIRST")
 set(Python_FIND_STRATEGY "LOCATION")
 
 # Call find_package
-find_package(Python3 REQUIRED
+find_package(Python3 QUIET
   COMPONENTS Development Development.Module Development.Embed Interpreter
   # Load NumPy as optional. Morpheus uses NumPy, MRC does not.
   OPTIONAL_COMPONENTS NumPy
 )
 
 # Call find_package(Python) as well since some use Python3 and others use Python. Just to be safe
-find_package(Python REQUIRED
+find_package(Python QUIET
   COMPONENTS Development Development.Module Development.Embed Interpreter
   # Load NumPy as optional. Morpheus uses NumPy, MRC does not.
   OPTIONAL_COMPONENTS NumPy
@@ -56,3 +56,7 @@ function(morpheus_utils_print_python_info)
   message(VERBOSE "Python3_NumPy_INCLUDE_DIRS: " ${Python3_NumPy_INCLUDE_DIRS})
   message(VERBOSE "Python3_NumPy_VERSION: " ${Python3_NumPy_VERSION})
 endfunction()
+
+# Set a variable indicating whether or this was found. We will use this later in
+# morpheus_utils_python_assert_loaded()
+set(_MORPHEUS_UTILS_PYTHON_FOUND_PYTHON3 ${Python3_FOUND})

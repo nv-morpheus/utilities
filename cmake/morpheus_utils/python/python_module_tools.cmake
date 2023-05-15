@@ -16,10 +16,6 @@
 # Ensure we only include this once
 include_guard(GLOBAL)
 
-# Needs cython and pybind11 first
-include("${CMAKE_CURRENT_LIST_DIR}/ensure_pybind11.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/ensure_cython.cmake")
-
 #[=======================================================================[
 @brief : Creates an artifact set used to build a python wheel
 ex. morpheus_utils_create_python_package(package_name)
@@ -29,7 +25,7 @@ morpheus_utils_create_python_package <PACKAGE_NAME>
 function(morpheus_utils_create_python_package PACKAGE_NAME)
   list(APPEND CMAKE_MESSAGE_CONTEXT "package-${PACKAGE_NAME}")
 
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   set(prefix F_ARGV)
   set(flags "")
@@ -128,7 +124,7 @@ function(morpheus_utils_add_target_resources)
     ${ARGN}
   )
 
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   # Get the current target resources
   get_target_property(target_resources ${_ARGS_TARGET_NAME} RESOURCE)
@@ -164,7 +160,7 @@ morpheus_utils_add_python_sources
 
 #]=======================================================================]
 function(morpheus_utils_add_python_sources)
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
@@ -185,7 +181,7 @@ morpheus_utils_add_python_sources
 
 #]=======================================================================]
 function(morpheus_utils_python_package_set_default_link_targets)
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_set_default_link_targets")
@@ -206,7 +202,7 @@ morpheus_utils_copy_target_resources(<TARGET_NAME>
                       <COPY_DIRECTORY>)
 #]=======================================================================]
 function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   # See if there are any resources associated with this target
   get_target_property(target_resources ${TARGET_NAME} RESOURCE)
@@ -298,7 +294,7 @@ morpheus_utils_build_python_package(<PACKAGE_NAME>
                      [INSTALL_WHEEL])
 #]=======================================================================]
 function(morpheus_utils_build_python_package PACKAGE_NAME)
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   if(NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call morpheus_utils_create_python_package() before calling morpheus_utils_add_python_sources")
@@ -451,7 +447,7 @@ function(morpheus_utils_resolve_python_module_name MODULE_NAME)
       "${multiValues}"
       ${ARGN})
 
-  # morpheus_utils_python_ensure_loaded()
+  morpheus_utils_python_assert_loaded(PYTHON3)
 
   set(py_module_name ${MODULE_NAME})
   set(py_module_namespace "")
@@ -501,7 +497,8 @@ macro(__create_python_library MODULE_NAME)
       "${multiValues}"
       ${ARGN})
 
-  # morpheus_utils_python_ensure_loaded()
+  # We always need pybind11 for either
+  morpheus_utils_python_assert_loaded(PYBIND11)
 
   if(NOT _ARGS_NO_PACKAGE AND NOT PYTHON_ACTIVE_PACKAGE_NAME)
     message(FATAL_ERROR "Must call create_python_wheel() before calling morpheus_utils_add_python_sources")
@@ -536,6 +533,9 @@ macro(__create_python_library MODULE_NAME)
     message(VERBOSE "Adding Pybind11 Module: ${TARGET_NAME}")
     pybind11_add_module(${TARGET_NAME} ${lib_type} ${_ARGS_SOURCE_FILES})
   elseif(_ARGS_IS_CYTHON)
+    # Make sure we have cython
+    morpheus_utils_python_assert_loaded(CYTHON)
+
     message(VERBOSE "Adding Cython Module: ${TARGET_NAME}")
     add_cython_target(${MODULE_NAME} "${_ARGS_PYX_FILE}" CXX PY3)
     add_library(${TARGET_NAME} ${lib_type} ${${MODULE_NAME}} ${_ARGS_SOURCE_FILES})
@@ -656,6 +656,9 @@ morpheus_utils_add_cython_library
 #]=======================================================================]
 function(morpheus_utils_add_cython_library MODULE_NAME)
 
+  # Check early
+  morpheus_utils_python_assert_loaded(CYTHON)
+
   __create_python_library(${MODULE_NAME} IS_CYTHON ${ARGN})
 
 endfunction()
@@ -669,6 +672,9 @@ morpheus_utils_add_pybind1_module
 
 #]=======================================================================]
 function(morpheus_utils_add_pybind11_module MODULE_NAME)
+
+  # Check early
+  morpheus_utils_python_assert_loaded(PYBIND11)
 
   # Add IS_MODULE to make a MODULE instead of a SHARED
   __create_python_library(${MODULE_NAME} IS_PYBIND11 IS_MODULE ${ARGN})
@@ -687,6 +693,9 @@ morpheus_utils_add_pybind11_library
 
 #]=======================================================================]
 function(morpheus_utils_add_pybind11_library MODULE_NAME)
+
+  # Check early
+  morpheus_utils_python_assert_loaded(PYBIND11)
 
   __create_python_library(${MODULE_NAME} IS_PYBIND11 ${ARGN})
 
