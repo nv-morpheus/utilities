@@ -29,7 +29,7 @@ option(${OPTION_PREFIX}_PYTHON_BUILD_WHEEL "Whether or not to build the generate
 option(${OPTION_PREFIX}_PYTHON_INPLACE_BUILD "Whether or not to copy built python modules back to the source tree for debug purposes." OFF)
 option(${OPTION_PREFIX}_PYTHON_PERFORM_INSTALL "Whether or not to automatically `pip install` any built python library. WARNING: This may overwrite any existing installation of the same name." OFF)
 
-include("${CMAKE_CURRENT_LIST_DIR}/python_module_tools.cmake")
+include(${CMAKE_CURRENT_LIST_DIR}/python_module_tools.cmake)
 
 string(REPLACE "-" "_" function_prefix ${PROJECT_NAME})
 
