@@ -17,13 +17,9 @@
 
 include_guard(GLOBAL)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
-
 set(MORPHEUS_UTILS_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
-include(environment_config/register_api)
-include(package_config/register_api)
-include(general/register_api)
-include(python/register_api)
-
-list(POP_BACK CMAKE_MODULE_PATH)
+include(${CMAKE_CURRENT_LIST_DIR}/environment_config/register_api.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/package_config/register_api.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/general/register_api.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/python/register_api.cmake)

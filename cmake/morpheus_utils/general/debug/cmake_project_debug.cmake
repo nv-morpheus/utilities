@@ -14,7 +14,8 @@
 # limitations under the License.
 
 include_guard(GLOBAL)
-include("${CMAKE_CURRENT_LIST_DIR}/../printing/formatting.cmake")
+
+include(${CMAKE_CURRENT_LIST_DIR}/../printing/formatting.cmake)
 
 # Get all propreties that cmake supports
 if(NOT CMAKE_PROPERTY_LIST)

@@ -36,7 +36,7 @@ function(morpheus_utils_initialize_package_manager
     )
 
   # Ensure rapids CMake is setup
-  include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_rapids_cmake_init.cmake")
+  include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_rapids_cmake_init.cmake)
 
   set(USE_CONDA ${${USE_CONDA_VAR_NAME}})
 

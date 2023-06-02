@@ -15,8 +15,4 @@
 
 include_guard(GLOBAL)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
-
-include(debug/cmake_project_debug)
-
-list(POP_BACK CMAKE_MODULE_PATH)
+include(${CMAKE_CURRENT_LIST_DIR}/debug/cmake_project_debug.cmake)
