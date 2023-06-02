@@ -23,7 +23,7 @@ function(morpheus_utils_configure_matx)
 
   morpheus_utils_assert_cpm_initialized()
   set(MATX_VERSION "0.4.0" CACHE STRING "Version of MatX to use")
-  set(MATX_TAG "e974c12" CACHE STRING "Tag of MatX to use")
+  set(MATX_TAG "72c276d" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND (CUDAToolkit_VERSION VERSION_GREATER "11.5"))
 
