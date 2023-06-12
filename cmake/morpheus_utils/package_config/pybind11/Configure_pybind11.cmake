@@ -39,12 +39,6 @@ function(morpheus_utils_configure_pybind11)
   # "PYBIND11_TEST OFF"
   # )
   rapids_find_package(pybind11 ${PYBIND11_VERSION} REQUIRED
-    GLOBAL_TARGETS
-    pybind11 pybind11::pybind11
-    BUILD_EXPORT_SET
-    ${PROJECT_NAME}-exports
-    INSTALL_EXPORT_SET
-    ${PROJECT_NAME}-exports
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
