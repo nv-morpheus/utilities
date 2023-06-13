@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b08c26d..b1b4028 100644
+index b08c26d..4dd5cb9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -100,7 +100,13 @@ endif()
@@ -10,7 +10,7 @@ index b08c26d..b1b4028 100644
 +
 +# Work around -- sometimes matx ends up getting a LIBCUDACXX_VERSION string that is set, but empty.
 +string(STRIP "${LIBCUDACXX_VERSION}" LIBCUDACXX_VERSION_STRIPPED)
-+if("${LIBCUDACXX_VERSION_STRIPPED}" STREQUAL "")
++if(NOT DEFINED "${LIBCUDACXX_VERSION}" OR "${LIBCUDACXX_VERSION_STRIPPED}" STREQUAL "")
 +  set(LIBCUDACXX_VERSION "2.1.0" CACHE STRING "Version of libcudacxx to use" FORCE)
 +endif()
 +
