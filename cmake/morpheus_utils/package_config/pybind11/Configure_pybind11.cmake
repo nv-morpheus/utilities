@@ -26,17 +26,17 @@ function(morpheus_utils_configure_pybind11)
   # Needs a patch to change the internal tracker to use fiber specific storage instead of TSS
   rapids_cpm_find(pybind11 ${PYBIND11_VERSION}
     GLOBAL_TARGETS
-    pybind11 pybind11::pybind11
+      pybind11 pybind11::pybind11
     BUILD_EXPORT_SET
-    ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-core-exports
     INSTALL_EXPORT_SET
-    ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-core-exports
     CPM_ARGS
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG "v${PYBIND11_VERSION}"
-    GIT_SHALLOW TRUE
-    OPTIONS "PYBIND11_INSTALL ON"
-    "PYBIND11_TEST OFF"
+      GIT_REPOSITORY  https://github.com/pybind/pybind11.git
+      GIT_TAG         "v${PYBIND11_VERSION}"
+      GIT_SHALLOW     TRUE
+      OPTIONS         "PYBIND11_INSTALL ON"
+                      "PYBIND11_TEST OFF"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
