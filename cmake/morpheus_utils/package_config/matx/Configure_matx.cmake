@@ -34,6 +34,7 @@ function(morpheus_utils_configure_matx)
       INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
       CPM_ARGS
+      PATCH_COMMAND   git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/matx_libcudacxx_version_fix.patch
       GIT_REPOSITORY https://github.com/NVIDIA/MatX.git
       GIT_TAG "${MATX_TAG}"
       GIT_SHALLOW True
