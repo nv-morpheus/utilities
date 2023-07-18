@@ -16,6 +16,9 @@
 # Include this once per directory since we set variables
 include_guard(DIRECTORY)
 
+# We just need to assert that python is available
+morpheus_utils_python_assert_loaded(PYTHON3)
+
 # Get the project name in uppercase if OPTION_PREFIX is not defined
 if(NOT DEFINED OPTION_PREFIX)
    string(TOUPPER "${PROJECT_NAME}" OPTION_PREFIX)
@@ -26,7 +29,7 @@ option(${OPTION_PREFIX}_PYTHON_BUILD_WHEEL "Whether or not to build the generate
 option(${OPTION_PREFIX}_PYTHON_INPLACE_BUILD "Whether or not to copy built python modules back to the source tree for debug purposes." OFF)
 option(${OPTION_PREFIX}_PYTHON_PERFORM_INSTALL "Whether or not to automatically `pip install` any built python library. WARNING: This may overwrite any existing installation of the same name." OFF)
 
-include("${CMAKE_CURRENT_LIST_DIR}/python_module_tools.cmake")
+include(${CMAKE_CURRENT_LIST_DIR}/python_module_tools.cmake)
 
 string(REPLACE "-" "_" function_prefix ${PROJECT_NAME})
 

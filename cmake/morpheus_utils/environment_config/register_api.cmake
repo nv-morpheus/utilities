@@ -17,25 +17,20 @@
 
 include_guard(GLOBAL)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+# No deps
+include(${CMAKE_CURRENT_LIST_DIR}/ccache/register_api.cmake)
 
 # No deps
-include(ccache/register_api)
+include(${CMAKE_CURRENT_LIST_DIR}/cpm/register_api.cmake)
 
 # No deps
-include(cpm/register_api)
+include(${CMAKE_CURRENT_LIST_DIR}/compiler/register_api.cmake)
 
 # No deps
-include(compiler/register_api)
-
-# No deps
-include(code_coverage/register_api)
+include(${CMAKE_CURRENT_LIST_DIR}/code_coverage/register_api.cmake)
 
 # Depends on ccache
-include(iwyu/register_api)
+include(${CMAKE_CURRENT_LIST_DIR}/iwyu/register_api.cmake)
 
 # No deps
-include(rapids_cmake/register_api)
-
-
-list(POP_BACK CMAKE_MODULE_PATH)
+include(${CMAKE_CURRENT_LIST_DIR}/rapids_cmake/register_api.cmake)

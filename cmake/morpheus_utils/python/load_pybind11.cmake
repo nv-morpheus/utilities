@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,23 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Add new issue/PR to project
+# Include this once per directory since we set variables
+include_guard(DIRECTORY)
 
-on:
-  issues:
-    types:
-      - opened
+# Requires sk build
+morpheus_utils_python_ensure_sk_build()
 
-  pull_request_target:
-    types:
-      - opened
+morpheus_utils_configure_pybind11()
 
-jobs:
-  add-to-project:
-    name: Add issue or PR to project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/add-to-project@v0.3.0
-        with:
-          project-url: https://github.com/orgs/nv-morpheus/projects/1
-          github-token: ${{ github.token }}
+find_package(pybind11 QUIET)
+
+# Set a variable indicating whether or this was found. We will use this later in
+# morpheus_utils_python_assert_loaded()
+set(_MORPHEUS_UTILS_PYTHON_FOUND_PYBIND11 ${pybind11_FOUND})

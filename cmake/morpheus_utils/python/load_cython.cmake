@@ -16,11 +16,15 @@
 # Include this once per directory since we set variables
 include_guard(DIRECTORY)
 
-# Needs Python3 first
-include("${CMAKE_CURRENT_LIST_DIR}/ensure_sk_build.cmake")
+# Requires sk build
+morpheus_utils_python_ensure_sk_build()
 
 set(CYTHON_FLAGS
     "--directive binding=True,boundscheck=False,wraparound=False,embedsignature=True,always_allow_keywords=True"
     CACHE STRING "The directives for Cython compilation.")
 
-find_package(Cython REQUIRED)
+find_package(Cython QUIET)
+
+# Set a variable indicating whether or this was found. We will use this later in
+# morpheus_utils_python_assert_loaded()
+set(_MORPHEUS_UTILS_PYTHON_FOUND_CYTHON ${Cython_FOUND})
