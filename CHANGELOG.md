@@ -1,3 +1,35 @@
+# utilities 23.07.00 (18 Jul 2023)
+
+## 🚨 Breaking Changes
+
+- Changing target names to `build` and `test` for CI runner ([#30](https://github.com/nv-morpheus/utilities/pull/30)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+
+## 🐛 Bug Fixes
+
+- Add conda&#39;s gcov to list of possible names for gcov ([#28](https://github.com/nv-morpheus/utilities/pull/28)) [@dagardner-nv](https://github.com/dagardner-nv)
+
+## 🚀 New Features
+
+- add compiler settings required for doca support ([#39](https://github.com/nv-morpheus/utilities/pull/39)) [@cwharris](https://github.com/cwharris)
+- Create label-external-issues.yml ([#37](https://github.com/nv-morpheus/utilities/pull/37)) [@jarmak-nv](https://github.com/jarmak-nv)
+- Update default RAPIDS version to 23.02 ([#27](https://github.com/nv-morpheus/utilities/pull/27)) [@cwharris](https://github.com/cwharris)
+
+## 🛠️ Improvements
+
+- Adding a `update-version.sh` script to help with releases ([#47](https://github.com/nv-morpheus/utilities/pull/47)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Patch matx so that it doesn&#39;t fail when LIBCUDACXX_VERSION is empty ([#44](https://github.com/nv-morpheus/utilities/pull/44)) [@drobison00](https://github.com/drobison00)
+- Remove patch from pybind11 ([#43](https://github.com/nv-morpheus/utilities/pull/43)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Adopt Matx 0.4.1 ([#42](https://github.com/nv-morpheus/utilities/pull/42)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Update Configure_matx.cmake ([#41](https://github.com/nv-morpheus/utilities/pull/41)) [@pdmack](https://github.com/pdmack)
+- Adoption MatX fix for Pascal builds ([#38](https://github.com/nv-morpheus/utilities/pull/38)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Adopt MatX v0.4.0 ([#36](https://github.com/nv-morpheus/utilities/pull/36)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Allow python scripts to be loaded even with missing dependencies ([#35](https://github.com/nv-morpheus/utilities/pull/35)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Make Cython targets have the same extension as pybind11 ([#34](https://github.com/nv-morpheus/utilities/pull/34)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Pr template and discussions ([#31](https://github.com/nv-morpheus/utilities/pull/31)) [@jarmak-nv](https://github.com/jarmak-nv)
+- Changing target names to `build` and `test` for CI runner ([#30](https://github.com/nv-morpheus/utilities/pull/30)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Give the conda installed gcov precedence over the OS copy ([#29](https://github.com/nv-morpheus/utilities/pull/29)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Set default version of MRC to 23.07 ([#25](https://github.com/nv-morpheus/utilities/pull/25)) [@dagardner-nv](https://github.com/dagardner-nv)
+
 # utilities 23.03.00 (29 Mar 2023)
 
 ## 🚨 Breaking Changes
