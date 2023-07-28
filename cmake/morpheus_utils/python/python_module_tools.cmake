@@ -612,7 +612,10 @@ macro(__create_python_library MODULE_NAME)
     add_dependencies(${PYTHON_ACTIVE_PACKAGE_NAME}-outputs ${TARGET_NAME}-stubs)
 
     # Save the output as a target property
-    morpheus_utils_add_target_resources(TARGET_NAME ${TARGET_NAME} "${module_binary_stub_file}")
+    morpheus_utils_add_target_resources(TARGET_NAME ${TARGET_NAME}-stubs "${module_binary_stub_file}")
+
+    # Always copy the stubs back to the source directory
+    morpheus_utils_copy_target_resources(${TARGET_NAME}-stubs ${CMAKE_CURRENT_SOURCE_DIR})
   endif()
 
   if(_ARGS_INSTALL_DEST)
