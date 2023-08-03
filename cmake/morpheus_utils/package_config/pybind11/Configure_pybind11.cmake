@@ -21,23 +21,9 @@ function(morpheus_utils_configure_pybind11)
   list(APPEND CMAKE_MESSAGE_CONTEXT "pybind11")
 
   morpheus_utils_assert_cpm_initialized()
-  set(PYBIND11_VERSION "2.8.1" CACHE STRING "Version of Pybind11 to use")
+  set(PYBIND11_VERSION "2.10.4" CACHE STRING "Version of Pybind11 to use")
 
-  # Needs a patch to change the internal tracker to use fiber specific storage instead of TSS
-  rapids_cpm_find(pybind11 ${PYBIND11_VERSION}
-    GLOBAL_TARGETS
-      pybind11 pybind11::pybind11
-    BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    CPM_ARGS
-      GIT_REPOSITORY  https://github.com/pybind/pybind11.git
-      GIT_TAG         "v${PYBIND11_VERSION}"
-      GIT_SHALLOW     TRUE
-      OPTIONS         "PYBIND11_INSTALL ON"
-                      "PYBIND11_TEST OFF"
-  )
+  rapids_find_package(pybind11 ${PYBIND11_VERSION} REQUIRED)
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
