@@ -27,8 +27,6 @@ function(morpheus_utils_configure_matx)
   if(CUDAToolkit_FOUND AND(CUDAToolkit_VERSION VERSION_GREATER "11.5"))
     # Build MatX with 32 bit indexes, this allows matx size types to match those of cuDF
 
-    add_compile_definitions(__STDC_FORMAT_MACROS)
-
     rapids_cpm_find(matx ${MATX_VERSION}
       GLOBAL_TARGETS
       matx matx::matx
@@ -48,6 +46,8 @@ function(morpheus_utils_configure_matx)
       "MATX_BUILD_TESTS OFF"
       "MATX_INSTALL ON"
     )
+
+    target_compile_definitions(matx INTERFACE __STDC_FORMAT_MACROS)
 
   else()
     message(SEND_ERROR
