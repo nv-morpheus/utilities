@@ -574,7 +574,12 @@ macro(__create_python_library MODULE_NAME)
   endif()
 
   set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
-  set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME "${MODULE_NAME}")
+
+  if(_ARGS_CURRENT_DIR_IS_MODULE)
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME "__init__")
+  else()
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME "${MODULE_NAME}")
+  endif()
 
   set(_link_libs "")
   if(_ARGS_LINK_TARGETS)
