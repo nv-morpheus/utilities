@@ -293,7 +293,7 @@ endfunction()
 #]=======================================================================]
 function(morpheus_utils_print_config)
     # Print CMake settings when verbose output is enabled
-    message(STATUS "PROJECT_NAME: " ${PROJECT_NAME})CMAKE_FIND_ROOT_PATH_MODE_INCLUDE
+    message(STATUS "PROJECT_NAME: " ${PROJECT_NAME})
     message(STATUS "CMAKE_BUILD_TYPE: " ${CMAKE_BUILD_TYPE})
     message(STATUS "CMAKE_CUDA_COMPILER_ID: " ${CMAKE_CUDA_COMPILER_ID})
     message(STATUS "CMAKE_CUDA_COMPILER_VERSION: " ${CMAKE_CUDA_COMPILER_VERSION})
