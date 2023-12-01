@@ -52,9 +52,25 @@ macro(${function_prefix}_add_pybind11_module)
    morpheus_utils_add_pybind11_module(\${ARGN} \${_common_args})
 endmacro()
 
-# A common macro for adding some default arguments to add_pybind11_module
+macro(${function_prefix}_add_pybind11_library)
+   # Build up the common arguments for add_pybind11_library
+   set(_common_args)
+
+   if(${OPTION_PREFIX}_PYTHON_INPLACE_BUILD)
+     list(APPEND _common_args \"COPY_INPLACE\")
+   endif()
+
+   if(${OPTION_PREFIX}_PYTHON_BUILD_STUBS)
+     list(APPEND _common_args \"BUILD_STUBS\")
+   endif()
+
+   # Forward all common arguments plus any arguments passed in
+   morpheus_utils_add_pybind11_library(\${ARGN} \${_common_args})
+endmacro()
+
+# A common macro for adding some default arguments to add_cython_library
 macro(${function_prefix}_add_cython_library)
-   # Build up the common arguments for add_pybind11_module
+   # Build up the common arguments for add_cython_library
    set(_common_args)
 
    if(${OPTION_PREFIX}_PYTHON_INPLACE_BUILD)
