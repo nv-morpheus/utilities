@@ -68,7 +68,7 @@ on:
 
 jobs:
   release_procedures:
-    uses: nv-morpheus/utilities/.github/workflows/release_procedures
+    uses: nv-morpheus/utilities/.github/workflows/release_procedures.yml@mdd_release-procedures
     with:
       current_version_array: ${{ inputs.current_version_array }}
       next_version_array: ${{ inputs.next_version_array }}

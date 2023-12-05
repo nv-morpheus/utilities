@@ -20,7 +20,7 @@ permissions:
   pull-requests: write
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       current_version_array:
         description: 'Current full version of the project expressed as a JSON array (e.g. `["24", "03", "00"]`)'
