@@ -57,6 +57,13 @@ on:
         required: true
         type: boolean
         default: false
+    secrets:
+      ACTIONS_APP_ID:
+        description: 'The Github App ID for the bot'
+        required: true
+      ACTIONS_APP_KEY:
+        description: 'The private key for the Github App'
+        required: true
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
