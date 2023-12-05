@@ -96,13 +96,12 @@ jobs:
           sparse-checkout-cone-mode: false
       - name: Create PR
         run: |
-          cat utilities/.github/CODE_FREEZE_PR_TEMPLATE.md
-          # cat utilities/.github/CODE_FREEZE_PR_TEMPLATE.md | envsubst | \
-          #   gh pr create --repo ${{ github.repository }} \
-          #     --base main --head branch-${CURRENT_VERSION} \
-          #     --title "[RELEASE] ${REPO_NAME} v${CURRENT_FULL_VERSION}" \
-          #     --body-file - \
-          #     --label "! - Release"
+          cat utilities/.github/CODE_FREEZE_PR_TEMPLATE.md | envsubst | \
+            gh pr create --repo ${{ github.repository }} \
+              --base main --head branch-${CURRENT_VERSION} \
+              --title "[RELEASE] ${REPO_NAME} v${CURRENT_FULL_VERSION}" \
+              --body-file - \
+              --label "! - Release"
   create_next_release_branch:
     if: ${{ inputs.create_next_release_branch }}
     name: Create Next Release Branch

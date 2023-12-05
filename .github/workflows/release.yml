@@ -58,14 +58,6 @@ on:
         type: boolean
         default: false
 
-# env:
-#   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#   REPO_NAME: ${{ github.event.repository.name }}
-#   CURRENT_VERSION: ${{ format('{0}.{1}', fromJson(inputs.current_version_array)[0], fromJson(inputs.current_version_array)[1]) }}
-#   CURRENT_FULL_VERSION: ${{ format('{0}.{1}.{2}', fromJson(inputs.current_version_array)[0], fromJson(inputs.current_version_array)[1], fromJson(inputs.current_version_array)[2]) }}
-#   NEXT_VERSION: ${{ format('{0}.{1}', fromJson(inputs.next_version_array)[0], fromJson(inputs.next_version_array)[1]) }}
-#   NEXT_FULL_VERSION: ${{ format('{0}.{1}.{2}', fromJson(inputs.next_version_array)[0], fromJson(inputs.next_version_array)[1], fromJson(inputs.next_version_array)[2]) }}
-
 jobs:
   release_procedures:
     uses: nv-morpheus/utilities/.github/workflows/release_procedures.yml@mdd_release-procedures
@@ -77,6 +69,4 @@ jobs:
       update_next_release_versions: ${{ inputs.update_next_release_versions }}
       update_changelog: ${{ inputs.update_changelog }}
       merge_release_branch: ${{ inputs.merge_release_branch }}
-    secrets:
-      ACTIONS_APP_ID: ${{ secrets.ACTIONS_APP_ID }}
-      ACTIONS_APP_KEY: ${{ secrets.ACTIONS_APP_KEY }}
+    secrets: inherit
