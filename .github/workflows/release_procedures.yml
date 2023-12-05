@@ -81,7 +81,7 @@ jobs:
     steps:
       - name: Configure Bot
         id: configure-bot
-        uses: nv-morpheus/morpheus-visualizations/.github/actions/configure-morpheus-bot@mdd_test-release-procedures
+        uses: nv-morpheus/utilities/.github/actions/configure-morpheus-bot@mdd_release-procedures
         with:
           bot-app-id: ${{ secrets.ACTIONS_APP_ID }}
           bot-private-key: ${{ secrets.ACTIONS_APP_KEY }}
@@ -89,19 +89,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: utilities
-          ref: branch-${{ env.CURRENT_VERSION }}
+          repository: nv-morpheus/utilities
+          # ref: branch-${{ env.CURRENT_VERSION }}
           token: ${{ steps.configure-bot.outputs.token }}
           sparse-checkout: |
             .github/CODE_FREEZE_PR_TEMPLATE.md
           sparse-checkout-cone-mode: false
       - name: Create PR
         run: |
-          cat utilities/.github/CODE_FREEZE_PR_TEMPLATE.md | envsubst | \
-            gh pr create --repo ${{ github.repository }} \
-              --base main --head branch-${CURRENT_VERSION} \
-              --title "[RELEASE] ${REPO_NAME} v${CURRENT_FULL_VERSION}" \
-              --body-file - \
-              --label "! - Release"
+          cat utilities/.github/CODE_FREEZE_PR_TEMPLATE.md
+          # cat utilities/.github/CODE_FREEZE_PR_TEMPLATE.md | envsubst | \
+          #   gh pr create --repo ${{ github.repository }} \
+          #     --base main --head branch-${CURRENT_VERSION} \
+          #     --title "[RELEASE] ${REPO_NAME} v${CURRENT_FULL_VERSION}" \
+          #     --body-file - \
+          #     --label "! - Release"
   create_next_release_branch:
     if: ${{ inputs.create_next_release_branch }}
     name: Create Next Release Branch
@@ -109,7 +111,7 @@ jobs:
     steps:
       - name: Configure Bot
         id: configure-bot
-        uses: nv-morpheus/morpheus-visualizations/.github/actions/configure-morpheus-bot@mdd_test-release-procedures
+        uses: nv-morpheus/utilities/.github/actions/configure-morpheus-bot@mdd_release-procedures
         with:
           bot-app-id: ${{ secrets.ACTIONS_APP_ID }}
           bot-private-key: ${{ secrets.ACTIONS_APP_KEY }}
@@ -142,7 +144,7 @@ jobs:
     steps:
       - name: Configure Bot
         id: configure-bot
-        uses: nv-morpheus/morpheus-visualizations/.github/actions/configure-morpheus-bot@mdd_test-release-procedures
+        uses: nv-morpheus/utilities/.github/actions/configure-morpheus-bot@mdd_release-procedures
         with:
           bot-app-id: ${{ secrets.ACTIONS_APP_ID }}
           bot-private-key: ${{ secrets.ACTIONS_APP_KEY }}
@@ -173,7 +175,7 @@ jobs:
     steps:
       - name: Configure Bot
         id: configure-bot
-        uses: nv-morpheus/morpheus-visualizations/.github/actions/configure-morpheus-bot@mdd_test-release-procedures
+        uses: nv-morpheus/utilities/.github/actions/configure-morpheus-bot@mdd_release-procedures
         with:
           bot-app-id: ${{ secrets.ACTIONS_APP_ID }}
           bot-private-key: ${{ secrets.ACTIONS_APP_KEY }}
@@ -215,7 +217,7 @@ jobs:
     steps:
       - name: Configure Bot
         id: configure-bot
-        uses: nv-morpheus/morpheus-visualizations/.github/actions/configure-morpheus-bot@mdd_test-release-procedures
+        uses: nv-morpheus/utilities/.github/actions/configure-morpheus-bot@mdd_release-procedures
         with:
           bot-app-id: ${{ secrets.ACTIONS_APP_ID }}
           bot-private-key: ${{ secrets.ACTIONS_APP_KEY }}
