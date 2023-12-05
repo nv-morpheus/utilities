@@ -56,7 +56,6 @@ on:
         description: 'Merges the code freeze release branch, creates the release tag, and creates a new Github release'
         required: true
         type: boolean
-        default: false
     secrets:
       ACTIONS_APP_ID:
         description: 'The Github App ID for the bot'
