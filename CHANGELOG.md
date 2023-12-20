@@ -1,3 +1,18 @@
+# utilities 23.11.00 (30 Nov 2023)
+
+## 🐛 Bug Fixes
+
+- Fix MatX when building MRC and Morpheus in same environment. ([#55](https://github.com/nv-morpheus/utilities/pull/55)) [@cwharris](https://github.com/cwharris)
+- Revert installing pybind11 via conda and patch the dec_ref method ([#52](https://github.com/nv-morpheus/utilities/pull/52)) [@dagardner-nv](https://github.com/dagardner-nv)
+
+## 🛠️ Improvements
+
+- Improve cmake debugging ([#57](https://github.com/nv-morpheus/utilities/pull/57)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Add option for generating python module from current CMake directory ([#56](https://github.com/nv-morpheus/utilities/pull/56)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Use `copy-pr-bot` ([#54](https://github.com/nv-morpheus/utilities/pull/54)) [@ajschmidt8](https://github.com/ajschmidt8)
+- Update Versions for v23.11.00 ([#49](https://github.com/nv-morpheus/utilities/pull/49)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Adopt pybind11 v2.10.4 ([#45](https://github.com/nv-morpheus/utilities/pull/45)) [@dagardner-nv](https://github.com/dagardner-nv)
+
 # utilities 23.07.00 (18 Jul 2023)
 
 ## 🚨 Breaking Changes

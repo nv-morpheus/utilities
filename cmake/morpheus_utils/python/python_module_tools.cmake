@@ -432,7 +432,7 @@ morpheus_utils_resolve_python_module_name <MODULE_NAME>
 #]=======================================================================]
 function(morpheus_utils_resolve_python_module_name MODULE_NAME)
   set(prefix _ARGS) # Prefix parsed args
-  set(flags "")
+  set(flags CURRENT_DIR_IS_MODULE)
   set(singleValues
       MODULE_ROOT
       OUTPUT_TARGET_NAME
@@ -454,7 +454,24 @@ function(morpheus_utils_resolve_python_module_name MODULE_NAME)
   set(py_module_path "")
 
   if(_ARGS_MODULE_ROOT)
-    file(RELATIVE_PATH py_module_path ${_ARGS_MODULE_ROOT} ${CMAKE_CURRENT_SOURCE_DIR})
+    set(py_module_dir ${CMAKE_CURRENT_SOURCE_DIR})
+
+    if(_ARGS_CURRENT_DIR_IS_MODULE)
+      # First, check if the current source directory name matches the module name
+      cmake_path(GET py_module_dir STEM py_module_dir_name)
+
+      # Make sure that the current directory has the correct name otherwise creating a module wont work
+      if (NOT ("${py_module_dir_name}" STREQUAL "${MODULE_NAME}"))
+        message(SEND_ERROR "When creating a python module, the option CURRENT_DIR_IS_MODULE was specified but the "
+                           "current directory name does not match the module name. "
+                           "Current dir: ${CMAKE_CURRENT_SOURCE_DIR}, Module name: ${MODULE_NAME}")
+      endif()
+
+      # Set the module dir to be one up from the current source dir
+      cmake_path(GET py_module_dir PARENT_PATH py_module_dir)
+    endif()
+
+    file(RELATIVE_PATH py_module_path ${_ARGS_MODULE_ROOT} ${py_module_dir})
 
     if(NOT ${py_module_path} STREQUAL "")
       # Convert the relative path to a namespace. i.e. `cuml/package/module` -> `cuml::package::module
@@ -486,7 +503,7 @@ macro(__create_python_library MODULE_NAME)
   list(APPEND CMAKE_MESSAGE_CONTEXT "module-${MODULE_NAME}")
 
   set(prefix _ARGS)
-  set(flags IS_PYBIND11 IS_CYTHON IS_MODULE COPY_INPLACE BUILD_STUBS)
+  set(flags IS_PYBIND11 IS_CYTHON IS_MODULE COPY_INPLACE BUILD_STUBS CURRENT_DIR_IS_MODULE)
   set(singleValues INSTALL_DEST OUTPUT_TARGET MODULE_ROOT PYX_FILE)
   set(multiValues INCLUDE_DIRS LINK_TARGETS SOURCE_FILES)
 
@@ -515,11 +532,18 @@ macro(__create_python_library MODULE_NAME)
   # Normalize the module root
   cmake_path(SET _ARGS_MODULE_ROOT "${_ARGS_MODULE_ROOT}")
 
+  set(extra_args "")
+
+  if(_ARGS_CURRENT_DIR_IS_MODULE)
+    set(extra_args "CURRENT_DIR_IS_MODULE")
+  endif()
+
   morpheus_utils_resolve_python_module_name(${MODULE_NAME}
     MODULE_ROOT ${_ARGS_MODULE_ROOT}
     OUTPUT_TARGET_NAME TARGET_NAME
     OUTPUT_MODULE_NAME MODULE_NAME
     OUTPUT_RELATIVE_PATH SOURCE_RELATIVE_PATH
+    ${extra_args}
   )
 
   set(lib_type SHARED)
@@ -550,7 +574,12 @@ macro(__create_python_library MODULE_NAME)
   endif()
 
   set_target_properties(${TARGET_NAME} PROPERTIES PREFIX "")
-  set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME "${MODULE_NAME}")
+
+  if(_ARGS_CURRENT_DIR_IS_MODULE)
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME "__init__")
+  else()
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME "${MODULE_NAME}")
+  endif()
 
   set(_link_libs "")
   if(_ARGS_LINK_TARGETS)

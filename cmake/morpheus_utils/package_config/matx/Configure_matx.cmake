@@ -46,6 +46,11 @@ function(morpheus_utils_configure_matx)
       "MATX_INSTALL ON"
     )
 
+    # Explicitly set this compiletime definition because it is not implicitly set when building MRC
+    # and Morphues in the same conda environment For more details, see this github pr...
+    # https://github.com/nv-morpheus/utilities/pull/55
+    target_compile_definitions(matx INTERFACE __STDC_FORMAT_MACROS)
+
   else()
     message(SEND_ERROR
       "Unable to add MatX dependency. CUDA Version must be greater than 11.5.
