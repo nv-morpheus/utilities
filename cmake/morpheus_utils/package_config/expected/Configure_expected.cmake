@@ -27,9 +27,9 @@ function(morpheus_utils_configure_tl_expected)
     GLOBAL_TARGETS
       expected tl::expected
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY https://github.com/ryanolson/expected.git
       GIT_TAG "5f4b7d2987658cc2a555ce7f4f5b81196461d953"

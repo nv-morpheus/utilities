@@ -43,13 +43,13 @@ function(morpheus_utils_configure_hwloc)
 
     # Now add it to the list of packages to install
     rapids_export_package(INSTALL hwloc
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
       GLOBAL_TARGETS hwloc::hwloc
     )
 
     # Overwrite the default package contents
     configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/pkgconfig_package.cmake.in"
-      "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_hwloc.cmake" @ONLY)
+      "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-exports/install/package_hwloc.cmake" @ONLY)
 
   else()
     # Try to find hwloc and download from source if not found
@@ -57,9 +57,9 @@ function(morpheus_utils_configure_hwloc)
       GLOBAL_TARGETS
         hwloc hwloc::hwloc
       BUILD_EXPORT_SET
-        ${PROJECT_NAME}-core-exports
+        ${PROJECT_NAME}-exports
       INSTALL_EXPORT_SET
-        ${PROJECT_NAME}-core-exports
+        ${PROJECT_NAME}-exports
       CPM_ARGS
         GIT_REPOSITORY          https://github.com/open-mpi/hwloc.git
         GIT_TAG                 "hwloc-${HWLOC_VERSION}"

@@ -32,9 +32,9 @@ function(morpheus_utils_configure_libcudacxx)
   # See: https://github.com/rapidsai/rapids-cmake/issues/117
   rapids_cpm_libcudacxx(
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

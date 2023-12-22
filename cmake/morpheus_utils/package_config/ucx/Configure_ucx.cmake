@@ -28,9 +28,9 @@ function(morpheus_utils_configure_ucx)
     GLOBAL_TARGETS
       ucx ucx::ucp ucx::uct ucx_ucx ucx::ucp ucx::uct ucx::ucx
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/openucx/ucx.git
       GIT_TAG                 "v${UCX_VERSION}"
@@ -177,7 +177,7 @@ function(morpheus_utils_configure_ucx)
     # Found installed UCX. Make sure to call rapids_export_package without a version.
     # Otherwise CMake fails with trying to add the dependency twice
     rapids_export_package(
-      INSTALL ucx ${PROJECT_NAME}-core-exports
+      INSTALL ucx ${PROJECT_NAME}-exports
       GLOBAL_TARGETS ucx ucx::ucp ucx::uct ucx_ucx ucx::ucp ucx::uct ucx::ucx
     )
 
@@ -195,9 +195,9 @@ endfunction()
 #     GLOBAL_TARGETS
 #       ucx ucx::ucp ucx::uct ucx_ucx ucx::ucp ucx::uct ucx::ucx
 #     BUILD_EXPORT_SET
-#       ${PROJECT_NAME}-core-exports
+#       ${PROJECT_NAME}-exports
 #     INSTALL_EXPORT_SET
-#       ${PROJECT_NAME}-core-exports
+#       ${PROJECT_NAME}-exports
 #   )
 
 #   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

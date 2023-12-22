@@ -30,9 +30,9 @@ function(morpheus_utils_configure_rmm)
     GLOBAL_TARGETS
       rmm::rmm rmm::Thrust
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
       GIT_TAG         branch-${_rmm_version}
