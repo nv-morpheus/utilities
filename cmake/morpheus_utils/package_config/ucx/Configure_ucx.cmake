@@ -166,7 +166,7 @@ function(morpheus_utils_configure_ucx)
     add_dependencies(ucx::ucm ucx)
 
     # Combined ucx::ucx target
-    add_library(ucx::ucx INTERFACE IMPORTED)
+    add_library(ucx::ucx INTERFACE IMPORTED GLOBAL)
     set_target_properties(ucx::ucx PROPERTIES
       INTERFACE_LINK_LIBRARIES "ucx::uct;ucx::ucp;ucx::ucs;ucx::ucm"
     )
