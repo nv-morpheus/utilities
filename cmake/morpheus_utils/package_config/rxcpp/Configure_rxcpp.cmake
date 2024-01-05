@@ -27,9 +27,9 @@ function(morpheus_utils_configure_rxcpp)
     GLOBAL_TARGETS
       rxcpp rxcpp::rxcpp
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/mdemoret-nv/RxCpp.git # TODO(MDD): Move RxCpp fork to nv-morpheus
       GIT_TAG         v${RXCPP_VERSION}

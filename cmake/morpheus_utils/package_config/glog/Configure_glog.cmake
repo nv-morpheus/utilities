@@ -27,9 +27,9 @@ function(morpheus_utils_configure_glog)
     GLOBAL_TARGETS
       glog glog::glog
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/google/glog.git
       GIT_TAG                 v${GLOG_VERSION}
