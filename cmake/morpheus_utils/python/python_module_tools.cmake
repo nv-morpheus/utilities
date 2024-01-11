@@ -248,7 +248,7 @@ function(morpheus_utils_copy_target_resources TARGET_NAME COPY_DIRECTORY)
         OUTPUT  ${resource_output}
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${resource} ${resource_output}
         DEPENDS ${resource}
-        COMMENT "Copying \${SOURCE_DIR}/${resource_source_relative} to \${SOURCE_DIR}/${resource_output_source_relative}"
+        COMMENT "Copying ${SOURCE_DIR}/${resource_source_relative} to ${SOURCE_DIR}/${resource_output_source_relative}"
       )
 
       list(APPEND resource_outputs ${resource_output})

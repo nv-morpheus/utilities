@@ -20,7 +20,7 @@ include_guard(GLOBAL)
 # Ensure we have MORPHEUS_UTILS_RAPIDS_VERSION set
 include(${CMAKE_CURRENT_LIST_DIR}/rapids_version.cmake)
 
-set(RAPIDS_CMAKE_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of rapids-cmake to use")
+set(RAPIDS_CMAKE_VERSION "${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of rapids-cmake to use")
 
 eval_rapids_version(${RAPIDS_CMAKE_VERSION} _rapids_cmake_version)
 

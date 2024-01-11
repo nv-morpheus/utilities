@@ -22,7 +22,7 @@ function(morpheus_utils_configure_rmm)
 
   morpheus_utils_assert_cpm_initialized()
 
-  set(RMM_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use.")
+  set(RMM_VERSION "${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Version of RMM to use.")
 
   eval_rapids_version(${RMM_VERSION} _rmm_version)
 

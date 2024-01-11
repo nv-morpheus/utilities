@@ -21,7 +21,7 @@ include_guard(GLOBAL)
 
 #   morpheus_utils_assert_cpm_initialized()
 
-#   set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
+#   set(CUDF_VERSION "${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to ${MORPHEUS_UTILS_RAPIDS_VERSION}")
 
 #   # Convert to a useable version
 #   eval_rapids_version(${CUDF_VERSION} CUDF_VERSION)
@@ -53,7 +53,7 @@ include_guard(GLOBAL)
 function(morpheus_utils_configure_cudf)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cudf")
 
-  set(CUDF_VERSION "\${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to \${MORPHEUS_UTILS_RAPIDS_VERSION}")
+  set(CUDF_VERSION "${MORPHEUS_UTILS_RAPIDS_VERSION}" CACHE STRING "Which version of cuDF to use. Defaults to ${MORPHEUS_UTILS_RAPIDS_VERSION}")
 
   # Convert to a useable version
   eval_rapids_version(${CUDF_VERSION} _cudf_version)
