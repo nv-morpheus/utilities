@@ -26,21 +26,31 @@ function(morpheus_utils_configure_rmm)
 
   eval_rapids_version(${RMM_VERSION} _rmm_version)
 
-  rapids_cpm_find(rmm ${_rmm_version}
+  # rapids_cpm_find(rmm ${_rmm_version}
+  #   GLOBAL_TARGETS
+  #     rmm::rmm rmm::Thrust
+  #   BUILD_EXPORT_SET
+  #     ${PROJECT_NAME}-core-exports
+  #   INSTALL_EXPORT_SET
+  #     ${PROJECT_NAME}-core-exports
+  #   CPM_ARGS
+  #     GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
+  #     GIT_TAG         branch-${_rmm_version}
+  #     GIT_SHALLOW     TRUE
+  #     OPTIONS         "BUILD_TESTS OFF"
+  #                     "BUILD_BENCHMARKS OFF"
+  #                     "CUDA_STATIC_RUNTIME OFF"
+  #                     "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
+  # )
+
+
+  rapids_find_package(rmm ${_rmm_version} REQUIRED
     GLOBAL_TARGETS
       rmm::rmm rmm::Thrust
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
-    CPM_ARGS
-      GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
-      GIT_TAG         branch-${_rmm_version}
-      GIT_SHALLOW     TRUE
-      OPTIONS         "BUILD_TESTS OFF"
-                      "BUILD_BENCHMARKS OFF"
-                      "CUDA_STATIC_RUNTIME OFF"
-                      "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
+      ${PROJECT_NAME}-exports
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
