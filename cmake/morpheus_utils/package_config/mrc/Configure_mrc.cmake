@@ -48,7 +48,7 @@ function(morpheus_utils_configure_mrc)
                       "MRC_USE_CLANG_TIDY ${MORPHEUS_USE_CLANG_TIDY}"
                       "MRC_PYTHON_INPLACE_BUILD OFF"
                       "MRC_PYTHON_PERFORM_INSTALL ON"
-                      "MRC_PYTHON_BUILD_STUBS ${${PROJECT_NAME_UPPER}_BUILD_PYTHON_STUBS}"
+                      "MRC_PYTHON_BUILD_STUBS ${${PROJECT_NAME_UPPER}_PYTHON_BUILD_STUBS}"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

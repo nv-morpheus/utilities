@@ -28,9 +28,9 @@ function(morpheus_utils_configure_pybind11)
     GLOBAL_TARGETS
       pybind11 pybind11::pybind11
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY https://github.com/pybind/pybind11.git
       GIT_TAG "v${PYBIND11_VERSION}"

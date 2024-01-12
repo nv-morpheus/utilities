@@ -51,6 +51,14 @@ function(morpheus_utils_configure_rmm)
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
+    CPM_ARGS
+      GIT_REPOSITORY  https://github.com/rapidsai/rmm.git
+      GIT_TAG         branch-${_rmm_version}
+      GIT_SHALLOW     TRUE
+      OPTIONS         "BUILD_TESTS OFF"
+                      "BUILD_BENCHMARKS OFF"
+                      "CUDA_STATIC_RUNTIME OFF"
+                      "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

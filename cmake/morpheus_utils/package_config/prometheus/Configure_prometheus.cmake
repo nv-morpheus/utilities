@@ -27,9 +27,9 @@ function(morpheus_utils_configure_prometheus_cpp)
     GLOBAL_TARGETS
       prometheus-cpp prometheus-cpp::core
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY https://github.com/jupp0r/prometheus-cpp.git
       GIT_TAG "v${PROMETHEUS_CPP_VERSION}"
