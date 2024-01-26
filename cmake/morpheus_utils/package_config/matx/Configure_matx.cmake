@@ -21,8 +21,8 @@ function(morpheus_utils_configure_matx)
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
   morpheus_utils_assert_cpm_initialized()
-  set(MATX_VERSION "0.4.1" CACHE STRING "Version of MatX to use")
-  set(MATX_TAG "v${MATX_VERSION}" CACHE STRING "Tag of MatX to use")
+  set(MATX_VERSION "0.7.0" CACHE STRING "Version of MatX to use")
+  set(MATX_TAG "d9b045b7269523d048001e99072c511707b0d169" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND(CUDAToolkit_VERSION VERSION_GREATER "11.5"))
     # Build MatX with 32 bit indexes, this allows matx size types to match those of cuDF
@@ -34,7 +34,6 @@ function(morpheus_utils_configure_matx)
       INSTALL_EXPORT_SET
         ${PROJECT_NAME}-exports
       CPM_ARGS
-        PATCH_COMMAND git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/matx_libcudacxx_version_fix.patch
         GIT_REPOSITORY https://github.com/NVIDIA/MatX.git
         GIT_TAG "${MATX_TAG}"
         GIT_SHALLOW True
