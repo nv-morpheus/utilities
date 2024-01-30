@@ -45,5 +45,11 @@ function(morpheus_utils_configure_tritonclient)
                       "TRITON_BACKEND_REPO_TAG r${TRITONCLIENT_VERSION}"
   )
 
+  # required for debug builds
+  target_link_libraries(httpclient_static
+    PRIVATE
+      ZLIB::ZLIB
+  )
+
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()
