@@ -1,0 +1,60 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 154bbf6..b27d6df 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,8 +37,11 @@ endif()
+ # CMake 3.24 can auto-detect GPUs, but it's not standard on any distrobution. For now, rapids-cmake has a utility
+ # function to do it, so we grab that as a dependency. The user can optionally override GPU_ARCH to specify
+ # their own
+-add_subdirectory(cmake/rapids-cmake)
+-
++if(NOT DEFINED rapids-cmake-dir)
++  add_subdirectory(cmake/rapids-cmake)
++else()
++  list(APPEND CMAKE_MODULE_PATH "${rapids-cmake-dir}")
++endif()
+ include(rapids-cmake)
+ include(rapids-cpm)
+ include(rapids-export)
+@@ -101,7 +104,7 @@ message(STATUS "Need CCCL. Finding...")
+ set(CCCL_VERSION "v2.2.0" CACHE STRING "Version of CCCL to use")
+ include(cmake/FindCCCL.cmake)
+ 
+-target_include_directories(matx SYSTEM INTERFACE
++target_include_directories(matx INTERFACE
+                             $<BUILD_INTERFACE:${CCCL_SOURCE_DIR}/libcudacxx/include>
+                             $<BUILD_INTERFACE:${CCCL_SOURCE_DIR}/cub>
+                             $<BUILD_INTERFACE:${CCCL_SOURCE_DIR}/thrust>)
+diff --git a/cmake/FindCCCL.cmake b/cmake/FindCCCL.cmake
+index f6caa75..5ea45e4 100644
+--- a/cmake/FindCCCL.cmake
++++ b/cmake/FindCCCL.cmake
+@@ -34,15 +34,21 @@ function(find_and_configure_cccl version)
+ 
+   list(APPEND CMAKE_MESSAGE_CONTEXT "cccl")
+ 
+-  CPMAddPackage(
+-    NAME CCCL
+-    GITHUB_REPOSITORY nvidia/cccl
+-    GIT_TAG ${version} 
+-)
++  set(cccl_VERSION "2.2.0" CACHE STRING "Version of cccl to use")
+ 
++  include("${rapids-cmake-dir}/cpm/cccl.cmake")
+ 
+-  set(CCCL_INCLUDE_DIR "${cccl_SOURCE_DIR}/include" PARENT_SCOPE)
+-  set(LIBCXX_INCLUDE_DIR "${cccl_SOURCE_DIR}/libcxx/include" PARENT_SCOPE)
++  # Use rapids-cpm to load cccl. This makes an interface library
++  # cccl::cccl that you can link against. If rapids_cpm_libcudaxx is
++  # removed, be sure to set `cccl_SOURCE_DIR` since other libraries can
++  # depend on this variable. Set it in the parent scope to ensure its valid
++  # See: https://github.com/rapidsai/rapids-cmake/issues/117
++  rapids_cpm_cccl(
++    BUILD_EXPORT_SET
++      ${PROJECT_NAME}-exports
++    INSTALL_EXPORT_SET
++      ${PROJECT_NAME}-exports
++  )
+ 
+ endfunction()
+ 

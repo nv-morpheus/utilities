@@ -22,6 +22,12 @@ function(morpheus_utils_configure_tritonclient)
   morpheus_utils_assert_cpm_initialized()
   set(TRITONCLIENT_VERSION "22.10" CACHE STRING "Which version of TritonClient to use")
 
+  # TODO(morpheus#1488): Since the RAPIDS 24.02 upgrade, pybind11_stubgen produces a segmentation fault for the developer guide examples.
+  # The triton_client.patch has been updated to work around the segmentation fault by ensuring curl is not initialized as part of a static
+  # destructor. We should root-cause why the segmentation fault is occuring for the developer guide examples and not morpheus itself, and
+  # attempt to fix the underlying issue, rather than patch Triton Client. Alternatively, we could upstream the Triton Client changes and
+  # update out version of Triton Client.
+
   rapids_cpm_find(TritonClient ${TRITONCLIENT_VERSION}
     GLOBAL_TARGETS
       TritonClient::httpclient TritonClient::httpclient_static TritonClient::grpcclient TritonClient::grpcclient_static
@@ -43,6 +49,12 @@ function(morpheus_utils_configure_tritonclient)
                       "TRITON_COMMON_REPO_TAG r${TRITONCLIENT_VERSION}"
                       "TRITON_CORE_REPO_TAG r${TRITONCLIENT_VERSION}"
                       "TRITON_BACKEND_REPO_TAG r${TRITONCLIENT_VERSION}"
+  )
+
+  # required for debug builds
+  target_link_libraries(httpclient_static
+    PRIVATE
+      ZLIB::ZLIB
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
