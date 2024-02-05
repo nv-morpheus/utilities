@@ -54,7 +54,7 @@ function(morpheus_utils_configure_tritonclient)
   # required for debug builds
   target_link_libraries(httpclient_static
     PRIVATE
-      ZLIB::ZLIB
+      $<$<CONFIG:Debug>:ZLIB::ZLIB>
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
