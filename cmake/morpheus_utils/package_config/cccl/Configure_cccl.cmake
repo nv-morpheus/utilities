@@ -17,24 +17,24 @@
 
 include_guard(GLOBAL)
 
-function(morpheus_utils_configure_libcudacxx)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "libcudacxx")
+function(morpheus_utils_configure_cccl)
+  list(APPEND CMAKE_MESSAGE_CONTEXT "cccl")
 
   morpheus_utils_assert_cpm_initialized()
-  set(LIBCUDACXX_VERSION "1.8.0" CACHE STRING "Version of libcudacxx to use")
+  set(cccl_VERSION "2.2.0" CACHE STRING "Version of cccl to use")
 
-  include("${rapids-cmake-dir}/cpm/libcudacxx.cmake")
+  include("${rapids-cmake-dir}/cpm/cccl.cmake")
 
-  # Use rapids-cpm to load libcudacxx. This makes an interface library
-  # libcudacxx::libcudacxx that you can link against. If rapids_cpm_libcudaxx is
-  # removed, be sure to set `libcudacxx_SOURCE_DIR` since other libraries can
+  # Use rapids-cpm to load cccl. This makes an interface library
+  # cccl::cccl that you can link against. If rapids_cpm_libcudaxx is
+  # removed, be sure to set `cccl_SOURCE_DIR` since other libraries can
   # depend on this variable. Set it in the parent scope to ensure its valid
   # See: https://github.com/rapidsai/rapids-cmake/issues/117
-  rapids_cpm_libcudacxx(
+  rapids_cpm_cccl(
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

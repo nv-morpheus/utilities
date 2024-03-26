@@ -21,7 +21,7 @@ morpheus_utils_python_assert_loaded(PYTHON3)
 
 # Get the project name in uppercase if OPTION_PREFIX is not defined
 if(NOT DEFINED OPTION_PREFIX)
-   string(TOUPPER "${PROJECT_NAME}" OPTION_PREFIX)
+  string(TOUPPER "${PROJECT_NAME}" OPTION_PREFIX)
 endif()
 
 option(${OPTION_PREFIX}_PYTHON_BUILD_STUBS "Whether or not to generated .pyi stub files for C++ Python modules. Disable to avoid requiring loading the NVIDIA GPU Driver during build" ON)
@@ -31,7 +31,7 @@ option(${OPTION_PREFIX}_PYTHON_PERFORM_INSTALL "Whether or not to automatically 
 
 include(${CMAKE_CURRENT_LIST_DIR}/python_module_tools.cmake)
 
-string(REPLACE "-" "_" function_prefix ${PROJECT_NAME})
+string(REPLACE "-" "_" function_prefix ${OPTION_PREFIX})
 
 # Setup common macro for adding some default arguments to adding modules. Use code eval to dynamically generate the
 # function prefix

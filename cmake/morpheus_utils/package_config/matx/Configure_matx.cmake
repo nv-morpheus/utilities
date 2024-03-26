@@ -21,29 +21,29 @@ function(morpheus_utils_configure_matx)
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
   morpheus_utils_assert_cpm_initialized()
-  set(MATX_VERSION "0.4.1" CACHE STRING "Version of MatX to use")
-  set(MATX_TAG "v${MATX_VERSION}" CACHE STRING "Tag of MatX to use")
+  set(MATX_VERSION "0.7.0" CACHE STRING "Version of MatX to use")
+  set(MATX_TAG "13076b0c392add7100f55e2aa651653a29f26bf4" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND(CUDAToolkit_VERSION VERSION_GREATER "11.5"))
     # Build MatX with 32 bit indexes, this allows matx size types to match those of cuDF
     rapids_cpm_find(matx ${MATX_VERSION}
       GLOBAL_TARGETS
-      matx matx::matx
+        matx matx::matx
       BUILD_EXPORT_SET
-      ${PROJECT_NAME}-exports
+        ${PROJECT_NAME}-exports
       INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-exports
+        ${PROJECT_NAME}-exports
       CPM_ARGS
-      PATCH_COMMAND   git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/matx_libcudacxx_version_fix.patch
-      GIT_REPOSITORY https://github.com/NVIDIA/MatX.git
-      GIT_TAG "${MATX_TAG}"
-      GIT_SHALLOW True
-      OPTIONS "MATX_BUILD_32_BIT ON"
-      "MATX_BUILD_BENCHMARKS OFF"
-      "MATX_BUILD_DOCS OFF"
-      "MATX_BUILD_EXAMPLES OFF"
-      "MATX_BUILD_TESTS OFF"
-      "MATX_INSTALL ON"
+        PATCH_COMMAND git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/matx_cccl_interface_fix.patch
+        GIT_REPOSITORY https://github.com/NVIDIA/MatX.git
+        GIT_TAG "${MATX_TAG}"
+        GIT_SHALLOW True
+        OPTIONS "MATX_BUILD_32_BIT ON"
+                "MATX_BUILD_BENCHMARKS OFF"
+                "MATX_BUILD_DOCS OFF"
+                "MATX_BUILD_EXAMPLES OFF"
+                "MATX_BUILD_TESTS OFF"
+                "MATX_INSTALL ON"
     )
 
     # Explicitly set this compiletime definition because it is not implicitly set when building MRC

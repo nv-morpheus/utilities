@@ -1,5 +1,5 @@
 # =============================================================================
-# SPDX-FileCopyrightText: Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2024, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,24 +17,17 @@
 
 include_guard(GLOBAL)
 
-function(morpheus_utils_configure_tl_expected)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "tl-expected")
+function(morpheus_utils_configure_grpc)
+  list(APPEND CMAKE_MESSAGE_CONTEXT "grpc")
 
   morpheus_utils_assert_cpm_initialized()
-  set(EXPECTED_VERSION "1.0.0" CACHE STRING "Version of expected to use")
-
-  rapids_cpm_find(tl-expected ${EXPECTED_VERSION}
+  rapids_find_package(gRPC REQUIRED
     GLOBAL_TARGETS
-      expected tl::expected
-    BUILD_EXPORT_SET
-      ${PROJECT_NAME}-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-exports
-    CPM_ARGS
-      GIT_REPOSITORY https://github.com/ryanolson/expected.git
-      GIT_TAG "5f4b7d2987658cc2a555ce7f4f5b81196461d953"
-      GIT_SHALLOW TRUE
-      OPTIONS "EXPECTED_BUILD_PACKAGE ON"
+    gRPC::address_sorting gRPC::gpr gRPC::grpc gRPC::grpc_unsecure gRPC::grpc++ gRPC::grpc++_alts gRPC::grpc++_error_details gRPC::grpc++_reflection
+    gRPC::grpc++_unsecure gRPC::grpc_plugin_support gRPC::grpcpp_channelz gRPC::upb gRPC::grpc_cpp_plugin gRPC::grpc_csharp_plugin gRPC::grpc_node_plugin
+    gRPC::grpc_objective_c_plugin gRPC::grpc_php_plugin gRPC::grpc_python_plugin gRPC::grpc_ruby_plugin
+    BUILD_EXPORT_SET ${PROJECT_NAME}-exports
+    INSTALL_EXPORT_SET ${PROJECT_NAME}-exports
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

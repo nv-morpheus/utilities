@@ -26,9 +26,9 @@ function(morpheus_utils_configure_taskflow version)
     GLOBAL_TARGETS
       Taskflow Taskflow::Taskflow
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY  https://github.com/taskflow/taskflow.git
       GIT_TAG         "v${version}"

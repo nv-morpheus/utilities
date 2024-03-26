@@ -36,9 +36,9 @@ include_guard(GLOBAL)
 #     GLOBAL_TARGETS
 #       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
 #     BUILD_EXPORT_SET
-#       ${PROJECT_NAME}-core-exports
+#       ${PROJECT_NAME}-exports
 #     INSTALL_EXPORT_SET
-#       ${PROJECT_NAME}-core-exports
+#       ${PROJECT_NAME}-exports
 #     CPM_ARGS
 #       GIT_REPOSITORY          https://github.com/boostorg/boost.git
 #       GIT_TAG                 v${BOOST_VERSION}
@@ -63,9 +63,9 @@ function(morpheus_utils_configure_boost)
     GLOBAL_TARGETS
       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
     BUILD_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/Orphis/boost-cmake.git
       GIT_TAG                 "7f97a08b64bd5d2e53e932ddf80c40544cf45edf"
@@ -77,12 +77,12 @@ function(morpheus_utils_configure_boost)
   if (NOT Boost_ADDED)
     # Now add it to the list of packages to install
     rapids_export_package(INSTALL Boost
-      ${PROJECT_NAME}-core-exports
+      ${PROJECT_NAME}-exports
       GLOBAL_TARGETS Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
     )
 
     # Overwrite the default package contents
-    file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
+    file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
   endif()
 endfunction()
 
@@ -95,15 +95,15 @@ endfunction()
 #     GLOBAL_TARGETS
 #       Boost::context Boost::fiber Boost::hana Boost::filesystem Boost::system
 #     BUILD_EXPORT_SET
-#       ${PROJECT_NAME}-core-exports
+#       ${PROJECT_NAME}-exports
 #     INSTALL_EXPORT_SET
-#       ${PROJECT_NAME}-core-exports
+#       ${PROJECT_NAME}-exports
 #     FIND_ARGS
 #       ${BOOST_VERSION} REQUIRED COMPONENTS context fiber filesystem system
 #   )
 
 #   # Overwrite the default package contents
-#   file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-core-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
+#   file(WRITE "${CMAKE_BINARY_DIR}/rapids-cmake/${PROJECT_NAME}-exports/install/package_Boost.cmake" "find_dependency(Boost REQUIRED COMPONENTS context fiber filesystem system)")
 
 #   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 # endfunction()
