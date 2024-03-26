@@ -1,3 +1,23 @@
+# utilities 24.03.00 (26 Mar 2024)
+
+## 🚨 Breaking Changes
+
+- Obtain libcudacxx via CCCL, patch matx to include properly. ([#66](https://github.com/nv-morpheus/utilities/pull/66)) [@cwharris](https://github.com/cwharris)
+
+## 🐛 Bug Fixes
+
+- only make triton client depend on zlib in debug builds ([#67](https://github.com/nv-morpheus/utilities/pull/67)) [@cwharris](https://github.com/cwharris)
+
+## 🚀 New Features
+
+- Update ops-bot.yaml ([#68](https://github.com/nv-morpheus/utilities/pull/68)) [@AyodeAwe](https://github.com/AyodeAwe)
+- Obtain libcudacxx via CCCL, patch matx to include properly. ([#66](https://github.com/nv-morpheus/utilities/pull/66)) [@cwharris](https://github.com/cwharris)
+
+## 🛠️ Improvements
+
+- Add helper method for configuring grpc ([#63](https://github.com/nv-morpheus/utilities/pull/63)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Improving setup scripts between MRC and Morpheus ([#61](https://github.com/nv-morpheus/utilities/pull/61)) [@dagardner-nv](https://github.com/dagardner-nv)
+
 # utilities 23.11.00 (30 Nov 2023)
 
 ## 🐛 Bug Fixes
