@@ -505,7 +505,7 @@ macro(__create_python_library MODULE_NAME)
   set(prefix _ARGS)
   set(flags IS_PYBIND11 IS_CYTHON IS_MODULE COPY_INPLACE BUILD_STUBS CURRENT_DIR_IS_MODULE)
   set(singleValues INSTALL_DEST OUTPUT_TARGET MODULE_ROOT PYX_FILE)
-  set(multiValues INCLUDE_DIRS LINK_TARGETS SOURCE_FILES)
+  set(multiValues INCLUDE_DIRS LINK_TARGETS SOURCE_FILES SUBMODULES)
 
   include(CMakeParseArguments)
   cmake_parse_arguments(${prefix}
@@ -621,27 +621,52 @@ macro(__create_python_library MODULE_NAME)
     cmake_path(RELATIVE_PATH _ARGS_MODULE_ROOT BASE_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE module_root_relative)
 
     cmake_path(APPEND PROJECT_BINARY_DIR ${module_root_relative} OUTPUT_VARIABLE module_root_binary_dir)
-    cmake_path(APPEND module_root_binary_dir ${SOURCE_RELATIVE_PATH} ${MODULE_NAME} "__init__.pyi" OUTPUT_VARIABLE module_binary_stub_file)
 
-    # Before installing, create the custom command to generate the stubs
-    add_custom_command(
-      OUTPUT  ${module_binary_stub_file}
-      COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen ${TARGET_NAME} --no-setup-py --log-level WARN -o ./ --root-module-suffix \"\"
-      DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules $<TARGET_OBJECTS:${TARGET_NAME}>
-      COMMENT "Building stub for python module ${TARGET_NAME}..."
-      WORKING_DIRECTORY ${module_root_binary_dir}
-    )
+    list(APPEND module_name_list ${MODULE_NAME})
+
+    if(_ARGS_SUBMODULES)
+      foreach(submodule IN LISTS _ARGS_SUBMODULES)
+        list(APPEND module_name_list "${MODULE_NAME}.${submodule}")
+      endforeach()
+    endif()
+
+    foreach(submodule IN LISTS module_name_list)
+      set(module_name_with_submodule ${submodule})
+      # set(module_target_name_with_submodule ${TARGET_NAME})
+
+      string(REGEX REPLACE "${MODULE_NAME}$" "${module_name_with_submodule}" module_target_name_with_submodule ${TARGET_NAME})
+
+      # if (string(LENGTH submodule) GREATER 0)
+      #   set(module_name_with_submodule "${module_name_with_submodule}.${submodule}")
+      #   set(module_target_name_with_submodule "${module_target_name_with_submodule}.${submodule}")
+      # endif()
+
+      string(REPLACE "." "/" module_path_with_submodule ${module_name_with_submodule})
+
+      cmake_path(APPEND module_root_binary_dir ${SOURCE_RELATIVE_PATH} ${module_path_with_submodule} "__init__.pyi" OUTPUT_VARIABLE module_binary_stub_file)
+
+      # Before installing, create the custom command to generate the stubs
+      add_custom_command(
+        OUTPUT  ${module_binary_stub_file}
+        COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen ${module_target_name_with_submodule} --no-setup-py --log-level WARN -o ./ --root-module-suffix \"\"
+        DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules $<TARGET_OBJECTS:${TARGET_NAME}>
+        COMMENT "Building stub for python module ${module_target_name_with_submodule}..."
+        WORKING_DIRECTORY ${module_root_binary_dir}
+      )
+
+      list(APPEND module_binary_stub_files ${module_binary_stub_file})
+    endforeach()
 
     # Add a custom target to ensure the stub generation runs
     add_custom_target(${TARGET_NAME}-stubs ALL
-      DEPENDS ${module_binary_stub_file}
+      DEPENDS ${module_binary_stub_files}
     )
 
     # Make the outputs depend on the stub
     add_dependencies(${PYTHON_ACTIVE_PACKAGE_NAME}-outputs ${TARGET_NAME}-stubs)
 
     # Save the output as a target property
-    morpheus_utils_add_target_resources(TARGET_NAME ${TARGET_NAME} "${module_binary_stub_file}")
+    morpheus_utils_add_target_resources(TARGET_NAME ${TARGET_NAME} "${module_binary_stub_files}")
   endif()
 
   if(_ARGS_INSTALL_DEST)
