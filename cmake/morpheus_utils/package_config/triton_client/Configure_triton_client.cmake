@@ -20,7 +20,7 @@ function(morpheus_utils_configure_tritonclient)
   list(APPEND CMAKE_MESSAGE_CONTEXT "TritonClient")
 
   morpheus_utils_assert_cpm_initialized()
-  set(TRITONCLIENT_VERSION "22.10" CACHE STRING "Which version of TritonClient to use")
+  set(TRITONCLIENT_VERSION "24.04" CACHE STRING "Which version of TritonClient to use")
 
   # TODO(morpheus#1488): Since the RAPIDS 24.02 upgrade, pybind11_stubgen produces a segmentation fault for the developer guide examples.
   # The triton_client.patch has been updated to work around the segmentation fault by ensuring curl is not initialized as part of a static
@@ -49,6 +49,7 @@ function(morpheus_utils_configure_tritonclient)
                       "TRITON_COMMON_REPO_TAG r${TRITONCLIENT_VERSION}"
                       "TRITON_CORE_REPO_TAG r${TRITONCLIENT_VERSION}"
                       "TRITON_BACKEND_REPO_TAG r${TRITONCLIENT_VERSION}"
+                      "TRITON_REPO_ORGANIZATION https://github.com/triton-inference-server"
   )
 
   # required for debug builds

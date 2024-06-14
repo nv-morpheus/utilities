@@ -1,5 +1,5 @@
 diff --git a/src/c++/library/CMakeLists.txt b/src/c++/library/CMakeLists.txt
-index 9766772..fb16e19 100644
+index cdee03e..f931c23 100644
 --- a/src/c++/library/CMakeLists.txt
 +++ b/src/c++/library/CMakeLists.txt
 @@ -142,7 +142,7 @@ if(TRITON_ENABLE_CC_GRPC OR TRITON_ENABLE_PERF_ANALYZER)
@@ -11,7 +11,7 @@ index 9766772..fb16e19 100644
       )
    endif() # NOT WIN32 AND NOT TRITON_KEEP_TYPEINFO
  
-@@ -310,7 +310,7 @@ if(TRITON_ENABLE_CC_HTTP OR TRITON_ENABLE_PERF_ANALYZER)
+@@ -326,7 +326,7 @@ if(TRITON_ENABLE_CC_HTTP OR TRITON_ENABLE_PERF_ANALYZER)
         httpclient
         PROPERTIES
           LINK_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libhttpclient.ldscript
@@ -21,18 +21,18 @@ index 9766772..fb16e19 100644
    endif() # NOT WIN32
  
 diff --git a/src/c++/library/http_client.cc b/src/c++/library/http_client.cc
-index 138533f..8a7662d 100644
+index 9f2f5ab..c2379ba 100644
 --- a/src/c++/library/http_client.cc
 +++ b/src/c++/library/http_client.cc
-@@ -25,6 +25,7 @@
- // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
- // Include this first to make sure we are a friend of common classes.
+@@ -37,6 +37,7 @@
+ #include <iostream>
+ #include <string>
+ #include <utility>
 +#include <mutex>
- #define TRITON_INFERENCE_SERVER_CLIENT_CLASS InferenceServerHttpClient
+ 
  #include "common.h"
  
-@@ -61,6 +62,12 @@ constexpr char kContentLengthHTTPHeader[] = "Content-Length";
+@@ -70,6 +71,13 @@ constexpr char kContentLengthHTTPHeader[] = "Content-Length";
  // initialization before any other threads are created and before any
  // curl methods are used. The curl_global static object is used to
  // perform this initialization.
@@ -42,10 +42,11 @@ index 138533f..8a7662d 100644
 +static std::mutex curl_global_mutex{};
 +static CurlGlobal* curl_global = nullptr;
 +
++
  class CurlGlobal {
   public:
    ~CurlGlobal();
-@@ -69,7 +76,13 @@ class CurlGlobal {
+@@ -78,7 +86,13 @@ class CurlGlobal {
  
    static const CurlGlobal& Get()
    {
@@ -60,7 +61,7 @@ index 138533f..8a7662d 100644
      return *curl_global;
    }
  
-@@ -93,7 +106,12 @@ CurlGlobal::~CurlGlobal()
+@@ -102,7 +116,12 @@ CurlGlobal::~CurlGlobal()
  
  class CurlGlobalDestroyer {
   public:
