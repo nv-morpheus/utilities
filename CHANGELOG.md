@@ -1,4 +1,4 @@
-# utilities 24.06.00 (02 Jul 2024)
+# utilities 24.06.00 (03 Jul 2024)
 There are no changes for v24.06.00.
 
 # utilities 24.03.00 (26 Mar 2024)
