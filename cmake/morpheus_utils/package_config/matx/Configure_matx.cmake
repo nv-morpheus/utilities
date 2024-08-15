@@ -21,8 +21,8 @@ function(morpheus_utils_configure_matx)
   list(APPEND CMAKE_MESSAGE_CONTEXT "matx")
 
   morpheus_utils_assert_cpm_initialized()
-  set(MATX_VERSION "0.7.0" CACHE STRING "Version of MatX to use")
-  set(MATX_TAG "13076b0c392add7100f55e2aa651653a29f26bf4" CACHE STRING "Tag of MatX to use")
+  set(MATX_VERSION "0.8.0" CACHE STRING "Version of MatX to use")
+  set(MATX_TAG "v0.8.0" CACHE STRING "Tag of MatX to use")
 
   if(CUDAToolkit_FOUND AND(CUDAToolkit_VERSION VERSION_GREATER "11.5"))
     # Build MatX with 32 bit indexes, this allows matx size types to match those of cuDF
