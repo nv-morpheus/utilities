@@ -17,7 +17,7 @@
 
 include_guard(GLOBAL)
 
-function(morpheus_utils_configure_cccl)
+function(morpheus_utils_configure_nlohmann_json)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cccl")
 
   morpheus_utils_assert_cpm_initialized()
@@ -27,7 +27,7 @@ function(morpheus_utils_configure_cccl)
 
   rapids_cpm_find(
     GLOBAL_TARGETS
-        hwloc hwloc::hwloc
+      nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
