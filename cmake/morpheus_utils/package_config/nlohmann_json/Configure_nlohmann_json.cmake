@@ -33,7 +33,7 @@ function(morpheus_utils_configure_nlohmann_json)
     CPM_ARGS
         GIT_REPOSITORY          https://github.com/nlohmann/json.git
         GIT_TAG                 "v${nlohmann_json_VERSION}"
-        DOWNLOAD_ONLY           TRUE
+        OPTIONS                 "JSON_Install ON"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
