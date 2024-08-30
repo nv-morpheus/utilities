@@ -25,7 +25,7 @@ function(morpheus_utils_configure_nlohmann_json)
 
   include("${rapids-cmake-dir}/cpm/cccl.cmake")
 
-  rapids_cpm_find(
+  rapids_cpm_find(nlohmann_json ${nlohmann_json_VERSION}
     GLOBAL_TARGETS
       nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
