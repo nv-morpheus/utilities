@@ -18,12 +18,10 @@
 include_guard(GLOBAL)
 
 function(morpheus_utils_configure_nlohmann_json)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "cccl")
+  list(APPEND CMAKE_MESSAGE_CONTEXT "nlohmann_json")
 
   morpheus_utils_assert_cpm_initialized()
   set(nlohmann_json_VERSION "3.11.3" CACHE STRING "Version of nlohmann_json to use")
-
-  include("${rapids-cmake-dir}/cpm/cccl.cmake")
 
   rapids_cpm_find(nlohmann_json ${nlohmann_json_VERSION}
     GLOBAL_TARGETS
