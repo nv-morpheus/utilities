@@ -43,5 +43,11 @@ function(morpheus_utils_configure_rmm)
                       "DISABLE_DEPRECATION_WARNING ${DISABLE_DEPRECATION_WARNINGS}"
   )
 
+  # include(${rapids-cmake-dir}/cpm/rmm.cmake)
+  # rapids_cpm_rmm(
+  #   BUILD_EXPORT_SET ${PROJECT_NAME}-exports
+  #   INSTALL_EXPORT_SET ${PROJECT_NAME}-exports
+  # )
+
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endfunction()

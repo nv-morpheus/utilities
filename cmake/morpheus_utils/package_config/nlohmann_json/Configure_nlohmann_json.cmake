@@ -17,36 +17,23 @@
 
 include_guard(GLOBAL)
 
-function(morpheus_utils_configure_glog)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
+function(morpheus_utils_configure_nlohmann_json)
+  list(APPEND CMAKE_MESSAGE_CONTEXT "nlohmann_json")
 
   morpheus_utils_assert_cpm_initialized()
-  set(GLOG_VERSION "0.7.1" CACHE STRING "Version of glog to use")
+  set(nlohmann_json_VERSION "3.11.3" CACHE STRING "Version of nlohmann_json to use")
 
-  # GLOG depends on GFlags being available. Import that now
-    rapids_cpm_find(gflags REQUIRED
+  rapids_cpm_find(nlohmann_json ${nlohmann_json_VERSION}
     GLOBAL_TARGETS
-      gflags gflags::gflags
-    BUILD_EXPORT_SET
-      ${PROJECT_NAME}-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-exports
-  )
-
-  rapids_cpm_find(glog ${GLOG_VERSION}
-    GLOBAL_TARGETS
-      glog glog::glog
+      nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
     CPM_ARGS
-      GIT_REPOSITORY          https://github.com/google/glog.git
-      GIT_TAG                 v${GLOG_VERSION}
-      GIT_SHALLOW             TRUE
-      OPTIONS                 "WITH_CUSTOM_PREFIX ON"
-                              "WITH_PKGCONFIG OFF"
-                              "BUILD_TESTING OFF"
+        GIT_REPOSITORY          https://github.com/nlohmann/json.git
+        GIT_TAG                 "v${nlohmann_json_VERSION}"
+        OPTIONS                 "JSON_Install ON"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
