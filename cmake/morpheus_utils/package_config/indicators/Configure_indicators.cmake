@@ -17,8 +17,6 @@ function(morpheus_utils_configure_indicators)
       GIT_REPOSITORY https://github.com/p-ranav/indicators.git
       GIT_TAG "v${INDICATORS_VERSION}"
       GIT_SHALLOW TRUE
-      OPTIONS "INDICATORS_INSTALL ON"
-              "INDICATORS_TEST OFF"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
