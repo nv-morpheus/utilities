@@ -4,7 +4,7 @@ function(morpheus_utils_configure_indicators)
   list(APPEND CMAKE_MESSAGE_CONTEXT "indicators")
 
   morpheus_utils_assert_cpm_initialized()
-  set(INDICATORS_VERSION "2.0" CACHE STRING "Version of indicators to use")
+  set(INDICATORS_VERSION "2.3" CACHE STRING "Version of indicators to use")
 
   rapids_cpm_find(indicators ${INDICATORS_VERSION}
     GLOBAL_TARGETS
