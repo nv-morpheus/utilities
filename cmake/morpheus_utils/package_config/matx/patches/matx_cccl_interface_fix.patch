@@ -1,22 +1,18 @@
+From 6ddba385b27f4f7075fcdd5a0916f59944c3ec16 Mon Sep 17 00:00:00 2001
+From: Christopher Harris <xixonia@gmail.com>
+Date: Wed, 7 Aug 2024 21:19:56 +0000
+Subject: [PATCH] fix cccl includes
+
+---
+ CMakeLists.txt       |  2 +-
+ cmake/FindCCCL.cmake | 20 +++++++++++++-------
+ 2 files changed, 14 insertions(+), 8 deletions(-)
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 154bbf6..b27d6df 100644
+index 3037a2f..93806d9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -37,8 +37,11 @@ endif()
- # CMake 3.24 can auto-detect GPUs, but it's not standard on any distrobution. For now, rapids-cmake has a utility
- # function to do it, so we grab that as a dependency. The user can optionally override GPU_ARCH to specify
- # their own
--add_subdirectory(cmake/rapids-cmake)
--
-+if(NOT DEFINED rapids-cmake-dir)
-+  add_subdirectory(cmake/rapids-cmake)
-+else()
-+  list(APPEND CMAKE_MODULE_PATH "${rapids-cmake-dir}")
-+endif()
- include(rapids-cmake)
- include(rapids-cpm)
- include(rapids-export)
-@@ -101,7 +104,7 @@ message(STATUS "Need CCCL. Finding...")
+@@ -117,7 +117,7 @@ message(STATUS "Need CCCL. Finding...")
  set(CCCL_VERSION "v2.2.0" CACHE STRING "Version of CCCL to use")
  include(cmake/FindCCCL.cmake)
  
@@ -58,3 +54,6 @@ index f6caa75..5ea45e4 100644
  
  endfunction()
  
+-- 
+2.43.2
+
