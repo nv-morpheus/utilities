@@ -21,7 +21,17 @@ function(morpheus_utils_configure_glog)
   list(APPEND CMAKE_MESSAGE_CONTEXT "glog")
 
   morpheus_utils_assert_cpm_initialized()
-  set(GLOG_VERSION "0.6" CACHE STRING "Version of glog to use")
+  set(GLOG_VERSION "0.7.1" CACHE STRING "Version of glog to use")
+
+  # GLOG depends on GFlags being available. Import that now
+  rapids_cpm_find(gflags REQUIRED
+    GLOBAL_TARGETS
+      gflags gflags::gflags
+    BUILD_EXPORT_SET
+      ${PROJECT_NAME}-exports
+    INSTALL_EXPORT_SET
+      ${PROJECT_NAME}-exports
+  )
 
   rapids_cpm_find(glog ${GLOG_VERSION}
     GLOBAL_TARGETS

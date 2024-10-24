@@ -17,24 +17,23 @@
 
 include_guard(GLOBAL)
 
-function(morpheus_utils_configure_cccl)
-  list(APPEND CMAKE_MESSAGE_CONTEXT "cccl")
+function(morpheus_utils_configure_nlohmann_json)
+  list(APPEND CMAKE_MESSAGE_CONTEXT "nlohmann_json")
 
   morpheus_utils_assert_cpm_initialized()
-  set(cccl_VERSION "2.5.0" CACHE STRING "Version of cccl to use")
+  set(nlohmann_json_VERSION "3.11.3" CACHE STRING "Version of nlohmann_json to use")
 
-  include("${rapids-cmake-dir}/cpm/cccl.cmake")
-
-  # Use rapids-cpm to load cccl. This makes an interface library
-  # cccl::cccl that you can link against. If rapids_cpm_libcudaxx is
-  # removed, be sure to set `cccl_SOURCE_DIR` since other libraries can
-  # depend on this variable. Set it in the parent scope to ensure its valid
-  # See: https://github.com/rapidsai/rapids-cmake/issues/117
-  rapids_cpm_cccl(
+  rapids_cpm_find(nlohmann_json ${nlohmann_json_VERSION}
+    GLOBAL_TARGETS
+      nlohmann_json nlohmann_json::nlohmann_json
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
+    CPM_ARGS
+        GIT_REPOSITORY          https://github.com/nlohmann/json.git
+        GIT_TAG                 "v${nlohmann_json_VERSION}"
+        OPTIONS                 "JSON_Install ON"
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)

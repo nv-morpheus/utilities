@@ -366,12 +366,9 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
     list(APPEND _pip_command  "--user")
   endif()
 
-  if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    list(APPEND _pip_command "-e")
-  endif()
-
   # Change which setup we use if we are using inplace
   if(_ARGS_IS_INPLACE)
+    list(APPEND _pip_command "-e")
     list(APPEND _pip_command "${sources_source_dir}")
   else()
     list(APPEND _pip_command "${sources_binary_dir}")

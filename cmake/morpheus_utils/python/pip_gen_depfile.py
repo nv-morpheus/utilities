@@ -15,10 +15,10 @@
 
 import argparse
 import os
+import sys
 import warnings
-
-import pkg_resources as pkg
-from pip._internal.commands.show import search_packages_info
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import distribution
 
 
 def convert_relative(filename: str, relative_to: str, warn_on_fail=False):
@@ -42,38 +42,25 @@ def gen_dep_file(pkg_name: str, input_file: str, output_file: str, relative_to: 
     # Convert the input file to be relative if specified
     input_file = convert_relative(input_file, relative_to=relative_to, warn_on_fail=True)
 
-    package_generator = search_packages_info([pkg_name])
+    try:
+        found_dist = distribution(pkg_name)
 
-    for pkg_info in package_generator:
+        joined_files = "".join([
+            "\\\n  " + convert_relative(str(found_dist.locate_file(f)), relative_to=relative_to) + " "
+            for f in found_dist.files
+        ])
 
-        # Get the import name of the package
-        try:
-            egg_info = pkg.get_distribution(pkg_info.name).egg_info
+        # Create the output lines
+        lines = [f"{input_file}: {joined_files}"]
 
-            # Try to open it
-            with open(os.path.join(egg_info, "top_level.txt")) as f:
-                egg_pkg_name = f.readline().rstrip()
+        # Write the depfile
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.writelines(lines)
 
-            if (egg_pkg_name == pkg_name):
+    except PackageNotFoundError:
+        print(f"Could not find package info for '{pkg_name}'")
 
-                joined_files = "".join([
-                    "\\\n  " + convert_relative(os.path.join(pkg_info.location, f), relative_to=relative_to) + " "
-                    for f in pkg_info.files
-                ])
-
-                # Create the output lines
-                lines = [f"{input_file}: {joined_files}"]
-
-                # Write the depfile
-                with open(output_file, "w") as f:
-                    f.writelines(lines)
-
-                return
-
-        except:
-            continue
-
-    print(f"Could not find package info for '{pkg_name}'")
+        sys.exit(1)
 
 
 if (__name__ == "__main__"):

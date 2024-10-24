@@ -21,7 +21,7 @@ index 9766772..fb16e19 100644
    endif() # NOT WIN32
  
 diff --git a/src/c++/library/http_client.cc b/src/c++/library/http_client.cc
-index 138533f..8a7662d 100644
+index 138533f..e12cfd5 100644
 --- a/src/c++/library/http_client.cc
 +++ b/src/c++/library/http_client.cc
 @@ -25,6 +25,7 @@
@@ -74,3 +74,12 @@ index 138533f..8a7662d 100644
  };
  
  static CurlGlobalDestroyer curl_global_destroyer_;
+@@ -713,7 +731,7 @@ ShapeHelper(
+   }
+ 
+   for (size_t i = 0; i < shape_json.ArraySize(); i++) {
+-    int64_t dim;
++    int64_t dim{};
+     Error err = shape_json.IndexAsInt(i, &dim);
+     if (!err.IsOk()) {
+       return err;
