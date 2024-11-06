@@ -24,11 +24,13 @@ function(morpheus_utils_configure_mrc)
 
   string(TOUPPER "${PROJECT_NAME}" PROJECT_NAME_UPPER)
 
-  set(MRC_VERSION 24.10 CACHE STRING "Which version of MRC to use")
+  set(MRC_VERSION 25.02 CACHE STRING "Which version of MRC to use")
 
   rapids_cpm_find(mrc ${MRC_VERSION}
+    COMPONENTS
+      python
     GLOBAL_TARGETS
-      mrc::mrc mrc::pymrc
+      mrc::libmrc mrc::pymrc
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
