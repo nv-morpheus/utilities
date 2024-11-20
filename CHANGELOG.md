@@ -1,3 +1,20 @@
+# utilities 24.10.00 (01 Nov 2024)
+
+## 🐛 Bug Fixes
+
+- Converting the import of MRC from `mrc::mrc` to `mrc::libmrc` ([#84](https://github.com/nv-morpheus/utilities/pull/84)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Fix in-place Python installs ([#81](https://github.com/nv-morpheus/utilities/pull/81)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Fixing python package pip dependency file generation ([#79](https://github.com/nv-morpheus/utilities/pull/79)) [@mdemoret-nv](https://github.com/mdemoret-nv)
+- Move the logic inferring the value of `CMAKE_INSTALL_PREFIX` to it's own function ([#74](https://github.com/nv-morpheus/utilities/pull/74)) [@dagardner-nv](https://github.com/dagardner-nv)
+
+## 🚀 New Features
+
+- Update to RAPIDS 24.10 ([#75](https://github.com/nv-morpheus/utilities/pull/75)) [@cwharris](https://github.com/cwharris)
+
+## 🛠️ Improvements
+
+- fix warning in triton http_client.cc that breaks build ([#82](https://github.com/nv-morpheus/utilities/pull/82)) [@cwharris](https://github.com/cwharris)
+
 # utilities 24.06.00 (03 Jul 2024)
 There are no changes for v24.06.00.
 
