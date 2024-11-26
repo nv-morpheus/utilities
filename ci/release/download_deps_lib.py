@@ -25,10 +25,8 @@ import logging
 import os
 import pprint
 import re
-import shutil
 import sys
 import tarfile
-import tempfile
 import typing
 
 import requests
@@ -132,7 +130,7 @@ def verify_tar_urls(session: requests.Session, dep_urls: dict[str,
         is_valid = (response is not None and response.status_code == 200)
         dep_info['is_valid'] = is_valid
 
-        msg = f"{github_name} : {dep_info['tag']} is_valid={is_valid}"
+        msg = f"{github_name} : {dep_info['tag']} is_valid={is_valid} {url}"
         if is_valid:
             logger.debug(msg)
         else:
