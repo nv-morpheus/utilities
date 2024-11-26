@@ -198,6 +198,9 @@ def parse_json_deps(json_file: str) -> dict[str, dict[str, typing.Any]]:
     with open(json_file, 'r', encoding="utf-8") as f:
         json_data = json.load(f)
 
+    if not isinstance(json_data, list):
+        json_data = json_data['actions']['FETCH']
+
     # Create a new dict keyed by package name
     packages = {pkg['name']: pkg for pkg in json_data}
     return packages
