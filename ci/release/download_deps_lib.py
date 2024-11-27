@@ -104,7 +104,7 @@ def mk_repo_urls(
             i += 1
 
         if repo_info is None and repo_name in other_repos:
-            url = other_repos[repo_name](pkg_name, pkg_version)
+            url = other_repos[repo_name](repo_name, pkg_version)
             repo_info = {
                 'packages': [pkg_name],
                 'tag': pkg_version,
