@@ -37,6 +37,9 @@ STRIP_VER_RE = re.compile(r"^([\w|-]+).*")
 GIT_HUB_TAG_URL_PATH = "{base_url}/archive/refs/tags/{tag}.tar.gz"
 GIT_LAB_TAG_URL_PATH = "{base_url}/-/archive/{tag}/{name}-{tag}.tar.gz"
 
+# A function that receives a package name and version and returns a URL
+PACKAGE_TO_URL_FN_T = typing.Callable[[str, str], str]
+
 TAG_BARE = "{version}"
 TAG_V_PREFIX = "v{version}"  # Default & most common tag format
 TAG_NAME_DASH_BARE = "{name}-{version}"
@@ -60,11 +63,15 @@ def _get_repo_info(*, git_tag_format, repo_url_map: dict, tag_url_path: str,
 
 
 def mk_repo_urls(
-    *, known_first_party: frozenset[str], known_github_urls: dict[str, str],
-    known_gitlab_urls: dict[str, str], git_tag_format: dict[str, str],
+    *,
+    known_first_party: frozenset[str],
+    known_github_urls: dict[str, str],
+    known_gitlab_urls: dict[str, str],
+    other_repos: dict[str, PACKAGE_TO_URL_FN_T],
+    git_tag_format: dict[str, str],
     package_aliases: dict[str, str],
-    packages: list[tuple[str,
-                         str]]) -> tuple[dict[str, typing.Any], list[str]]:
+    packages: list[tuple[str, str]],
+) -> tuple[dict[str, typing.Any], list[str]]:
     matched = {}
     unmatched: list[str] = []
     for (pkg_name, pkg_version) in packages:
@@ -95,6 +102,14 @@ def mk_repo_urls(
                                            tag_url_path=tag_url_path,
                                            git_tag_format=git_tag_format)
             i += 1
+
+        if repo_info is None and repo_name in other_repos:
+            url = other_repos[repo_name](pkg_name, pkg_version)
+            repo_info = {
+                'packages': [pkg_name],
+                'tag': pkg_version,
+                'tar_url': url
+            }
 
         if repo_info is not None:
             matched[repo_name] = repo_info
@@ -309,6 +324,7 @@ def download_source_deps(*,
                          package_aliases: dict[str, str],
                          known_github_urls: dict[str, str],
                          known_gitlab_urls: dict[str, str],
+                         other_repos: dict[str, PACKAGE_TO_URL_FN_T],
                          known_first_party: frozenset[str],
                          git_tag_format: dict[str, str],
                          known_non_conda_deps: list[tuple[str, str]],
@@ -336,6 +352,9 @@ def download_source_deps(*,
     known_gitlab_urls : dict[str, str]
         Mapping of package names to their GitLab repo URL. This is kept separate from `known_github_urls` since they
         have different tag URL formats.
+    other_repos : dict[str, PACKAGE_TO_URL_FN_T]
+        Mapping of package names to a function that takes a package name and version and returns a URL. This will be
+        used as a fallback for any package not found in `known_github_urls` or `known_gitlab_urls`.
     known_first_party : frozenset[str]
         Set of first party packages that are not downloaded.
     git_tag_format : dict[str, str]
@@ -378,6 +397,7 @@ def download_source_deps(*,
      unmatched_packages) = mk_repo_urls(known_first_party=known_first_party,
                                         known_github_urls=known_github_urls,
                                         known_gitlab_urls=known_gitlab_urls,
+                                        other_repos=other_repos,
                                         git_tag_format=git_tag_format,
                                         package_aliases=package_aliases,
                                         packages=merged_deps)
