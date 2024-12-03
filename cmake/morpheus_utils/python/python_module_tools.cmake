@@ -618,15 +618,24 @@ macro(__create_python_library MODULE_NAME)
     cmake_path(RELATIVE_PATH _ARGS_MODULE_ROOT BASE_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE module_root_relative)
 
     cmake_path(APPEND PROJECT_BINARY_DIR ${module_root_relative} OUTPUT_VARIABLE module_root_binary_dir)
-    cmake_path(APPEND module_root_binary_dir ${SOURCE_RELATIVE_PATH} ${MODULE_NAME} "__init__.pyi" OUTPUT_VARIABLE module_binary_stub_file)
+    cmake_path(APPEND module_root_binary_dir ${SOURCE_RELATIVE_PATH} "stubs" OUTPUT_VARIABLE module_binary_stub_temp_dir)
+    cmake_path(APPEND module_binary_stub_temp_dir ${SOURCE_RELATIVE_PATH} "${MODULE_NAME}.pyi" OUTPUT_VARIABLE module_binary_stub_temp_file)
+    cmake_path(APPEND module_root_binary_dir ${SOURCE_RELATIVE_PATH} "${MODULE_NAME}" "__init__.pyi" OUTPUT_VARIABLE module_binary_stub_file)
 
     # Before installing, create the custom command to generate the stubs
     add_custom_command(
-      OUTPUT  ${module_binary_stub_file}
-      COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen --ignore-invalid-identifiers '.*' ${TARGET_NAME} -o ./
+      OUTPUT  ${module_binary_stub_temp_file}
+      COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen --ignore-invalid-identifiers '.*' ${TARGET_NAME} -o ${module_binary_stub_temp_dir}
       DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules $<TARGET_OBJECTS:${TARGET_NAME}>
       COMMENT "Building stub for python module ${TARGET_NAME}..."
-      WORKING_DIRECTORY ${module_root_binary_dir}
+      WORKING_DIRECTORY ${module_binary_stub_dir}
+    )
+
+    add_custom_command(
+      OUTPUT ${module_binary_stub_file}
+      COMMAND ${CMAKE_COMMAND} -E copy ${module_binary_stub_temp_file} ${module_binary_stub_file}
+      DEPENDS ${module_binary_stub_temp_file}
+      COMMENT "Moving target ${module_binary_stub_temp_file} to ${module_binary_stub_file}"
     )
 
     # Add a custom target to ensure the stub generation runs
