@@ -625,7 +625,8 @@ macro(__create_python_library MODULE_NAME)
     # Before installing, create the custom command to generate the stubs
     add_custom_command(
       OUTPUT  ${module_binary_stub_temp_file}
-      COMMAND ${Python3_EXECUTABLE} -m pybind11_stubgen --ignore-invalid-identifiers '.*' ${TARGET_NAME} -o ${module_binary_stub_temp_dir}
+      COMMAND 
+        ${Python3_EXECUTABLE} -m pybind11_stubgen --print-safe-value-reprs='.*' --ignore-invalid-identifiers '.*' ${TARGET_NAME} -o ${module_binary_stub_temp_dir}
       DEPENDS ${PYTHON_ACTIVE_PACKAGE_NAME}-modules $<TARGET_OBJECTS:${TARGET_NAME}>
       COMMENT "Building stub for python module ${TARGET_NAME}..."
       WORKING_DIRECTORY ${module_root_binary_dir}
