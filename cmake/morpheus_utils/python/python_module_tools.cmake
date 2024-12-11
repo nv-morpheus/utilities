@@ -613,7 +613,7 @@ macro(__create_python_library MODULE_NAME)
   # succeed
   add_dependencies(${PYTHON_ACTIVE_PACKAGE_NAME}-modules ${TARGET_NAME})
 
-  if(_ARGS_BUILD_STUBS)
+  if(_ARGS_BUILD_STUBS AND NOT _ARGS_IS_CYTHON)
     # Get the relative path from the project source to the module root
     cmake_path(RELATIVE_PATH _ARGS_MODULE_ROOT BASE_DIRECTORY ${PROJECT_SOURCE_DIR} OUTPUT_VARIABLE module_root_relative)
 
