@@ -21,6 +21,7 @@ REPO_NAME=$(basename -s .git `git config --get remote.origin.url`)
 REPO_NAME=$(echo "${REPO_NAME}" | tr '[:upper:]' '[:lower:]')
 
 DOCKER_TARGET=${DOCKER_TARGET:-"build" "test"}
+DOCKER_TARGET_ARCH=${DOCKER_TARGET_ARCH:-"amd64" "arm64"}
 DOCKER_BUILDKIT=${DOCKER_BUILDKIT:-1}
 DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER:-"nvcr.io"}
 DOCKER_REGISTRY_PATH=${DOCKER_REGISTRY_PATH:-"/ea-nvidia-morpheus/morpheus"}
@@ -37,21 +38,25 @@ set -e
 RUNNER_CONTEXT=${1:-./ci/runner}
 
 function get_image_full_name() {
-   echo "${DOCKER_REGISTRY_SERVER}${DOCKER_REGISTRY_PATH}:${DOCKER_TAG_PREFIX}-${build_target}-${DOCKER_TAG_POSTFIX}"
+   echo "${DOCKER_REGISTRY_SERVER}${DOCKER_REGISTRY_PATH}:${DOCKER_TAG_PREFIX}-${build_target}-${DOCKER_TAG_POSTFIX}-${build_arch}"
 }
 
 if [[ "${SKIP_BUILD}" == "" ]]; then
     for build_target in ${DOCKER_TARGET[@]}; do
-        FULL_NAME=$(get_image_full_name)
-        echo "Building target \"${build_target}\" as ${FULL_NAME}";
-        docker build --network=host ${DOCKER_EXTRA_ARGS} --target ${build_target} -t ${FULL_NAME} -f ${RUNNER_CONTEXT}/Dockerfile .
+        for build_arch in ${DOCKER_TARGET_ARCH[@]}; do
+            FULL_NAME=$(get_image_full_name)
+            echo "Building target ${build_arch} ${build_target} as ${FULL_NAME}";
+            docker build --platform=linux/${build_arch} --network=host ${DOCKER_EXTRA_ARGS} --target ${build_target} -t ${FULL_NAME} -f ${RUNNER_CONTEXT}/Dockerfile .
+        done
     done
 fi
 
 if [[ "${SKIP_PUSH}" == "" ]]; then
     for build_target in ${DOCKER_TARGET[@]}; do
-        FULL_NAME=$(get_image_full_name)
-        echo "Pushing ${FULL_NAME}";
-        docker push ${FULL_NAME}
+        for build_arch in ${DOCKER_TARGET_ARCH[@]}; do
+            FULL_NAME=$(get_image_full_name)
+            echo "Pushing ${FULL_NAME}";
+            docker push ${FULL_NAME}
+        done
     done
 fi
