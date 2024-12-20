@@ -27,6 +27,31 @@ cd $(git rev-parse --show-toplevel)
 cd $(git rev-parse --show-superproject-working-tree)
 ```
 
+## Optional: Supporting muti-arch builds
+To build the images for multiple architectures we will be using qemu, install onto the host system with:
+```bash
+sudo apt install qemu-utils qemu-system-arm qemu-user-static
+```
+
+Register qemu with Docker:
+```bash
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+```
+
+Verify that the registration was successful:
+```bash
+docker run --platform=linux/arm64/v8 --rm -t rapidsai/ci-conda:cuda12.5.1-ubuntu22.04-py3.10 uname -m
+```
+
+If successful, the output should be `aarch64`.
+
+## Optional: Building only for your architecture
+For local CI testing of your own architcture, do so by setting `DOCKER_TARGET_ARCH` to the desired architecture. For example, to build for the current architecture:
+```bash
+export DOCKER_TARGET_ARCH="$(dpkg --print-architecture)"
+```
+
+
 # Building CI images
 The `Dockerfile` defines two targets: `build` and `test`. The `build` target is used during the build phase and most likely will not have a GPU. The `test` target is used during the test phase and will have a GPU.
 
