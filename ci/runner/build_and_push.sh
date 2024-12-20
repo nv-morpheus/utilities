@@ -61,8 +61,6 @@ function get_real_arch() {
 
 if [[ "${SKIP_BUILD}" == "" ]]; then
     for build_target in ${DOCKER_TARGET[@]}; do
-        SHORT_NAME=$(get_image_short_name)
-        AMEND_ARGS=()
         for build_arch in ${DOCKER_TARGET_ARCH[@]}; do
             FULL_NAME=$(get_image_full_name)
             REAL_ARCH=$(get_real_arch ${build_arch})
@@ -75,12 +73,7 @@ if [[ "${SKIP_BUILD}" == "" ]]; then
                 --target ${build_target} \
                 -t ${FULL_NAME} \
                 -f ${RUNNER_CONTEXT}/Dockerfile .
-
-            AMEND_ARGS+=(--amend ${FULL_NAME})
         done
-
-        echo "Creating Manifest"
-        docker manifest create ${SHORT_NAME} ${AMEND_ARGS[@]}
     done
 
 
@@ -89,11 +82,17 @@ fi
 if [[ "${SKIP_PUSH}" == "" ]]; then
     for build_target in ${DOCKER_TARGET[@]}; do
         SHORT_NAME=$(get_image_short_name)
+        AMEND_ARGS=()
         for build_arch in ${DOCKER_TARGET_ARCH[@]}; do
             FULL_NAME=$(get_image_full_name)
             echo "Pushing ${FULL_NAME}";
             docker push ${FULL_NAME}
         done
+        AMEND_ARGS+=(--amend ${FULL_NAME})
+
+        echo "Creating Manifest"
+        docker manifest create ${SHORT_NAME} ${AMEND_ARGS[@]}
+
         echo "Pushing ${SHORT_NAME}";
         docker manifest push ${SHORT_NAME}
     done
