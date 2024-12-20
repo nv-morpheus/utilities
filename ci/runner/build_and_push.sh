@@ -21,7 +21,7 @@ REPO_NAME=$(basename -s .git `git config --get remote.origin.url`)
 REPO_NAME=$(echo "${REPO_NAME}" | tr '[:upper:]' '[:lower:]')
 
 DOCKER_TARGET=${DOCKER_TARGET:-"build" "test"}
-DOCKER_TARGET_ARCH=${DOCKER_TARGET_ARCH:-"amd64" "arm64"}
+DOCKER_TARGET_ARCH=${DOCKER_TARGET_ARCH:-"arm64" "amd64"}
 DOCKER_BUILDKIT=${DOCKER_BUILDKIT:-1}
 DOCKER_REGISTRY_SERVER=${DOCKER_REGISTRY_SERVER:-"nvcr.io"}
 DOCKER_REGISTRY_PATH=${DOCKER_REGISTRY_PATH:-"/ea-nvidia-morpheus/morpheus"}
@@ -37,26 +37,64 @@ set -e
 # Get the runner context from the user supplied argument or default to ci/runner
 RUNNER_CONTEXT=${1:-./ci/runner}
 
+function get_image_short_name() {
+   echo "${DOCKER_REGISTRY_SERVER}${DOCKER_REGISTRY_PATH}:${DOCKER_TAG_PREFIX}-${build_target}-${DOCKER_TAG_POSTFIX}"
+}
+
 function get_image_full_name() {
-   echo "${DOCKER_REGISTRY_SERVER}${DOCKER_REGISTRY_PATH}:${DOCKER_TAG_PREFIX}-${build_target}-${DOCKER_TAG_POSTFIX}-${build_arch}"
+   echo "$(get_image_short_name)-${build_arch}"
+}
+
+function get_real_arch() {
+    case ${1} in
+        "amd64")
+            echo "x86_64"
+            ;;
+        "arm64")
+            echo "aarch64"
+            ;;
+        *)
+            echo "unknown"
+            ;;
+    esac
 }
 
 if [[ "${SKIP_BUILD}" == "" ]]; then
     for build_target in ${DOCKER_TARGET[@]}; do
+        SHORT_NAME=$(get_image_short_name)
+        AMEND_ARGS=()
         for build_arch in ${DOCKER_TARGET_ARCH[@]}; do
             FULL_NAME=$(get_image_full_name)
+            REAL_ARCH=$(get_real_arch ${build_arch})
             echo "Building target ${build_arch} ${build_target} as ${FULL_NAME}";
-            docker build --platform=linux/${build_arch} --network=host ${DOCKER_EXTRA_ARGS} --target ${build_target} -t ${FULL_NAME} -f ${RUNNER_CONTEXT}/Dockerfile .
+            docker build \
+                --platform=linux/${build_arch} \
+                --network=host \
+                --build-arg REAL_ARCH=${REAL_ARCH} \
+                ${DOCKER_EXTRA_ARGS} \
+                --target ${build_target} \
+                -t ${FULL_NAME} \
+                -f ${RUNNER_CONTEXT}/Dockerfile .
+
+            AMEND_ARGS+=(--amend ${FULL_NAME})
         done
+
+        echo "Creating Manifest"
+        docker manifest create ${SHORT_NAME} ${AMEND_ARGS[@]}
     done
+
+
 fi
 
 if [[ "${SKIP_PUSH}" == "" ]]; then
     for build_target in ${DOCKER_TARGET[@]}; do
+        SHORT_NAME=$(get_image_short_name)
         for build_arch in ${DOCKER_TARGET_ARCH[@]}; do
             FULL_NAME=$(get_image_full_name)
             echo "Pushing ${FULL_NAME}";
             docker push ${FULL_NAME}
         done
+        echo "Pushing ${SHORT_NAME}";
+        docker manifest push ${SHORT_NAME}
     done
 fi
