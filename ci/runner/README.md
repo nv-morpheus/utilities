@@ -40,7 +40,7 @@ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
 Verify that the registration was successful:
 ```bash
-docker run --platform=linux/arm64/v8 --rm -t rapidsai/ci-conda:cuda12.5.1-ubuntu22.04-py3.10 uname -m
+docker run --platform=linux/arm64 --rm -t rapidsai/ci-conda:cuda12.5.1-ubuntu22.04-py3.10 uname -m
 ```
 
 If successful, the output should be `aarch64`.
