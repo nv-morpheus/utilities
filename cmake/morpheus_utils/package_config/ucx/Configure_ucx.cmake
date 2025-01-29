@@ -29,8 +29,6 @@ function(morpheus_utils_configure_ucx)
       ucx ucx::ucp ucx::uct ucx_ucx ucx::ucp ucx::uct ucx::ucx
     BUILD_EXPORT_SET
       ${PROJECT_NAME}-exports
-    INSTALL_EXPORT_SET
-      ${PROJECT_NAME}-exports
     CPM_ARGS
       GIT_REPOSITORY          https://github.com/openucx/ucx.git
       GIT_TAG                 "v${UCX_VERSION}"
