@@ -35,9 +35,6 @@ function(morpheus_utils_configure_cccl)
       ${PROJECT_NAME}-exports
     INSTALL_EXPORT_SET
       ${PROJECT_NAME}-exports
-      # Set to match changes in https://github.com/rapidsai/rapids-cmake/pull/710/files
-      GIT_TAG "83028fcdcfa8de51ab359e61ce07198a6003a65e"
-      GIT_SHALLOW FALSE
   )
 
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
