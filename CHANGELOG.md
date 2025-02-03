@@ -1,3 +1,11 @@
+# utilities 25.02.00 (03 Feb 2025)
+
+## 🛠️ Improvements
+
+- Support building multi-arch containers for CI ([#90](https://github.com/nv-morpheus/utilities/pull/90)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Automate downloading of dependent source packages ([#88](https://github.com/nv-morpheus/utilities/pull/88)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Add `indicators` dependency for C++ version of `MonitorStage` ([#78](https://github.com/nv-morpheus/utilities/pull/78)) [@yczhang-nv](https://github.com/yczhang-nv)
+
 # utilities 24.10.00 (01 Nov 2024)
 
 ## 🐛 Bug Fixes
