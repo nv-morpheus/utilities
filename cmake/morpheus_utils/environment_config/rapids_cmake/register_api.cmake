@@ -67,20 +67,13 @@ macro(morpheus_utils_enable_cuda)
   list(POP_BACK CMAKE_MESSAGE_CONTEXT)
 endmacro()
 
-function(morpheus_utils_initialize_package_manager
-    USE_CONDA_VAR_NAME
-    BUILD_SHARED_LIBS_VAR_NAME
-)
+function(morpheus_utils_initialize_package_manager)
   # Ensure rapids CMake is setup
   include(${CMAKE_CURRENT_FUNCTION_LIST_DIR}/ensure_rapids_cmake_init.cmake)
 endfunction()
 
-function(morpheus_utils_initialize_install_prefix
-    USE_CONDA_VAR_NAME
-)
-  set(USE_CONDA ${${USE_CONDA_VAR_NAME}})
-
-  if(USE_CONDA AND DEFINED ENV{CONDA_PREFIX})
+function(morpheus_utils_initialize_install_prefix)
+  if(DEFINED ENV{CONDA_PREFIX})
     message(STATUS "${USE_CONDA_VAR_NAME} is defined and CONDA environment ($ENV{CONDA_PREFIX}) exists.")
     rapids_cmake_support_conda_env(conda_env MODIFY_PREFIX_PATH)
 
@@ -93,5 +86,7 @@ function(morpheus_utils_initialize_install_prefix
     list(REMOVE_DUPLICATES CMAKE_FIND_ROOT_PATH)
     message(STATUS "Prepending CONDA_PREFIX ($ENV{CONDA_PREFIX}) to CMAKE_FIND_ROOT_PATH. CMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}")
     set(CMAKE_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH} PARENT_SCOPE)
+  else()
+    message(WARNING "Conda expected but CONDA_PREFIX not specified")
   endif()
 endfunction()
