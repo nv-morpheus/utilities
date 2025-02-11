@@ -45,7 +45,6 @@ function(morpheus_utils_configure_mrc)
                       "MRC_BUILD_PYTHON ON"
                       "MRC_ENABLE_XTENSOR ON"
                       "MRC_ENABLE_MATX ON"
-                      "MRC_USE_CONDA ${MORPHEUS_USE_CONDA}"
                       "MRC_USE_CCACHE ${MORPHEUS_USE_CCACHE}"
                       "MRC_USE_CLANG_TIDY ${MORPHEUS_USE_CLANG_TIDY}"
                       "MRC_PYTHON_INPLACE_BUILD OFF"
