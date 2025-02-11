@@ -1,32 +1,35 @@
 diff --git a/include/pybind11/gil.h b/include/pybind11/gil.h
-index b73aaa3..68b6239 100644
+index da22f48..98d634c 100644
 --- a/include/pybind11/gil.h
 +++ b/include/pybind11/gil.h
-@@ -86,23 +86,25 @@ public:
-     }
- 
+@@ -93,7 +93,6 @@ public:
+     void inc_ref() { ++tstate->gilstate_counter; }
+
      PYBIND11_NOINLINE void dec_ref() {
 -        --tstate->gilstate_counter;
-         #if !defined(NDEBUG)
-             if (detail::get_thread_state_unchecked() != tstate)
-                 pybind11_fail("scoped_acquire::dec_ref(): thread state must be current!");
-             if (tstate->gilstate_counter < 0)
-                 pybind11_fail("scoped_acquire::dec_ref(): reference count underflow!");
-         #endif
+ #        if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+         if (detail::get_thread_state_unchecked() != tstate) {
+             pybind11_fail("scoped_acquire::dec_ref(): thread state must be current!");
+@@ -102,18 +101,21 @@ public:
+             pybind11_fail("scoped_acquire::dec_ref(): reference count underflow!");
+         }
+ #        endif
 -        if (tstate->gilstate_counter == 0) {
 +        if (tstate->gilstate_counter == 1) {
-             #if !defined(NDEBUG)
-                 if (!release)
-                     pybind11_fail("scoped_acquire::dec_ref(): internal error!");
-             #endif
+ #        if defined(PYBIND11_DETAILED_ERROR_MESSAGES)
+             if (!release) {
+                 pybind11_fail("scoped_acquire::dec_ref(): internal error!");
+             }
+ #        endif
              PyThreadState_Clear(tstate);
 +            --tstate->gilstate_counter;
-             if (active)
+             if (active) {
                  PyThreadState_DeleteCurrent();
+             }
              PYBIND11_TLS_DELETE_VALUE(detail::get_internals().tstate);
              release = false;
 +        } else {
 +            --tstate->gilstate_counter;
          }
      }
- 
+
