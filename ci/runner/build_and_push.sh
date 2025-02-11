@@ -87,9 +87,9 @@ if [[ "${SKIP_PUSH}" == "" ]]; then
             FULL_NAME=$(get_image_full_name)
             echo "Pushing ${FULL_NAME}";
             docker push ${FULL_NAME}
+            AMEND_ARGS+=(--amend ${FULL_NAME})
         done
-        AMEND_ARGS+=(--amend ${FULL_NAME})
-
+        
         echo "Creating Manifest"
         docker manifest create ${SHORT_NAME} ${AMEND_ARGS[@]}
 
