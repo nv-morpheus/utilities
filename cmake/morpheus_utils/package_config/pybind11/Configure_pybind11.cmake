@@ -35,7 +35,7 @@ function(morpheus_utils_configure_pybind11)
       GIT_REPOSITORY https://github.com/pybind/pybind11.git
       GIT_TAG "v${PYBIND11_VERSION}"
       GIT_SHALLOW TRUE
-      # PATCH_COMMAND git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/gil_dec_ref.patch
+      PATCH_COMMAND git checkout -- . && git apply --whitespace=fix ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/patches/gil_dec_ref.patch
       OPTIONS "PYBIND11_INSTALL ON"
               "PYBIND11_TEST OFF"
   )
