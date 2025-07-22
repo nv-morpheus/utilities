@@ -1,3 +1,23 @@
+# utilities 25.06.00 (22 Jul 2025)
+
+## 🚨 Breaking Changes
+
+- Chore: update `Configure_mrc.cmake` to not list `MRC_USE_CONDA` option ([#99](https://github.com/nv-morpheus/utilities/pull/99)) [@willkill07](https://github.com/willkill07)
+- Chore: remove unused parameters from `register_api.cmake` functions ([#98](https://github.com/nv-morpheus/utilities/pull/98)) [@willkill07](https://github.com/willkill07)
+
+## 🐛 Bug Fixes
+
+- Fix bug ensuring all architectures are added to the docker manifest ([#100](https://github.com/nv-morpheus/utilities/pull/100)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Chore: update `Configure_mrc.cmake` to not list `MRC_USE_CONDA` option ([#99](https://github.com/nv-morpheus/utilities/pull/99)) [@willkill07](https://github.com/willkill07)
+- Chore: remove unused parameters from `register_api.cmake` functions ([#98](https://github.com/nv-morpheus/utilities/pull/98)) [@willkill07](https://github.com/willkill07)
+- bugfix: fix python import for version check ([#94](https://github.com/nv-morpheus/utilities/pull/94)) [@willkill07](https://github.com/willkill07)
+
+## 🚀 New Features
+
+- Adopt Pybind11 2.12 ([#101](https://github.com/nv-morpheus/utilities/pull/101)) [@dagardner-nv](https://github.com/dagardner-nv)
+- Adopt Rapids 25.02 ([#95](https://github.com/nv-morpheus/utilities/pull/95)) [@dagardner-nv](https://github.com/dagardner-nv)
+
+
 # utilities 25.02.00 (03 Feb 2025)
 
 ## 🛠️ Improvements
