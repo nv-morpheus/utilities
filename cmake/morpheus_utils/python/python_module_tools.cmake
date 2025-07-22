@@ -89,7 +89,6 @@ function(morpheus_utils_create_python_package PACKAGE_NAME)
       "${project_dir}/pyproject.toml"
       "${project_dir}/setup.cfg"
       "${project_dir}/setup.py"
-      "${project_dir}/versioneer.py"
   )
 
   list(APPEND wheel_python_files ${wheel_python_project_files})

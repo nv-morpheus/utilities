@@ -21,7 +21,7 @@ function(morpheus_utils_configure_cccl)
   list(APPEND CMAKE_MESSAGE_CONTEXT "cccl")
 
   morpheus_utils_assert_cpm_initialized()
-  set(cccl_VERSION "2.5.0" CACHE STRING "Version of cccl to use")
+  set(cccl_VERSION "2.7.0" CACHE STRING "Version of cccl to use")
 
   include("${rapids-cmake-dir}/cpm/cccl.cmake")
 
