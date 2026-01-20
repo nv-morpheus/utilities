@@ -358,7 +358,8 @@ function(morpheus_utils_build_python_package PACKAGE_NAME)
   # Now build up the pip arguments to either install the package or print a message with the install command
   set(_pip_command)
 
-  list(APPEND _pip_command  "${Python3_EXECUTABLE}" "-m" "pip" "install")
+  # The --no-build-isolation flag ensures that pip runs in the current conda environment
+  list(APPEND _pip_command "${Python3_EXECUTABLE}" "-m" "pip" "install" "--no-build-isolation")
 
   # detect virtualenv and set Pip args accordingly
   if(NOT DEFINED ENV{VIRTUAL_ENV} AND NOT DEFINED ENV{CONDA_PREFIX})
